@@ -1,1 +1,55 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-card">
+    <h2>Create Account</h2>
+
+    <!-- Google -->
+    <button class="google-btn" (click)="loginWithGoogle()">
+      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" />
+      Continue with Google
+    </button>
+
+    <div class="divider">
+      <span>Or register with email</span>
+    </div>
+
+    <!-- Email -->
+    <input type="email" placeholder="Email" class="input" />
+
+    <!-- Username -->
+    <input type="text" placeholder="Username" class="input" />
+
+    <!-- Password -->
+    <div class="password-box">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+        class="input"
+      />
+      <span class="toggle" (click)="togglePassword()">
+        {{ showPassword ? 'Hide' : 'Show' }}
+      </span>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="password-box">
+      <input
+        [type]="showConfirm ? 'text' : 'password'"
+        placeholder="Confirm Password"
+        class="input"
+      />
+      <span class="toggle" (click)="toggleConfirm()">
+        {{ showConfirm ? 'Hide' : 'Show' }}
+      </span>
+    </div>
+
+    <!-- Button -->
+    <button class="register-btn">Create Account</button>
+
+    <!-- Footer -->
+    <div class="register-footer">
+      <span>Got account?
+        <a routerLink="/login">Sign in here</a>
+      </span>
+    </div>
+  </div>
+</div>
