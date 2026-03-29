@@ -1,51 +1,13 @@
-<div class="home-container">
+<div class="home-wrapper">
+  <div class="welcome-text">WELCOME TO</div>
+  <div class="brand-title">JUST4QUIZ</div>
 
-  <!-- Welcome -->
-  <div class="welcome">
-    <h2>Welcome to Quiz Game 👋</h2>
-    <p>Play, create and challenge your friends!</p>
+  <div class="join-container">
+    <input type="text" placeholder="ENTER PIN" class="pin-input" />
+    <button class="join-button">Join Game</button>
   </div>
 
-  <!-- Action buttons -->
-  <div class="actions">
-    <button class="btn create">Create Quiz</button>
-    <button class="btn category">Categories</button>
-    <button class="btn leaderboard">Leaderboards</button>
-  </div>
-
-  <!-- Main content -->
-  <div class="main-content">
-
-    <!-- LEFT: Recommended -->
-    <div class="recommended-box">
-      <h3>Recommended Quizzes</h3>
-
-      <div class="quiz-list">
-        <div class="quiz-item" *ngFor="let quiz of quizzes">
-          <div class="quiz-left">
-            <div class="quiz-icon"></div>
-            <div>
-              <div class="quiz-title">{{ quiz.title }}</div>
-              <div class="quiz-sub">{{ quiz.questions }} questions</div>
-            </div>
-          </div>
-          <button class="play-btn">Play</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Categories -->
-    <div class="category-box">
-      <h3>Popular Categories</h3>
-      <div class="category-list">
-        <div class="category-item">Technology</div>
-        <div class="category-item">Science</div>
-        <div class="category-item">Arts</div>
-        <div class="category-item">Music</div>
-        <div class="category-item">Geography</div>
-        <div class="category-item">General</div>
-      </div>
-      <button class="view-all">View All Categories</button>
-    </div>
+  <div class="home-footer">
+    Terms | Privacy | Cookie notice
   </div>
 </div>
