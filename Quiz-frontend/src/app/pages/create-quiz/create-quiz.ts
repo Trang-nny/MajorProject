@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-create-quiz',
   imports: [],
   templateUrl: './create-quiz.html',
-  styleUrl: './create-quiz.css',
+  styleUrls: ['./create-quiz.css'],
 })
-export class CreateQuiz {}
+export class CreateQuizComponent {}

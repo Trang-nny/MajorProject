@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-game-room',
   imports: [],
   templateUrl: './game-room.html',
-  styleUrl: './game-room.css',
+  styleUrls: ['./game-room.css'],
 })
-export class GameRoom {}
+export class GameRoomComponent {}
