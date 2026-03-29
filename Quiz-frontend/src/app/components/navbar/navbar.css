@@ -1,0 +1,90 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+/* Khu vực Logo */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-box {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: #666;
+}
+
+/* Khu vực Menu giữa */
+.navbar-center {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-center a {
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.navbar-center a:hover, .navbar-center a.active {
+  color: #673ab7;
+  font-weight: bold;
+}
+
+/* Khu vực nút bấm bên phải */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.link-signin {
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+}
+
+.btn-signup {
+  text-decoration: none;
+  background-color: #ddd; /* Màu xám nhạt như Figma */
+  color: #333;
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: 1px solid #bbb;
+}
+
+.btn-signup:hover {
+  background-color: #ccc;
+}
