@@ -1,13 +1,16 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar'; 
+import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { RouterOutlet } from '@angular/router'; // Thêm RouterOutlet
+import { appConfig } from './app.config';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent], 
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  standalone: true,
+  imports: [RouterOutlet], // Nhập RouterOutlet vào đây
+  template: '<router-outlet></router-outlet>' // Chỉ cần thẻ này là đủ
 })
-export class App {
-  protected readonly title = signal('Quiz-frontend');
-}
+export class App {} // Bạn có thể đổi tên class thành AppComponent nếu muốn
+
+// Khởi chạy ứng dụng bằng App class trên
+bootstrapApplication(App, appConfig)
+  .catch((err) => console.error(err));
