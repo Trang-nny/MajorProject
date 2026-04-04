@@ -1,0 +1,19 @@
+.footer-bar {
+  padding: 30px 80px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #EAECF0;
+  font-size: 13px;
+  color: #667085;
+  background-color: #F9F5FF; /* Khớp màu nền home */
+}
+
+.footer-right {
+  display: flex;
+  gap: 25px;
+}
+
+.footer-right a {
+  text-decoration: none;
+  color: #667085;
+}

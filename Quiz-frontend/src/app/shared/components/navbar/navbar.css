@@ -1,0 +1,38 @@
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background-color: #F9F5FF; /* Đổi từ trắng sang màu nền chung */
+  border-bottom: 1px solid rgba(112, 41, 255, 0.05); /* Đường kẻ mờ để phân cách nhẹ */
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  color: #7029FF;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* Tạo khoảng cách giữa Sign In và Sign Up */
+}
+
+.btn-text {
+  text-decoration: none;
+  color: #7029FF;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.btn-primary {
+  text-decoration: none;
+  background: #7F56D9;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(127, 86, 217, 0.3);
+}
