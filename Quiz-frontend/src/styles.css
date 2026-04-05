@@ -3,3 +3,5 @@ body {
   background-color: #F9F5FF !important;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+@import "primeicons/primeicons.css";

@@ -1,1 +1,62 @@
-<p>login works!</p>
+<div class="auth-container">
+  <div class="login-card">
+    <div class="login-left">
+      <div class="overlay-content">
+        <h1>Elevate your <br> Trivia Game</h1>
+        <p>Join the most vibrant community of quiz enthusiasts and challenge your intellect.</p>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="form-container">
+        <h2>Sign in</h2>
+        <p class="subtitle">Welcome back! Please enter your details.</p>
+
+        <button class="btn-google">
+          <img src="/Google.png" alt="Google">
+          Continue with Google
+        </button>
+
+        <div class="divider"><span>OR WITH EMAIL</span></div>
+
+        <form>
+          <div class="form-group">
+            <label>EMAIL ADDRESS</label>
+            <div class="input-wrapper">
+              <span class="material-icons field-icon">mail_outline</span>
+              <input type="email" placeholder="hello@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label>PASSWORD</label>
+              <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+            <div class="input-wrapper">
+              <span class="material-icons field-icon">lock_outline</span>
+              <input [type]="passwordVisible ? 'text' : 'password'" placeholder="••••••••">
+              <span class="material-icons eye-icon" (click)="togglePassword()">
+                {{ passwordVisible ? 'visibility' : 'visibility_off' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="options-row">
+            <div class="checkbox-group">
+              <input type="checkbox" id="keep-signed">
+              <label for="keep-signed">Keep me signed in</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary-auth btn-register-gradient">Sign in</button>
+        </form>
+
+        <p class="footer-terms">
+          By signing in, you agree to JUST4QUIZ's 
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

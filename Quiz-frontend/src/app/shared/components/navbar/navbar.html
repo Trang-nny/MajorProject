@@ -1,38 +1,24 @@
 <nav class="navbar-container">
   <div class="nav-left">
-    <div class="logo">JUST4QUIZ</div>
-  </div>
-
-  <div class="nav-center" *ngIf="type === 'profile'">
-    <ul class="nav-menu">
-      <li><a routerLink="/" routerLinkActive="active">Home</a></li>
-      <li><a routerLink="/quizzes">Quizzes</a></li>
-      <li><a routerLink="/leaderboard">Leaderboard</a></li>
-      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-    </ul>
+    <div class="logo" routerLink="/">JUST4QUIZ</div>
   </div>
 
   <div class="nav-right">
-    
     <div class="auth-buttons" *ngIf="type === 'home'">
       <a class="btn-text" routerLink="/login">Sign In</a>
       <a class="btn-primary" routerLink="/register">Sign Up</a>
     </div>
 
-    <div class="user-info" *ngIf="type === 'profile' || type === 'game'">
-      <span class="username">{{ username }}</span>
-      <div class="avatar-circle">
-        <img src="assets/images/avatar-default.png" alt="User Avatar">
-      </div>
-    </div>
-
     <div class="auth-switch" *ngIf="type === 'auth-signin'">
-      <span>Don't have an account? <a routerLink="/register" class="link-purple">Sign up here</a></span>
+      <span class="switch-text">Don't have an account? 
+        <a routerLink="/register" class="link-purple">Sign up here</a>
+      </span>
     </div>
 
     <div class="auth-switch" *ngIf="type === 'auth-signup'">
-      <span>Already have an account? <a routerLink="/login" class="link-purple">Login here</a></span>
+      <span class="switch-text">Already a member? 
+        <a routerLink="/login" class="link-purple">Sign in here</a>
+      </span>
     </div>
-
   </div>
 </nav>

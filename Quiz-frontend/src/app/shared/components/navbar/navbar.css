@@ -3,28 +3,48 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 80px;
-  background-color: #F9F5FF; /* Đổi từ trắng sang màu nền chung */
-  border-bottom: 1px solid rgba(112, 41, 255, 0.05); /* Đường kẻ mờ để phân cách nhẹ */
+  background-color: #F9F5FF;
+  border-bottom: 1px solid rgba(112, 41, 255, 0.05);
 }
 
 .logo {
   font-size: 24px;
   font-weight: 900;
   color: #7029FF;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
 }
 
+/* Style cho phần text điều hướng Sign in / Sign up */
+.switch-text {
+  font-size: 15px;
+  color: #667085;
+  font-weight: 500;
+}
+
+.link-purple {
+  color: #7029FF;
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 5px;
+  transition: 0.2s;
+}
+
+.link-purple:hover {
+  text-decoration: underline;
+  color: #5514D6;
+}
+
+/* Giữ nguyên style cũ cho nút Home nếu cần */
 .auth-buttons {
   display: flex;
+  gap: 25px;
   align-items: center;
-  gap: 25px; /* Tạo khoảng cách giữa Sign In và Sign Up */
 }
 
 .btn-text {
   text-decoration: none;
   color: #7029FF;
   font-weight: 700;
-  font-size: 15px;
 }
 
 .btn-primary {
@@ -34,5 +54,4 @@
   padding: 10px 24px;
   border-radius: 12px;
   font-weight: 700;
-  box-shadow: 0 4px 15px rgba(127, 86, 217, 0.3);
 }

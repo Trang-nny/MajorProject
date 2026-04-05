@@ -1,1 +1,60 @@
-<p>register works!</p>
+<div class="auth-container">
+  <div class="login-card">
+    <div class="login-left">
+      <div class="overlay-content">
+        <h1>Master your favorite <br> topics today.</h1>
+        <p>Join thousands of players and challenge your intellect with our curated daily quizzes.</p>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="form-container">
+        <h2>Create account</h2>
+        <p class="subtitle">Start your journey into the Neon Atoll of knowledge.</p>
+
+        <button class="btn-google">
+          <img src="/Google.png" alt="Google">
+          Continue with Google
+        </button>
+
+        <div class="divider"><span>OR WITH EMAIL</span></div>
+
+        <form>
+          <div class="form-group">
+            <label>USERNAME</label>
+            <div class="input-wrapper">
+              <span class="material-icons field-icon">person_outline</span>
+              <input type="text" placeholder="quiz_master">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>EMAIL ADDRESS</label>
+            <div class="input-wrapper">
+              <span class="material-icons field-icon">mail_outline</span>
+              <input type="email" placeholder="hello@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>PASSWORD</label>
+            <div class="input-wrapper">
+              <span class="material-icons field-icon">lock_outline</span>
+              <input [type]="passwordVisible ? 'text' : 'password'" placeholder="••••••••">
+              <span class="material-icons eye-icon" (click)="togglePassword()">
+                {{ passwordVisible ? 'visibility' : 'visibility_off' }}
+              </span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary-auth btn-register-gradient">Create Account</button>
+        </form>
+
+        <p class="footer-terms">
+          By creating an account, you agree to JUST4QUIZ's 
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
