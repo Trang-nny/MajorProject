@@ -1,1 +1,138 @@
-<p>create-quiz works!</p>
+<div class="create-quiz-wrapper">
+  <div class="create-quiz-container">
+    
+    <aside class="sidebar-questions">
+      <h3 class="sidebar-title">Questions</h3>
+      <div class="question-list">
+        <div class="question-nav-item active">
+          <div class="q-number">1</div>
+          <span>Question 1</span>
+        </div>
+        <div class="question-nav-item">
+          <div class="q-number">2</div>
+          <span>Question 2</span>
+        </div>
+        <button class="btn-add-q-dash">
+          <span class="material-icons">add</span> Add Question
+        </button>
+      </div>
+    </aside>
+
+    <main class="quiz-editor-main">
+      
+      <section class="quiz-info-section">
+        <div class="info-header-row">
+           <span class="material-icons">info</span>
+           <h2 class="form-section-title">Quiz Information</h2>
+        </div>
+
+        <div class="info-grid-top">
+          <div class="form-group-custom title-group">
+            <label class="label-bold">Quiz Title</label>
+            <input type="text" placeholder="e.g. World History Masters" class="input-styled">
+          </div>
+          <div class="form-group-custom level-group">
+            <label class="label-bold">Level</label>
+            <div class="level-pills-row">
+              <button class="pill-btn active">Easy</button>
+              <button class="pill-btn">Mid</button>
+              <button class="pill-btn">Pro</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group-custom">
+          <label class="label-bold">Description</label>
+          <textarea placeholder="Describe your quiz..." class="textarea-styled"></textarea>
+        </div>
+      </section>
+
+      <section class="question-editor-card">
+        <div class="card-header-flex">
+          <div class="info-header-row" style="margin-bottom: 0;">
+            <span class="material-icons">description</span>
+            <h2 class="form-section-title">Question 1</h2>
+          </div>
+
+          <div class="header-actions">
+            <button class="icon-button-action">
+              <span class="material-icons">content_copy</span>
+            </button>
+            <button class="icon-button-action delete">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="main-q-input">
+          <textarea placeholder="Type your question here..."></textarea>
+          <span class="char-limit">0/250</span>
+        </div>
+
+        <div class="toggle-option-row">
+          <span>Allow multiple correct answers</span>
+          <label class="switch-ui">
+            <input type="checkbox">
+            <span class="slider-ui"></span>
+          </label>
+        </div>
+
+        <div class="answers-2-col">
+          <div class="ans-box selected">
+            <button class="radio-check-btn active">
+              <span class="material-icons">done</span>
+            </button>
+            <input type="text" value="Alexander the Great">
+          </div>
+          
+          <div class="ans-box">
+            <button class="radio-check-btn"></button>
+            <input type="text" placeholder="Add answer">
+          </div>
+          
+          <div class="ans-box">
+            <button class="radio-check-btn"></button>
+            <input type="text" placeholder="Add answer">
+          </div>
+          
+          <div class="ans-box">
+            <button class="radio-check-btn"></button>
+            <input type="text" placeholder="Add answer">
+          </div>
+        </div>
+        
+        <div class="add-answer-wrapper">
+            <button class="btn-add-ans-solid">+ Add Answer</button>
+        </div>
+
+        <div class="settings-bottom">
+          <div class="custom-select-ui">
+            <span class="material-icons">timer</span>
+            <select>
+              <option value="10">10 seconds</option>
+              <option value="20" selected>20 seconds</option>
+              <option value="30">30 seconds</option>
+              <option value="60">60 seconds</option>
+            </select>
+            <span class="material-icons">expand_more</span>
+          </div>
+          <div class="custom-select-ui">
+            <span class="material-icons">stars</span>
+            <select>
+              <option value="100" selected>100 points</option>
+              <option value="200">200 points</option>
+              <option value="500">500 points</option>
+              <option value="1000">1000 points</option>
+            </select>
+            <span class="material-icons">expand_more</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="final-actions">
+        <button class="btn-footer btn-save">Save Quiz</button>
+        <button class="btn-footer btn-publish">Publish Quiz</button>
+      </div>
+    </main>
+  </div>
+</div>
