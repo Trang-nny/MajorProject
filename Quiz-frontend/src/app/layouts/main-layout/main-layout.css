@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #F9F5FF;
+}
+
+.main-container {
+  flex: 1; /* Đẩy footer xuống đáy trang */
+  min-height: calc(100vh - 160px); /* Trừ chiều cao navbar/footer */
+  padding: 40px 0;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 80px; /* Khớp với khoảng cách lề của Navbar */
+}
+
+/* Đảm bảo các route chuyển cảnh mượt mà */
+router-outlet + * {
+  display: block;
+}

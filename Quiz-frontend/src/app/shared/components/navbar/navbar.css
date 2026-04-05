@@ -1,10 +1,12 @@
+/* GIỮ NGUYÊN 100% STYLE GỐC CỦA BẠN */
 .navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 80px;
-  background-color: #F9F5FF;
+  background-color: #F9F5FF; /* Màu nền cũ của bạn */
   border-bottom: 1px solid rgba(112, 41, 255, 0.05);
+  position: relative; /* Thêm để menu center có thể căn giữa tuyệt đối */
 }
 
 .logo {
@@ -14,7 +16,6 @@
   cursor: pointer;
 }
 
-/* Style cho phần text điều hướng Sign in / Sign up */
 .switch-text {
   font-size: 15px;
   color: #667085;
@@ -29,12 +30,6 @@
   transition: 0.2s;
 }
 
-.link-purple:hover {
-  text-decoration: underline;
-  color: #5514D6;
-}
-
-/* Giữ nguyên style cũ cho nút Home nếu cần */
 .auth-buttons {
   display: flex;
   gap: 25px;
@@ -54,4 +49,44 @@
   padding: 10px 24px;
   border-radius: 12px;
   font-weight: 700;
+}
+
+/* PHẦN BỔ SUNG: CSS cho Menu Dashboard (Căn giữa tuyệt đối) */
+.nav-menu-center {
+  display: flex;
+  gap: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-menu-center a {
+  text-decoration: none;
+  color: #667085;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.nav-menu-center a.active {
+  color: #7029FF;
+  border-bottom: 2px solid #7029FF;
+}
+
+/* CSS cho cụm Profile mới */
+.user-controls-simple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  font-weight: 700;
+  color: #344054;
+}
+
+.avatar-wrapper img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }

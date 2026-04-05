@@ -1,1 +1,76 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  
+  <section class="hero-section">
+    <div class="hero-left">
+    <h1 class="welcome-text">WELCOME TO <br><span>JUST4QUIZ</span></h1>
+    <p class="hero-subtext">Unleash your inner genius. Challenge friends, join live arenas, or master new topics today.</p>
+  </div>
+
+    <div class="hero-right">
+      <div class="pin-group-box">
+        <span class="enter-pin-label">ENTER PIN</span>
+        <div class="pin-inputs">
+          <input type="text" maxlength="1" placeholder="•" *ngFor="let i of [1,2,3,4,5,6]">
+        </div>
+        <button class="btn-join-hero">
+          JOIN GAME <span class="material-icons">bolt</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="action-cards-grid">
+  
+    <div class="action-card-item" [routerLink]="['/app/create-quiz']">
+      <div class="card-icon-circle purple">
+        <span class="material-icons">add_circle_outline</span>
+      </div>
+      <h4>Create Quiz</h4>
+    </div>
+
+    <div class="action-card-item" [routerLink]="['/app/quizzes']">
+      <div class="card-icon-circle pink">
+        <span class="material-icons">question_mark</span>
+      </div>
+      <h4>Quizzes</h4>
+    </div>
+
+    <div class="action-card-item" [routerLink]="['/app/leaderboard']">
+      <div class="card-icon-circle blue">
+        <span class="material-icons">bar_chart</span>
+      </div>
+      <h4>Leaderboards</h4>
+    </div>
+  </section>
+
+  <div class="main-layout-grid">
+    
+    <aside class="recommended-column">
+      <div class="recommended-header">
+        <h3>Recommended Quizzes</h3>
+        <span class="material-icons trend-icon">trending_up</span>
+      </div>
+
+      <div class="recommended-quiz-list">
+      <div class="quiz-row-card" *ngFor="let item of quizzes">
+        <img [src]="item.img" [alt]="item.title">
+        
+        <div class="quiz-card-info">
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.stats }}</p>
+        </div>
+        
+        <span class="material-icons arrow-icon">chevron_right</span>
+      </div>
+    </div>
+    </aside>
+
+    <section class="invite-column">
+      <div class="invite-gradient-card">
+        <h4>Invite your friends</h4>
+        <p>Challenge your classmates or coworkers and win exclusive badges.</p>
+        <button class="btn-send-invite">SEND INVITE</button>
+      </div>
+    </section>
+  </div>
+</div>
