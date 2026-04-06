@@ -1,0 +1,147 @@
+/* Tông màu Dashboard: Nền tím cực nhạt */
+.mode-selection-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: #F9F5FF; /* Màu nền gốc */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Thẻ lớn trung tâm (Cân đối lại max-width) */
+.selection-card {
+  background-color: #F9F5FF; /* Tiệp màu với nền toàn màn hình */
+  width: 90%;
+  max-width: 800px;
+  border-radius: 40px;
+  padding: 60px 40px;
+  box-shadow: 0 30px 100px rgba(112, 41, 255, 0.1); 
+  position: relative;
+  text-align: center;
+}
+
+/* Header & Text */
+.card-header {
+  margin-bottom: 50px;
+}
+
+.main-title {
+  color: #2D0B7A;
+  font-size: 36px;
+  font-weight: 900;
+  margin: 0 0 10px;
+}
+
+.sub-title {
+  color: #667085;
+  font-size: 16px;
+  margin: 0;
+}
+
+.sub-title strong {
+  color: #7029FF;
+}
+
+.btn-close-abs {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: #F4EBFF;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #7029FF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Grid chia 2 cột */
+.selection-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* Thẻ con (Nút nhấn - Nền Trắng) */
+.mode-option-card {
+  background: white; /* Nền trắng của thẻ con */
+  padding: 50px 30px 40px; /* Thẻ dài ra, đủ chỗ chứa nút bên dưới */
+  border-radius: 32px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  border: 2px solid transparent;
+}
+
+.mode-option-card:hover {
+  transform: translateY(-10px);
+  border-color: #7029FF;
+  box-shadow: 0 20px 40px rgba(112, 41, 255, 0.1);
+}
+
+/* Icon & Content */
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+.icon-circle .material-icons { color: white; font-size: 35px; }
+
+.solo-bg { background: linear-gradient(135deg, #7029FF, #3C37FF); }
+.multi-bg { background: linear-gradient(135deg, #EE46BC, #7029FF); }
+
+.text-content h3 {
+  color: #2D0B7A;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.text-content p {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 60px; /* Đảm bảo p có chiều cao tối thiểu */
+}
+
+/* Nút tròn tiệp màu nền giao diện (Màu tím cực nhạt) */
+.action-btn-pills {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #F4EBFF; /* Trùng màu nền giao diện tổng thể */
+  color: #7029FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px; /* Khoảng cách từ p xuống nút */
+  transition: all 0.3s ease;
+}
+
+/* Hiệu ứng khi hover vào cả thẻ lớn thì nút tròn nhỏ đổi màu */
+.mode-option-card:hover .action-btn-pills {
+  background: #7029FF;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .selection-body-grid { grid-template-columns: 1fr; }
+  .selection-card { padding: 40px 20px; }
+  .mode-option-card { padding: 30px; }
+}
