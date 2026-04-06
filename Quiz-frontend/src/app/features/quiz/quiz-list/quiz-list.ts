@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-quiz-list',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './quiz-list.html',
-  styleUrl: './quiz-list.css',
+  styleUrls: ['./quiz-list.css']
 })
-export class QuizList {}
+export class QuizList {
+  // Logic xử lý nếu cần
+}
