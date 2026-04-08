@@ -1,1 +1,185 @@
-<p>quiz-detail works!</p>
+<div class="quiz-detail-page">
+  <div class="container-grid">
+
+
+    <!-- LEFT -->
+    <div>
+
+
+      <!-- HERO -->
+      <div class="hero-card" [ngClass]="isOwner ? 'hero-owner' : 'hero-guest'">
+
+
+        <div class="image-box">
+          <img [src]="isOwner ? quizData.imageUser : quizData.imageGuest"
+               class="hero-img">
+        </div>
+
+
+        <span class="badge-expert">EXPERT</span>
+
+
+        <div class="hero-content">
+          <span class="text-featured">FEATURED QUIZ</span>
+          <h1 class="main-title">{{ quizData.title }}</h1>
+
+
+          <div class="stats-bar">
+            <div class="stat-item">
+              <i class="pi pi-play-circle"></i>
+              {{ quizData.plays }}
+            </div>
+
+
+            <div class="stat-item">
+              <i class="pi pi-list"></i>
+              {{ quizData.questionsCount }}
+            </div>
+
+
+            <div class="stat-item">
+              <i class="pi pi-clock"></i>
+              {{ quizData.duration }} avg
+            </div>
+          </div>
+
+
+          @if (!isOwner) {
+            <div class="hero-actions">
+              <button class="btn-host-purple">Host Game</button>
+              <button class="btn-play-light">Play Solo</button>
+            </div>
+          }
+        </div>
+      </div>
+
+
+      <!-- VISIBILITY -->
+      @if (isOwner) {
+        <div class="visibility-section">
+          <div class="section-title">👁 Manage Visibility</div>
+
+
+          <div class="visibility-grid">
+            <div class="v-card active">
+              <div class="v-icon"><i class="pi pi-globe"></i></div>
+              <strong>Public</strong>
+              <div>Visible to everyone</div>
+            </div>
+
+
+            <div class="v-card">
+              <div class="v-icon"><i class="pi pi-link"></i></div>
+              <strong>Private</strong>
+              <div>Link access</div>
+            </div>
+
+
+            <div class="v-card">
+              <div class="v-icon"><i class="pi pi-user"></i></div>
+              <strong>Only Me</strong>
+              <div>Draft mode</div>
+            </div>
+          </div>
+        </div>
+      }
+
+
+      <!-- QUESTIONS -->
+      <div class="preview-header">
+        <h2>Question Preview</h2>
+        <span>{{ quizData.questionsCount }} total questions</span>
+      </div>
+
+
+      <div>
+        @for (q of questions; track q.id) {
+          <div class="q-row">
+            <div class="q-idx">{{ q.id }}</div>
+
+
+            <div class="q-body">
+              <div class="q-tags">
+                <span class="tag-purple">{{ q.type }}</span>
+                <span class="tag-gray">⏱ {{ q.time }}</span>
+                <span class="tag-gray">{{ q.points }} pts</span>
+              </div>
+
+
+              <div class="q-text">{{ q.text }}</div>
+            </div>
+
+
+            <i class="pi pi-chevron-down"></i>
+          </div>
+        }
+      </div>
+
+
+    </div>
+
+
+    <!-- RIGHT -->
+    <div class="sidebar">
+
+
+      @if (isOwner) {
+        <button class="btn-host-gradient">▶ HOST GAME</button>
+      }
+
+
+      <!-- QUICK ACTIONS -->
+      <div class="side-card purple">
+        <div class="side-label">QUICK ACTIONS</div>
+
+
+        @if (isOwner) {
+          <div class="action-item">
+            <i class="pi pi-pencil"></i>
+            Edit Quiz
+          </div>
+        }
+
+
+        <div class="action-item">
+          <i class="pi pi-share-alt"></i>
+          Share Quiz
+        </div>
+
+
+        @if (isOwner) {
+          <div class="action-item delete">
+            <i class="pi pi-trash"></i>
+            Delete Quiz
+          </div>
+        }
+      </div>
+
+
+      <!-- DETAILS -->
+      <div class="side-card white">
+        <h3>Quiz Details</h3>
+
+
+        <div class="detail-row">
+          <span class="label">Author</span>
+          <span class="value">{{ quizData.author }}</span>
+        </div>
+
+
+        <div class="detail-row">
+          <span class="label">Last Updated</span>
+          <span class="value">{{ quizData.lastUpdated }}</span>
+        </div>
+
+
+        <p class="desc-text">{{ quizData.description }}</p>
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+
