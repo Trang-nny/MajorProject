@@ -1,1 +1,156 @@
-<p>profile works!</p>
+<div class="profile-page">
+  <div class="profile-container">
+
+    <!-- 1. Header & Banner User Info (Chia 2 khung: Trái Avatar - Phải Info) -->
+    <div class="profile-header-card">
+      <!-- Khung trái: Avatar -->
+      <div class="avatar-column">
+        <div class="avatar-wrap">
+          <img src="/User.png" alt="Avatar">
+          <div class="verified-badge"><span class="material-icons">check_circle</span></div>
+        </div>
+      </div>
+
+      <!-- Khung phải: Chữ & Thống kê -->
+      <div class="info-column">
+        <div class="user-identity">
+          <h1>{{ user.name }}</h1>
+          <p>{{ user.title }}</p>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="icon-box info-bg"><span class="material-icons info-color">sports_esports</span></div>
+            <div class="stat-info">
+              <span class="label">GAMES</span>
+              <span class="value">{{ user.games }}</span>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <div class="icon-box danger-bg"><span class="material-icons danger-color">diamond</span></div>
+            <div class="stat-info">
+              <span class="label">POINTS</span>
+              <span class="value">{{ user.points | number }}</span>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <div class="icon-box primary-bg"><span class="material-icons primary-color">workspace_premium</span></div>
+            <div class="stat-info">
+              <span class="label">RANK</span>
+              <span class="value">#{{ user.rank }}</span>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <div class="icon-box success-bg"><span class="material-icons success-color">assessment</span></div>
+            <div class="stat-info">
+              <span class="label">AVG SCORE</span>
+              <span class="value">{{ user.avgScore }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Middle Section (Layout 70/30) -->
+    <div class="main-grid-layout">
+     
+      <!-- Left: Game History -->
+      <div class="history-column">
+        <div class="section-header">
+          <h2>Game History</h2>
+          <a class="view-all" routerLink="#">View All Sessions</a>
+        </div>
+       
+        <div class="history-stack">
+          <!-- Bảng Header -->
+          <div class="history-table-header">
+            <span class="col-name">QUIZ NAME</span>
+            <span class="col-date">DATE</span>
+            <span class="col-score">SCORE</span>
+            <span class="col-rank">RANK</span>
+            <span class="col-players">PLAYERS</span>
+          </div>
+
+          <!-- Các hàng dữ liệu rời nhau -->
+          <div class="history-item-row" *ngFor="let item of historySessions">
+            <div class="col-name cell-flex">
+              <div class="quiz-mini-icon" [style.color]="item.color" [style.background]="item.color + '15'">
+                <span class="material-icons">{{ item.icon }}</span>
+              </div>
+              <span class="quiz-title-name">{{ item.name }}</span>
+            </div>
+            <div class="col-date">{{ item.date }}</div>
+            <div class="col-score text-danger-bold">{{ item.score }}</div>
+            <div class="col-rank">
+              <span class="rank-pill" [class.gold]="item.rank === '1st'" [class.silver]="item.rank === '2nd'">
+                <span class="material-icons sm-icon" *ngIf="item.rank === '1st'">emoji_events</span>
+                {{ item.rank }}
+              </span>
+            </div>
+            <div class="col-players">{{ item.players }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Quick Actions -->
+      <div class="actions-column">
+        <h2 class="sub-section-title">Quick Actions</h2>
+       
+        <div class="actions-vertical-stack">
+          <button class="action-btn-primary" routerLink="#">
+            <span class="material-icons">edit_square</span> Edit Profile
+            <span class="material-icons chevron">chevron_right</span>
+          </button>
+         
+          <button class="action-btn-white" routerLink="/app/create-quiz">
+            <span class="material-icons info-color">add_circle_outline</span> Create Quiz
+            <span class="material-icons chevron">chevron_right</span>
+          </button>
+
+          <button class="action-btn-white" routerLink="/app/leaderboard">
+            <span class="material-icons primary-color">bar_chart</span> Global Leaderboard
+            <span class="material-icons chevron">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Bottom Section: My Created Quizzes -->
+    <div class="created-quizzes-section">
+      <div class="section-header">
+        <h2>My Created Quizzes</h2>
+        <div class="nav-arrows-box">
+          <button class="nav-btn"><span class="material-icons">arrow_back</span></button>
+          <button class="nav-btn"><span class="material-icons">arrow_forward</span></button>
+        </div>
+      </div>
+
+      <div class="quizzes-responsive-grid">
+        <!-- Quiz Cards - Added routerLink to quiz details -->
+        <div class="pro-quiz-card" *ngFor="let quiz of createdQuizzes" [routerLink]="['/app/quiz-detail', quiz.id]">
+          <div class="card-img-box">
+            <div class="category-pill" [style.background]="quiz.color">{{ quiz.category }}</div>
+            <img [src]="quiz.image" alt="Quiz">
+          </div>
+          <div class="card-body">
+            <h3>{{ quiz.title }}</h3>
+            <div class="card-meta">
+              <span><span class="material-icons sm">play_arrow</span> {{ quiz.plays }}</span>
+              <span><span class="material-icons sm gold">star</span> {{ quiz.rating }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create New Card (Chuẩn tỉ lệ 16:9 giống các card khác) -->
+        <div class="create-placeholder-card" routerLink="/app/create-quiz">
+          <div class="plus-circle-icon"><span class="material-icons">add</span></div>
+          <span class="label-text">Create New Quiz</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
