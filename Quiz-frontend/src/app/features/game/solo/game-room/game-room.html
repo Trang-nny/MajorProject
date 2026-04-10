@@ -1,1 +1,64 @@
-<p>game-room works!</p>
+<div class="game-room-wrapper">
+  <div class="game-room-container">
+    
+    <div class="header-section">
+      <div class="left-head">
+        <div class="badge">
+          <span class="material-icons badge-icon">security</span> SECURITY FUNDAMENTALS
+        </div>
+        <h1 class="question-count">Question {{ questionNumber }} of {{ totalQuestions }}</h1>
+      </div>
+
+      <div class="timer-card">
+        <div class="timer-circle">
+          <span class="timer-number">{{ timeLeft }}</span>
+        </div>
+        <span class="timer-label">SECONDS LEFT</span>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <h2 class="question-text">
+        Which of the following is the most common method of social engineering?
+      </h2>
+    </div>
+
+    <!-- Answers Grid -->
+    <div class="answers-grid">
+      <!-- Option A -->
+      <button class="answer-btn answer-a" (click)="selectAnswer('A')">
+        <span class="option-letter">A</span>
+        <span class="option-text">Phishing</span>
+        <div class="bg-icon">@</div>
+      </button>
+
+      <!-- Option B -->
+      <button class="answer-btn answer-b" (click)="selectAnswer('B')">
+        <span class="option-letter">B</span>
+        <span class="option-text">SQL Injection</span>
+        <div class="bg-icon"><span class="material-icons bg-material">storage</span></div>
+      </button>
+
+      <!-- Option C -->
+      <button class="answer-btn answer-c" (click)="selectAnswer('C')">
+        <span class="option-letter">C</span>
+        <span class="option-text">Brute Force</span>
+        <div class="bg-icon"><span class="material-icons bg-material">lock_open</span></div>
+      </button>
+
+      <!-- Option D -->
+      <button class="answer-btn answer-d" (click)="selectAnswer('D')">
+        <span class="option-letter">D</span>
+        <span class="option-text">Ransomware</span>
+        <div class="bg-icon"><span class="material-icons bg-material">security</span></div>
+      </button>
+    </div>
+
+    <div class="action-section">
+      <button class="next-btn" routerLink="/play/result">
+        NEXT QUESTION <span class="material-icons">double_arrow</span>
+      </button>
+    </div>
+
+  </div>
+</div>
