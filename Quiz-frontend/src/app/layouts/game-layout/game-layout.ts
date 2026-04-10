@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router'; 
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from '../../shared/components/navbar/navbar';
+import { Footer } from '../../shared/components/footer/footer';
 
 @Component({
   selector: 'app-game-layout',
-  imports: [CommonModule, RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, Navbar, Footer],
   templateUrl: './game-layout.html',
-  styleUrls: ['./game-layout.css'],
+  styleUrls: ['./game-layout.css']
 })
-export class GameLayout {}
+export class GameLayout {
+
+}

@@ -28,7 +28,7 @@
       </span>
     </div>
 
-    <div class="user-controls-simple" *ngIf="type === 'profile'" routerLink="/app/profile" style="cursor: pointer;">
+    <div class="user-controls-simple" *ngIf="type === 'profile' || type === 'game'" routerLink="/app/profile" style="cursor: pointer;">
       <span class="username">{{ username }}</span>
       <div class="avatar-wrapper">
         <img src="/User.png" alt="Avatar">

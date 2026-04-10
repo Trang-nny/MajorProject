@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Lobby } from './lobby';
+import { SoloLobby } from './solo-lobby';
 
-describe('Lobby', () => {
-  let component: Lobby;
-  let fixture: ComponentFixture<Lobby>;
+describe('SoloLobby', () => {
+  let component: SoloLobby;
+  let fixture: ComponentFixture<SoloLobby>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Lobby],
+      imports: [SoloLobby],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Lobby);
+    fixture = TestBed.createComponent(SoloLobby);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

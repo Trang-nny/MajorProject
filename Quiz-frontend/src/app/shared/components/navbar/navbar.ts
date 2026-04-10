@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Cần thiết để dùng *ngIf
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -10,8 +10,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class Navbar {
-// Thêm 'auth' vào danh sách này
-@Input() type: 'auth' | 'home' | 'profile' | 'game' | 'auth-signin' | 'auth-signup' = 'home';
+  @Input() type: 'auth' | 'home' | 'profile' | 'game' | 'auth-signin' | 'auth-signup' = 'home';
   
   username: string = 'Alex Rivera';
 }
