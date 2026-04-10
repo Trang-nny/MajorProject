@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -18,6 +19,7 @@ export class Profile {
     rank: 12,
     avgScore: 88
   };
+
 
   historySessions = [
     { name: 'Retro Sci-Fi Trivia', date: 'Oct 24, 2024', score: 950, rank: '1st', players: 248, icon: 'public', color: '#6c2bd9' },
