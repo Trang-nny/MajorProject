@@ -1,16 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-quiz-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quiz-detail.html',
   styleUrl: './quiz-detail.css'
 })
 export class QuizDetail implements OnInit {
   @Input() isOwner: boolean = true;
+  selectedVisibility: string = 'public';
 
 
   quizData = {
@@ -21,10 +23,11 @@ export class QuizDetail implements OnInit {
     level: 'Pro Level',
     engagementRate: 88,
     lastUpdated: 'Oct 24, 2023',
+    category: 'Technology',
     author: 'JUST4QUIZ',
     description: 'A comprehensive deep-dive into modern cybersecurity threats, defense mechanisms, and ethical hacking protocols updated for the late 2024 landscape.',
-    imageUser: '/Cyber security concept.png',
-    imageGuest: '/Cyber Security Theme.png'
+    imageUser: '/Cyber Security Theme.png',
+    imageGuest: '/Cyber security concept.png'
   };
 
 
@@ -36,4 +39,15 @@ export class QuizDetail implements OnInit {
 
 
   ngOnInit(): void {}
+ 
+  saveChanges() {
+     console.log('Visibility changed to:', this.selectedVisibility);
+  }
+ 
+  cancel() {
+    console.log('Action cancelled');
+  }
 }
+
+
+

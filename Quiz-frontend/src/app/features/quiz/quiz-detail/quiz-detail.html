@@ -1,185 +1,181 @@
-<div class="quiz-detail-page">
-  <div class="container-grid">
-
-
-    <!-- LEFT -->
-    <div>
-
-
-      <!-- HERO -->
-      <div class="hero-card" [ngClass]="isOwner ? 'hero-owner' : 'hero-guest'">
-
-
-        <div class="image-box">
-          <img [src]="isOwner ? quizData.imageUser : quizData.imageGuest"
-               class="hero-img">
-        </div>
-
-
-        <span class="badge-expert">EXPERT</span>
-
-
-        <div class="hero-content">
-          <span class="text-featured">FEATURED QUIZ</span>
-          <h1 class="main-title">{{ quizData.title }}</h1>
-
-
-          <div class="stats-bar">
-            <div class="stat-item">
-              <i class="pi pi-play-circle"></i>
-              {{ quizData.plays }}
-            </div>
-
-
-            <div class="stat-item">
-              <i class="pi pi-list"></i>
-              {{ quizData.questionsCount }}
-            </div>
-
-
-            <div class="stat-item">
-              <i class="pi pi-clock"></i>
-              {{ quizData.duration }} avg
+<div class="quiz-detail-container">
+  <div class="main-layout-grid">
+   
+    <!-- CỘT TRÁI -->
+    <div class="main-content">
+     
+      @if (isOwner) {
+        <!-- HERO AREA FOR OWNER -->
+        <div class="hero-card hero-owner">
+          <div class="hero-info">
+            <h1 class="main-title">{{ quizData.title }}</h1>
+           
+            <div class="stats-bar">
+              <span class="stat-item"><i class="pi pi-play-circle"></i> {{ quizData.plays }} Plays</span>
+              <span class="stat-item"><i class="pi pi-list"></i> {{ quizData.questionsCount }} Questions</span>
+              <span class="stat-item"><i class="pi pi-clock"></i> {{ quizData.duration }} Avg.</span>
+              <span class="stat-item"><i class="pi pi-trophy"></i> {{ quizData.level }}</span>
             </div>
           </div>
-
-
-          @if (!isOwner) {
-            <div class="hero-actions">
-              <button class="btn-host-purple">Host Game</button>
-              <button class="btn-play-light">Play Solo</button>
-            </div>
-          }
         </div>
-      </div>
 
 
-      <!-- VISIBILITY -->
-      @if (isOwner) {
+        <!-- MANAGE VISIBILITY (Chỉ hiện khi là Host) -->
         <div class="visibility-section">
-          <div class="section-title">👁 Manage Visibility</div>
-
-
+          <div class="section-header">
+            <i class="pi pi-eye"></i>
+            <h3>Manage Visibility</h3>
+          </div>
           <div class="visibility-grid">
-            <div class="v-card active">
-              <div class="v-icon"><i class="pi pi-globe"></i></div>
+            <div class="v-card" [class.active]="selectedVisibility === 'public'" (click)="selectedVisibility = 'public'">
+              <i class="pi pi-globe"></i>
               <strong>Public</strong>
-              <div>Visible to everyone</div>
+              <span>Visible to everyone</span>
             </div>
-
-
-            <div class="v-card">
-              <div class="v-icon"><i class="pi pi-link"></i></div>
+            <div class="v-card" [class.active]="selectedVisibility === 'private'" (click)="selectedVisibility = 'private'">
+              <i class="pi pi-link"></i>
               <strong>Private</strong>
-              <div>Link access</div>
+              <span>Link access only</span>
             </div>
-
-
-            <div class="v-card">
-              <div class="v-icon"><i class="pi pi-user"></i></div>
+            <div class="v-card" [class.active]="selectedVisibility === 'only-me'" (click)="selectedVisibility = 'only-me'">
+              <i class="pi pi-user"></i>
               <strong>Only Me</strong>
-              <div>Draft mode</div>
+              <span>Personal draft</span>
             </div>
           </div>
         </div>
-      }
 
 
-      <!-- QUESTIONS -->
-      <div class="preview-header">
-        <h2>Question Preview</h2>
-        <span>{{ quizData.questionsCount }} total questions</span>
-      </div>
+        <!-- PREVIEW QUESTIONS -->
+        <div class="preview-section">
+          <div class="preview-header">
+            <h2>Question Preview</h2>
+            <span class="total-count">{{ quizData.questionsCount }} total questions</span>
+          </div>
 
 
-      <div>
-        @for (q of questions; track q.id) {
-          <div class="q-row">
-            <div class="q-idx">{{ q.id }}</div>
-
-
-            <div class="q-body">
-              <div class="q-tags">
-                <span class="tag-purple">{{ q.type }}</span>
-                <span class="tag-gray">⏱ {{ q.time }}</span>
-                <span class="tag-gray">{{ q.points }} pts</span>
+          <div class="questions-list">
+            <div class="q-card" *ngFor="let q of questions">
+              <div class="q-index">{{ q.id }}</div>
+              <div class="q-content">
+                <div class="q-meta">
+                  <span class="q-tag type-tag">{{ q.type }}</span>
+                  <span class="q-tag time-tag"><i class="pi pi-clock"></i> {{ q.time }}</span>
+                  <span class="q-tag points-tag">{{ q.points }} PTS</span>
+                </div>
+                <p class="q-text">{{ q.text }}</p>
               </div>
-
-
-              <div class="q-text">{{ q.text }}</div>
+              <button class="btn-expand"><i class="pi pi-chevron-down"></i></button>
             </div>
-
-
-            <i class="pi pi-chevron-down"></i>
           </div>
-        }
-      </div>
-
-
-    </div>
-
-
-    <!-- RIGHT -->
-    <div class="sidebar">
-
-
-      @if (isOwner) {
-        <button class="btn-host-gradient">▶ HOST GAME</button>
+        </div>
+      } @else {
+        <!-- HERO AREA FOR GUEST -->
+        <div class="hero-card hero-guest-full">
+          <div class="guest-hero-layout">
+            <div class="guest-hero-img-box">
+              <img [src]="quizData.imageGuest" alt="Quiz Cover">
+            </div>
+            <div class="guest-hero-info">
+              <div class="guest-top-meta">
+                <span class="cat-tag">{{ quizData.category }}</span>
+              </div>
+              <h1 class="guest-main-title">{{ quizData.title }}</h1>
+              <div class="guest-stats-row">
+                <span class="g-stat"><i class="pi pi-play"></i> {{ quizData.plays }} Plays</span>
+                <span class="g-stat"><i class="pi pi-list"></i> {{ quizData.questionsCount }} Qs</span>
+                <span class="g-stat"><i class="pi pi-clock"></i> {{ quizData.duration }}</span>
+              </div>
+              
+              <div class="guest-cta-btns">
+                <button class="btn-play-now"><i class="pi pi-play"></i> START GAME</button>
+              </div>
+            </div>
+          </div>
+        </div>
       }
-
-
-      <!-- QUICK ACTIONS -->
-      <div class="side-card purple">
-        <div class="side-label">QUICK ACTIONS</div>
-
-
-        @if (isOwner) {
-          <div class="action-item">
-            <i class="pi pi-pencil"></i>
-            Edit Quiz
-          </div>
-        }
-
-
-        <div class="action-item">
-          <i class="pi pi-share-alt"></i>
-          Share Quiz
-        </div>
-
-
-        @if (isOwner) {
-          <div class="action-item delete">
-            <i class="pi pi-trash"></i>
-            Delete Quiz
-          </div>
-        }
-      </div>
-
-
-      <!-- DETAILS -->
-      <div class="side-card white">
-        <h3>Quiz Details</h3>
-
-
-        <div class="detail-row">
-          <span class="label">Author</span>
-          <span class="value">{{ quizData.author }}</span>
-        </div>
-
-
-        <div class="detail-row">
-          <span class="label">Last Updated</span>
-          <span class="value">{{ quizData.lastUpdated }}</span>
-        </div>
-
-
-        <p class="desc-text">{{ quizData.description }}</p>
-      </div>
-
-
     </div>
+
+
+    <!-- CỘT PHẢI (SIDEBAR) -->
+    <aside class="sidebar">
+      @if (isOwner) {
+        <!-- Start Game chính (Host) -->
+        <button class="btn-start-gradient">
+          <i class="pi pi-play"></i> START GAME
+        </button>
+
+
+        <!-- Quick Actions -->
+        <div class="side-card quick-actions-card">
+          <span class="side-label">QUICK ACTIONS</span>
+          <div class="action-list">
+            <button class="action-item">
+              <i class="pi pi-align-left text-primary"></i>
+              <span>Edit Quiz</span>
+            </button>
+            <button class="action-item">
+              <i class="pi pi-share-alt text-secondary"></i>
+              <span>Share Quiz</span>
+            </button>
+            <button class="action-item delete">
+              <i class="pi pi-trash text-danger"></i>
+              <span>Delete Quiz</span>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Summary -->
+        <div class="side-card summary-card">
+          <span class="side-label">QUIZ SUMMARY</span>
+          <div class="summary-content">
+            <p class="summary-text">This quiz was last updated on <strong>{{ quizData.lastUpdated }}</strong>.</p>
+            <p class="summary-text last-summary">It's trending in the <span class="tag-purple">#{{ quizData.category }}</span> category with a 92% satisfaction rate.</p>
+            <div class="engagement-box">
+              <div class="eng-text"><span>ENGAGEMENT RATE</span><span>{{ quizData.engagementRate }}%</span></div>
+              <div class="progress-bg"><div class="progress-fill" [style.width.%]="quizData.engagementRate"></div></div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- GUEST SIDEBAR -->
+        <div class="side-card quick-actions-card">
+          <span class="side-label">QUICK ACTIONS</span>
+          <div class="action-list">
+            <button class="action-item">
+              <i class="pi pi-share-alt text-secondary"></i>
+              <span>Share Quiz</span>
+            </button>
+          </div>
+        </div>
+
+
+        <div class="side-card detail-card">
+          <span class="side-label-large">Quiz Details</span>
+          <div class="detail-list">
+            <div class="detail-item-guest">
+              <span class="detail-label">Author</span>
+              <div class="val-guest">
+                <span class="author-name">{{ quizData.author }}</span>
+                <i class="pi pi-verified-fill verified-icon"></i>
+              </div>
+            </div>
+            <div class="detail-item-guest">
+              <span class="detail-label">Last Updated</span>
+              <div class="val-guest">Oct 12, 2024</div>
+            </div>
+          </div>
+          <p class="summary-desc-guest">
+            {{ quizData.description }}
+          </p>
+        </div>
+      }
+    </aside>
 
 
   </div>
 </div>
+
+
 
