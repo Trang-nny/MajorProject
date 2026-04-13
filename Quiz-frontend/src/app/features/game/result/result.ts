@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-result',
   standalone: true,
@@ -11,7 +12,8 @@ import { RouterModule } from '@angular/router';
 })
 export class Result implements OnInit {
   // Chuyển false để xem giao diện Guest, true để xem Host
-  isOwner: boolean = false; 
+  isOwner: boolean = false;
+
 
   quizResult = {
     description: "Amazing effort! You've navigated JUST4QUIZ with luminous intelligence.",
@@ -26,6 +28,7 @@ export class Result implements OnInit {
     imageSummary: '/Celebratory.png'
   };
 
+
   leaderboard = [
     { rank: 1, name: 'Alex Rivera', points: 15890, avatar: '/User.png', badge: 'WINNER' },
     { rank: 2, name: 'Sarah', points: 12450, avatar: '/User.png', badge: '' },
@@ -33,6 +36,7 @@ export class Result implements OnInit {
     { rank: 4, name: 'Jordan P.', points: 9840, avatar: '/User.png', badge: 'TOP PERFORMER' },
     { rank: 5, name: 'Mia Wong', points: 8200, avatar: '/User.png', badge: 'CONSISTENT' }
   ];
+
 
   ngOnInit(): void {}
 }
