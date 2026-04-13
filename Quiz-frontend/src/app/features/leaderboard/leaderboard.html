@@ -1,1 +1,72 @@
-<p>leaderboard works!</p>
+<div class="leaderboard-container">
+  <header class="leaderboard-header">
+    <h1>Global Champions</h1>
+    
+    <div class="header-controls">
+      <div class="search-bar">
+        <span class="material-icons">search</span>
+        <input type="text" placeholder="Search champion...">
+      </div>
+      <div class="tab-filters">
+        <button class="active">Weekly</button>
+        <button>Monthly</button>
+        <button>All Time</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="top-champions">
+    <!-- Đảm bảo mảng topChampions trong TS có thứ tự: [Hạng 2, Hạng 1, Hạng 3] -->
+    <div *ngFor="let player of topChampions" 
+         [class]="'champion-card ' + (player.rank === 1 ? 'main' : (player.rank === 2 ? 'silver' : 'bronze'))">
+      <div class="rank-badge">{{player.rank}}</div>
+      <div class="avatar-container">
+        <img [src]="player.img" [alt]="player.name">
+        <span class="material-icons crown-icon" *ngIf="player.rank === 1">stars</span>
+      </div>
+      <h3 class="name">{{player.name}}</h3>
+      <p class="title" *ngIf="player.title">{{player.title}}</p>
+      <div class="points-box">
+        <span class="value">{{player.points}}</span>
+        <span class="label">PTS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ranking-section">
+    <div class="section-header">
+      <h2>Global Ranking</h2>
+      <span class="count">Showing 4-100 of 12.4k</span>
+    </div>
+
+    <div class="ranking-list">
+      <div *ngFor="let item of rankings" 
+           [class]="'ranking-item' + (item.isUser ? ' current-user' : '')">
+        <span class="rank-num">{{item.rank}}</span>
+        <div class="player-info">
+          <img [src]="item.img" alt="Player">
+          <div class="details">
+            <div class="name-badge">
+              <span class="name">{{item.name}}</span>
+              <span class="badge" *ngIf="item.badge" 
+                    [style.background-color]="item.badge === 'TOP PERFORMER' ? '#E0EAFF' : (item.badge === 'CONSISTENT' ? '#FDF2FA' : '')"
+                    [style.color]="item.badge === 'TOP PERFORMER' ? '#444CE7' : (item.badge === 'CONSISTENT' ? '#C11574' : '')">
+                {{item.badge}}
+              </span>
+            </div>
+            <span class="subtitle">{{item.subtitle}}</span>
+          </div>
+        </div>
+        <div class="player-score">
+          <span class="points">{{item.points}}</span>
+          <span [class]="'trend ' + (item.trendDown ? 'down' : (item.trend === 'STABLE' ? 'stable' : 'up'))">
+            <span class="material-icons" style="font-size: 12px; vertical-align: middle;">
+              {{item.trendDown ? 'trending_down' : (item.trend === 'STABLE' ? 'remove' : 'trending_up')}}
+            </span>
+            {{item.trend}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

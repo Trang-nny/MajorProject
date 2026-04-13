@@ -1,0 +1,347 @@
+.leaderboard-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.leaderboard-header h1 {
+  text-align: center;
+  font-size: 48px;
+  background: linear-gradient(180deg, #2D1B69 0%, #4D35A3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 40px;
+  font-weight: 800;
+}
+
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.search-bar {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 300px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+}
+
+.tab-filters {
+  background: #EEE7FF;
+  padding: 5px;
+  border-radius: 12px;
+  display: flex;
+  gap: 5px;
+}
+
+.tab-filters button {
+  border: none;
+  background: transparent;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #667085;
+  cursor: pointer;
+}
+
+.tab-filters button.active {
+  background: white;
+  color: #7029FF;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* TOP CHAMPIONS */
+.top-champions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px; /* Giảm gap để các thẻ sát nhau hơn như hình */
+  margin-bottom: 60px;
+  padding: 20px 0;
+}
+
+.champion-card {
+  background: white;
+  border-radius: 32px;
+  padding: 30px 15px; /* Giảm padding ngang */
+  text-align: center;
+  position: relative;
+  width: 240px; /* Cố định chiều rộng để không bị kéo dài */
+  height: 280px; /* Cố định chiều cao cho rank 2, 3 */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Nội dung luôn nằm giữa */
+}
+
+.champion-card.main {
+  background: linear-gradient(135deg, #7029FF 0%, #D8315B 100%);
+  height: 360px; /* Cao hơn rank 2, 3 */
+  width: 280px; 
+  color: white;
+  z-index: 2;
+  box-shadow: 0 20px 50px rgba(112, 41, 255, 0.3);
+}
+
+.champion-card.silver, .champion-card.bronze {
+  height: 280px;
+}
+
+.rank-badge {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  font-weight: 800;
+  font-size: 20px;
+  opacity: 0.4;
+  color: #667085;
+}
+
+.main .rank-badge {
+  color: white;
+  opacity: 0.6;
+}
+
+.avatar-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.main .avatar-container {
+  width: 130px;
+  height: 130px;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #F2F4F7;
+}
+
+.main .avatar-container img {
+  border: 4px solid #FFD700;
+}
+
+.crown-icon {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #FFD700;
+  background: white;
+  border-radius: 50%;
+  font-size: 28px !important;
+}
+
+.name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1D2939;
+}
+
+.main .name {
+  color: white;
+  font-size: 24px;
+}
+
+.title {
+  font-size: 13px;
+  color: #667085;
+  margin: 4px 0;
+}
+
+.main .title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.points-box {
+  background: #F9FAFB;
+  padding: 8px 18px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.main .points-box {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.points-box .value {
+  font-weight: 800;
+  font-size: 18px;
+  color: #7029FF;
+}
+
+.main .points-box .value {
+  color: white;
+}
+
+.points-box .label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #98A2B3;
+}
+
+.main .points-box .label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* RANKING SECTION */
+.ranking-section {
+  background: white;
+  border-radius: 24px;
+  padding: 20px 30px; /* Điều chỉnh padding */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.ranking-list {
+  max-height: 450px; /* Đặt chiều cao cố định để kích hoạt thanh cuộn */
+  overflow-y: scroll; /* Luôn hiện thanh cuộn hoặc dùng auto */
+  padding-right: 15px; /* Khoảng cách với thanh cuộn */
+  margin-top: 10px;
+}
+
+/* Tùy chỉnh thanh cuộn bên phải */
+.ranking-list::-webkit-scrollbar {
+  width: 8px; /* Độ rộng thanh cuộn */
+}
+
+.ranking-list::-webkit-scrollbar-track {
+  background: #F2F4F7;
+  border-radius: 4px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb {
+  background: #D0D5DD;
+  border-radius: 4px;
+  border: 2px solid #F2F4F7; /* Tạo khoảng trống xung quanh thumb */
+}
+
+.ranking-list::-webkit-scrollbar-thumb:hover {
+  background: #98A2B3;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #F2F4F7;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.section-header h2 {
+  font-size: 18px;
+  color: #1D2939;
+}
+
+.count {
+  font-size: 12px;
+  color: #667085;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #F9FAFB;
+  gap: 20px;
+}
+
+.ranking-item.current-user {
+  background: #F4EBFF;
+  border: 1px solid #D6BBFB;
+  border-radius: 16px;
+}
+
+.rank-num {
+  font-weight: 700;
+  color: #667085;
+  width: 30px;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.player-info img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.name-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-badge .name {
+  font-size: 16px;
+  color: #1D2939;
+}
+
+.badge {
+  background: #F2F4F7;
+  color: #344054;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.current-user .badge {
+  background: #7029FF;
+  color: white;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #667085;
+}
+
+.player-score {
+  text-align: right;
+}
+
+.points {
+  display: block;
+  font-weight: 800;
+  color: #1D2939;
+}
+
+.trend {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.trend.up { color: #12B76A; }
+.trend.down { color: #F04438; }
+.trend.stable { color: #667085; }
