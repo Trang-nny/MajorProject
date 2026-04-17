@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+﻿import { Routes } from '@angular/router';
 
 // Layouts
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
@@ -20,19 +20,16 @@ import { ProfileEdit } from './features/profile-edit/profile-edit';
 import { QuizList } from './features/quiz/quiz-list/quiz-list';
 import { CreateQuiz } from './features/quiz/create-quiz/create-quiz';
 import { QuizDetail } from './features/quiz/quiz-detail/quiz-detail';
-import { QuizEdit } from './features/quiz/quiz-edit/quiz-edit';
 
 // Features - Game Play
+import { GameRoom } from './features/game/multi/game-room/game-room';
+import { MultiLobby } from './features/game/multi/multi-lobby/multi-lobby';
 import { ModeSelection } from './features/game/mode-selection/mode-selection';
 import { Result } from './features/game/result/result';
 
-// Solo Features
+// Features - Solo Play
 import { SoloLobby } from './features/game/solo/solo-lobby/solo-lobby';
-import { GameRoom as SoloGameRoom } from './features/game/solo/game-room/game-room';
-
-// Multi Features
-import { MultiLobby } from './features/game/multi/multi-lobby/multi-lobby';
-import { GameRoom as MultiGameRoom } from './features/game/multi/game-room/game-room';
+import { GameRoomComponent as SoloGameRoom } from './features/game/solo/game-room/game-room';
 
 export const routes: Routes = [
   // Nhóm 1: Các trang không có Header phức tạp (Sử dụng AuthLayout)
@@ -55,10 +52,9 @@ export const routes: Routes = [
       { path: 'quizzes', component: QuizList },
       { path: 'create-quiz', component: CreateQuiz },
       { path: 'quiz-detail/:id', component: QuizDetail },
-      { path: 'quiz-edit/:id', component: QuizEdit },
       { path: 'leaderboard', component: Leaderboard },
       { path: 'profile', component: Profile },
-      { path: 'profile-edit', component: ProfileEdit },
+      { path: 'profile/edit', component: ProfileEdit },
     ]
   },
 
@@ -68,16 +64,13 @@ export const routes: Routes = [
     component: GameLayout,
     children: [
       { path: 'mode', component: ModeSelection },
-      
-      // Chế độ Solo
-      { path: 'solo/setup', component: SoloLobby },
-      { path: 'solo/room', component: SoloGameRoom },
-      
-      // Chế độ Multi
-      { path: 'multi/lobby', component: MultiLobby },
-      { path: 'multi/room', component: MultiGameRoom },
-      
+      { path: 'lobby', component: MultiLobby },
+      { path: 'room', component: GameRoom },
       { path: 'result', component: Result },
+      
+      // Khai báo route cho Solo Mode
+      { path: 'solo/lobby', component: SoloLobby },
+      { path: 'solo/room', component: SoloGameRoom },
     ]
   },
 

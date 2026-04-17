@@ -1,25 +1,23 @@
-<div class="create-quiz-wrapper">
+﻿<div class="create-quiz-wrapper">
   <div class="create-quiz-container">
-    
+
     <aside class="sidebar-questions">
       <h3 class="sidebar-title">Questions</h3>
       <div class="question-list">
-        <div class="question-nav-item active">
-          <div class="q-number">1</div>
-          <span>Question 1</span>
+        <div class="question-nav-item" 
+             *ngFor="let q of questions; let i = index" 
+             [class.active]="i === activeQuestionIndex" 
+             (click)="selectQuestion(i)">
+          <div class="q-number">{{ i + 1 }}</div>
+          <span>Question {{ i + 1 }}</span>
         </div>
-        <div class="question-nav-item">
-          <div class="q-number">2</div>
-          <span>Question 2</span>
-        </div>
-        <button class="btn-add-q-dash">
+        <button class="btn-add-q-dash" (click)="addQuestion()">
           <span class="material-icons">add</span> Add Question
         </button>
       </div>
     </aside>
 
     <main class="quiz-editor-main">
-      
       <section class="quiz-info-section">
         <div class="info-header-row">
            <span class="material-icons">info</span>
@@ -29,100 +27,117 @@
         <div class="info-grid-top">
           <div class="form-group-custom title-group">
             <label class="label-bold">Quiz Title</label>
-            <input type="text" placeholder="e.g. World History Masters" class="input-styled">
+            <input type="text" [(ngModel)]="quizTitle" placeholder="e.g. World History Masters" class="input-styled" maxlength="100">
           </div>
           <div class="form-group-custom level-group">
             <label class="label-bold">Level</label>
             <div class="level-pills-row">
-              <button class="pill-btn active">Easy</button>
-              <button class="pill-btn">Mid</button>
-              <button class="pill-btn">Pro</button>
+              <button class="pill-btn" [class.active]="quizLevel === 'Easy'" (click)="selectLevel('Easy')">Easy</button>
+              <button class="pill-btn" [class.active]="quizLevel === 'Mid'" (click)="selectLevel('Mid')">Mid</button>
+              <button class="pill-btn" [class.active]="quizLevel === 'Pro'" (click)="selectLevel('Pro')">Pro</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group-custom">
+          <label class="label-bold">Cover Image</label>
+          <div class="cover-image-upload" style="display: flex; align-items: center; gap: 1.5rem; margin-top: 5px;">
+            <div class="upload-actions" style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; background-color: #ffffff; border: 1px solid rgba(64, 47, 93, 0.1); border-radius: 20px; padding: 6px 16px 6px 6px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s ease; width: fit-content;">
+                <div style="background-color: #eee9fb; color: #402f5d; width: 36px; height: 36px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <span class="material-icons" style="font-size: 20px;">image</span>
+                </div>
+                <span style="color: #402f5d; font-weight: 600; font-size: 15px;">{{ quizCoverFileName ? 'Change Image' : 'Choose Image' }}</span>
+                <input type="file" (change)="onCoverImageSelected($event)" accept="image/*" style="display: none;">
+              </label>
+              <button *ngIf="quizCoverImage" (click)="removeCoverImage()" class="icon-button-action delete" style="background: none; color: #d32f2f; border: none; cursor: pointer; text-align: left; padding: 0; padding-left: 8px; font-weight: 500;">
+                <span class="material-icons" style="font-size: 16px; vertical-align: middle;">delete_outline</span> Delete Image
+              </button>
+            </div>
+            
+            <div class="cover-preview-container" *ngIf="quizCoverImage" style="display: flex; align-items: center; gap: 12px; background: #faf9ff; padding: 8px; border-radius: 16px; border: 1px solid #f0ebf8;">
+              <div class="cover-preview" style="width: 80px; height: 56px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex-shrink: 0;">
+                <img [src]="quizCoverImage" style="width: 100%; height: 100%; object-fit: cover;" alt="Cover Preview">
+              </div>
+              <div class="cover-info" style="display: flex; flex-direction: column; padding-right: 12px; max-width: 200px;">
+                <span style="font-size: 13px; font-weight: 600; color: #402f5d; margin-bottom: 2px;">Đã chọn ảnh</span>
+                <span style="font-size: 12px; color: #6c6380; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" [title]="quizCoverFileName">{{ quizCoverFileName }}</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="form-group-custom">
           <label class="label-bold">Description</label>
-          <textarea placeholder="Describe your quiz..." class="textarea-styled"></textarea>
+          <textarea [(ngModel)]="quizDescription" placeholder="Describe your quiz..." class="textarea-styled" maxlength="500"></textarea>
         </div>
       </section>
 
-      <section class="question-editor-card">
+      <section class="question-editor-card" *ngIf="activeQuestion">
         <div class="card-header-flex">
           <div class="info-header-row" style="margin-bottom: 0;">
             <span class="material-icons">description</span>
-            <h2 class="form-section-title">Question 1</h2>
+            <h2 class="form-section-title">Question {{ activeQuestionIndex + 1 }}</h2>
           </div>
 
           <div class="header-actions">
-            <button class="icon-button-action">
+            <button class="icon-button-action" title="Duplicate Question" (click)="copyQuestion(activeQuestionIndex)">
               <span class="material-icons">content_copy</span>
             </button>
-            <button class="icon-button-action delete">
+            <button class="icon-button-action delete" title="Delete Question" (click)="deleteQuestion(activeQuestionIndex)">
               <span class="material-icons">delete</span>
             </button>
           </div>
         </div>
 
         <div class="main-q-input">
-          <textarea placeholder="Type your question here..."></textarea>
-          <span class="char-limit">0/250</span>
+          <textarea [(ngModel)]="activeQuestion.text" placeholder="Type your question here..." maxlength="250"></textarea>        
+          <span class="char-limit">{{ activeQuestion.text.length }}/250</span>
         </div>
 
         <div class="toggle-option-row">
           <span>Allow multiple correct answers</span>
           <label class="switch-ui">
-            <input type="checkbox">
+            <input type="checkbox" [(ngModel)]="activeQuestion.multipleCorrect" (change)="onMultipleCorrectChange()">
             <span class="slider-ui"></span>
           </label>
         </div>
 
         <div class="answers-2-col">
-          <div class="ans-box selected">
-            <button class="radio-check-btn active">
-              <span class="material-icons">done</span>
+          <div class="ans-box" *ngFor="let ans of activeQuestion.answers; let ansIndex = index"
+               [class.selected]="ans.isCorrect">
+            <button class="radio-check-btn" [class.active]="ans.isCorrect" (click)="toggleCorrectAnswer(ansIndex)">
+              <span class="material-icons" *ngIf="ans.isCorrect">done</span>
             </button>
-            <input type="text" value="Alexander the Great">
-          </div>
-          
-          <div class="ans-box">
-            <button class="radio-check-btn"></button>
-            <input type="text" placeholder="Add answer">
-          </div>
-          
-          <div class="ans-box">
-            <button class="radio-check-btn"></button>
-            <input type="text" placeholder="Add answer">
-          </div>
-          
-          <div class="ans-box">
-            <button class="radio-check-btn"></button>
-            <input type="text" placeholder="Add answer">
+            <input type="text" [(ngModel)]="ans.text" placeholder="Add answer {{ ansIndex + 1 }}" maxlength="100">
+            <button *ngIf="activeQuestion.answers.length > 2" class="icon-button-action delete" style="margin-left: auto;" (click)="deleteAnswer(ansIndex)">
+              <span class="material-icons" style="font-size: 18px;">close</span>
+            </button>
           </div>
         </div>
-        
-        <div class="add-answer-wrapper">
-            <button class="btn-add-ans-solid">+ Add Answer</button>
+
+        <div class="add-answer-wrapper" [style.visibility]="activeQuestion.answers.length < 4 ? 'visible' : 'hidden'">
+            <button class="btn-add-ans-solid" (click)="addAnswer()" [disabled]="activeQuestion.answers.length >= 4">+ Add Answer</button>
         </div>
 
         <div class="settings-bottom">
           <div class="custom-select-ui">
             <span class="material-icons">timer</span>
-            <select>
-              <option value="10">10 seconds</option>
-              <option value="20" selected>20 seconds</option>
-              <option value="30">30 seconds</option>
-              <option value="60">60 seconds</option>
+            <select [(ngModel)]="activeQuestion.timeLimit">
+              <option [ngValue]="10">10 seconds</option>
+              <option [ngValue]="20">20 seconds</option>
+              <option [ngValue]="30">30 seconds</option>
+              <option [ngValue]="60">60 seconds</option>
             </select>
             <span class="material-icons">expand_more</span>
           </div>
           <div class="custom-select-ui">
             <span class="material-icons">stars</span>
-            <select>
-              <option value="100" selected>100 points</option>
-              <option value="200">200 points</option>
-              <option value="500">500 points</option>
-              <option value="1000">1000 points</option>
+            <select [(ngModel)]="activeQuestion.points">
+              <option [ngValue]="100">100 points</option>
+              <option [ngValue]="200">200 points</option>
+              <option [ngValue]="500">500 points</option>
+              <option [ngValue]="1000">1000 points</option>
             </select>
             <span class="material-icons">expand_more</span>
           </div>
@@ -130,8 +145,8 @@
       </section>
 
       <div class="final-actions">
-        <button class="btn-footer btn-save">Save Quiz</button>
-        <button class="btn-footer btn-publish">Publish Quiz</button>
+        <button class="btn-footer btn-save" title="Lưu nháp">Save Draft</button>
+        <button class="btn-footer btn-publish" (click)="saveQuiz()">Publish Quiz</button>
       </div>
     </main>
   </div>

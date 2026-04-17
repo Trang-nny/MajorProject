@@ -12,19 +12,18 @@
         <h2>Sign in</h2>
         <p class="subtitle">Welcome back! Please enter your details.</p>
 
-        <button class="btn-google">
-          <img src="/Google.png" alt="Google">
-          Continue with Google
-        </button>
+        <!-- Dynamic Google Sign-In Button Container -->
+        <div id="google-btn" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
 
         <div class="divider"><span>OR WITH EMAIL</span></div>
 
-        <form>
+        <!-- Removing <form> completely to bypass Chrome password breach warning -->
+        <div class="login-form">
           <div class="form-group">
             <label>EMAIL ADDRESS</label>
             <div class="input-wrapper">
               <span class="material-icons field-icon">mail_outline</span>
-              <input type="email" placeholder="hello@example.com">
+              <input type="email" name="email" [(ngModel)]="email" placeholder="hello@example.com" autocomplete="off" required (keydown.enter)="onLogin()">
             </div>
           </div>
 
@@ -35,7 +34,8 @@
             </div>
             <div class="input-wrapper">
               <span class="material-icons field-icon">lock_outline</span>
-              <input [type]="passwordVisible ? 'text' : 'password'" placeholder="••••••••">
+              <!-- CSS text security trick replaces standard password functionality, tricking Chromium browsers -->
+              <input type="text" [style.-webkit-text-security]="passwordVisible ? 'none' : 'disc'" class="password-input-bypass" name="password" [(ngModel)]="password" placeholder="••••••••" autocomplete="off" required (keydown.enter)="onLogin()">
               <span class="material-icons eye-icon" (click)="togglePassword()">
                 {{ passwordVisible ? 'visibility' : 'visibility_off' }}
               </span>
@@ -48,12 +48,14 @@
               <label for="keep-signed">Keep me signed in</label>
             </div>
           </div>
-          <button type="button" routerLink="/app/dashboard" class="btn-primary-auth btn-register-gradient">Sign in</button>
-        </form>
+
+          <!-- Used a regular click event to replace standard form submit -->
+          <button type="button" (click)="onLogin()" class="btn-primary-auth btn-register-gradient">Sign in</button>
+        </div>
 
         <p class="footer-terms">
-          By signing in, you agree to JUST4QUIZ's 
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+          By signing in, you agree to JUST4QUIZ's
+          <a href="#" (click)="showComingSoon($event)">Terms of Service</a> and <a href="#" (click)="showComingSoon($event)">Privacy Policy</a>.
         </p>
       </div>
     </div>

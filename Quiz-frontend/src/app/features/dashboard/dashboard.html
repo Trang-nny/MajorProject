@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  
+
   <section class="hero-section">
     <div class="hero-left">
     <h1 class="welcome-text">WELCOME TO <br><span>JUST4QUIZ</span></h1>
@@ -7,20 +7,33 @@
   </div>
 
     <div class="hero-right">
-      <div class="pin-group-box">
-        <span class="enter-pin-label">ENTER PIN</span>
-        <div class="pin-inputs">
-          <input type="text" maxlength="1" placeholder="•" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="pin-card">
+        <span class="pin-badge">ENTER PIN</span>
+        
+        <div class="pin-input-group">
+          <input 
+            type="text" 
+            [(ngModel)]="joinPin" 
+            maxlength="6" 
+            class="hidden-pin-input" 
+            (input)="onPinInput($event)">
+          
+          @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+            <div class="pin-field" [class.placeholder]="!joinPin[i]">
+              {{ joinPin[i] || '0' }}
+            </div>
+          }
         </div>
-        <button class="btn-join-hero">
-          JOIN GAME <span class="material-icons">bolt</span>
+        
+        <button class="btn-join" [disabled]="joinPin.length < 6">
+          JOIN GAME <span class="material-icons bolt-icon">bolt</span>
         </button>
       </div>
     </div>
   </section>
 
   <section class="action-cards-grid">
-  
+
     <div class="action-card-item" [routerLink]="['/app/create-quiz']">
       <div class="card-icon-circle purple">
         <span class="material-icons">add_circle_outline</span>
@@ -44,7 +57,7 @@
   </section>
 
   <div class="main-layout-grid">
-    
+
     <aside class="recommended-column">
       <div class="recommended-header">
         <h3>Recommended Quizzes</h3>
@@ -52,23 +65,23 @@
       </div>
 
       <div class="recommended-quiz-list">
-      <div class="quiz-row-card" *ngFor="let item of quizzes">
-        <img [src]="item.img" [alt]="item.title">
-        
-        <div class="quiz-card-info">
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.stats }}</p>
-        </div>
-        
-        <span class="material-icons arrow-icon">chevron_right</span>
+        @for (item of quizzes; track item.id) {
+          <div class="quiz-row-card" [routerLink]="['/app/quiz-detail', item.id || 1]">
+            <img [src]="item.img" [alt]="item.title" style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover;">
+            <div class="quiz-card-info">
+              <h4>{{ item.title }}</h4>
+              <p>{{ item.stats }}</p>
+            </div>
+            <span class="material-icons arrow-icon">chevron_right</span>
+          </div>
+        }
       </div>
-    </div>
     </aside>
 
     <section class="invite-column">
       <div class="invite-gradient-card">
         <h4>Invite your friends</h4>
-        <p>Challenge your classmates or coworkers and win exclusive badges.</p>
+        <p>Challenge your classmates or coworkers and win exclusive badges.</p> 
         <button class="btn-send-invite">SEND INVITE</button>
       </div>
     </section>

@@ -3,11 +3,11 @@
     <div class="logo" routerLink="/">JUST4QUIZ</div>
   </div>
 
-  <div class="nav-menu-center" *ngIf="type === 'profile'">
-    <a routerLink="/app/dashboard" routerLinkActive="active">Home</a>
-    <a routerLink="/app/quizzes" routerLinkActive="active">Quizzes</a>
-    <a routerLink="/app/leaderboard" routerLinkActive="active">Leaderboard</a>
-    <a routerLink="/app/profile" routerLinkActive="active">Profile</a>
+  <div class="nav-center" *ngIf="type === 'profile' || type === 'dashboard'">
+    <a class="nav-link" routerLink="/app/dashboard" routerLinkActive="active-link">Home</a>
+    <a class="nav-link" routerLink="/app/quizzes" routerLinkActive="active-link">Quizzes</a>
+    <a class="nav-link" routerLink="/app/leaderboard" routerLinkActive="active-link">Leaderboard</a>
+    <a class="nav-link" routerLink="/app/profile" routerLinkActive="active-link">Profile</a>
   </div>
 
   <div class="nav-right">
@@ -28,12 +28,12 @@
       </span>
     </div>
 
-    <div class="user-controls-simple" *ngIf="type === 'profile' || type === 'game'" routerLink="/app/profile" style="cursor: pointer;">
-      <span class="username">{{ username }}</span>
-      <div class="avatar-wrapper">
-        <img src="/User.png" alt="Avatar">
+    <div class="profile-menu" *ngIf="type === 'profile' || type === 'dashboard'" routerLink="/app/profile">
+      <span class="profile-name">{{ username }}</span>
+      <div class="avatar-circle">
+        <img [src]="avatar || '/User.png'" alt="Avatar" class="avatar-img" onerror="this.src='https://via.placeholder.com/36?text=U'">
       </div>
-      <span class="material-icons">expand_more</span>
+      <span class="material-icons drop-icon">expand_more</span>
     </div>
   </div>
 </nav>

@@ -12,19 +12,18 @@
         <h2>Create account</h2>
         <p class="subtitle">Start your journey into the Neon Atoll of knowledge.</p>
 
-        <button class="btn-google">
-          <img src="/Google.png" alt="Google">
-          Continue with Google
-        </button>
+        <div id="google-btn"></div>
 
         <div class="divider"><span>OR WITH EMAIL</span></div>
 
-        <form>
+<!-- Removing <form> completely to bypass Chrome password breach warning -->
+        <div class="login-form">
           <div class="form-group">
             <label>USERNAME</label>
             <div class="input-wrapper">
               <span class="material-icons field-icon">person_outline</span>
-              <input type="text" placeholder="quiz_master">
+              <!-- Binding ngModel and keeping autocomplete off -->
+              <input type="text" name="username" [(ngModel)]="username" placeholder="quiz_master" autocomplete="off" required (keydown.enter)="onRegister()">
             </div>
           </div>
 
@@ -32,7 +31,7 @@
             <label>EMAIL ADDRESS</label>
             <div class="input-wrapper">
               <span class="material-icons field-icon">mail_outline</span>
-              <input type="email" placeholder="hello@example.com">
+              <input type="email" name="email" [(ngModel)]="email" placeholder="hello@example.com" autocomplete="off" required (keydown.enter)="onRegister()">
             </div>
           </div>
 
@@ -40,18 +39,20 @@
             <label>PASSWORD</label>
             <div class="input-wrapper">
               <span class="material-icons field-icon">lock_outline</span>
-              <input [type]="passwordVisible ? 'text' : 'password'" placeholder="••••••••">
+              <!-- CSS text security trick replaces standard password functionality, tricking Chromium browsers -->
+              <input type="text" [style.-webkit-text-security]="passwordVisible ? 'none' : 'disc'" class="password-input-bypass" name="password" [(ngModel)]="password" placeholder="••••••••" autocomplete="off" required (keydown.enter)="onRegister()">
               <span class="material-icons eye-icon" (click)="togglePassword()">
                 {{ passwordVisible ? 'visibility' : 'visibility_off' }}
               </span>
             </div>
           </div>
-          <button type="button" routerLink="/app/dashboard" class="btn-primary-auth btn-register-gradient">Create Account</button>
-        </form>
+
+          <button type="button" (click)="onRegister()" class="btn-primary-auth btn-register-gradient">Create Account</button>
+        </div>
 
         <p class="footer-terms">
-          By creating an account, you agree to JUST4QUIZ's 
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+          By creating an account, you agree to JUST4QUIZ's
+          <a href="#" (click)="showComingSoon($event)">Terms of Service</a> and <a href="#" (click)="showComingSoon($event)">Privacy Policy</a>.
         </p>
       </div>
     </div>

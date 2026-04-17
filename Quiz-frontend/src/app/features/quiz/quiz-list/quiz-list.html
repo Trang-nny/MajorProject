@@ -4,10 +4,10 @@
       <div class="hero-content-left">
         <h1 class="welcome-text">Explore <span>Quizzes</span></h1>
         <p class="hero-subtext">Test your knowledge across hundreds of categories and compete with the global community.</p>
-        
+       
         <div class="search-box-pill">
           <span class="material-icons search-icon-left">search</span>
-          <input type="text" placeholder="Search for quizzes, topics, or authors..." class="search-input">
+          <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="saveState()" placeholder="Search for quizzes, topics, or authors..." class="search-input">
           <button class="btn-search-pill">
             <span class="material-icons">search</span> Search
           </button>
@@ -16,25 +16,27 @@
     </section>
   </div>
 
+
   <div class="quiz-list-main-grid">
     <aside class="sidebar-filters">
       <div class="filter-card">
         <h3 class="filter-main-title">Filters</h3>
-        
+       
         <div class="filter-group">
           <label class="label-bold">Difficulty</label>
           <div class="checkbox-list">
             <label class="custom-check-item">
-              <input type="checkbox"><span class="checkmark"></span> Easy
+              <input type="checkbox" [(ngModel)]="selectedLevels['Easy']" (ngModelChange)="saveState()"><span class="checkmark"></span> Easy
             </label>
             <label class="custom-check-item">
-              <input type="checkbox" checked><span class="checkmark"></span> Mid
+              <input type="checkbox" [(ngModel)]="selectedLevels['Mid']" (ngModelChange)="saveState()"><span class="checkmark"></span> Mid
             </label>
             <label class="custom-check-item">
-              <input type="checkbox"><span class="checkmark"></span> Pro
+              <input type="checkbox" [(ngModel)]="selectedLevels['Pro']" (ngModelChange)="saveState()"><span class="checkmark"></span> Pro
             </label>
           </div>
         </div>
+
 
         <div class="filter-group">
           <label class="label-bold">Sort By</label>
@@ -50,126 +52,60 @@
           </div>
         </div>
 
-        <button class="btn-clear-all-outline">Clear All</button>
+
+        <button class="btn-clear-all-outline" (click)="clearAll()">Clear All</button>
       </div>
     </aside>
 
+
     <main class="quiz-content-area">
       <div class="quiz-grid-6-cards">
+       
+        <!-- Hiển thị danh sách quiz đã được phân trang -->
+        <div class="quiz-item-card" *ngFor="let quiz of paginatedQuizzes">
+          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', quiz.id]">
+            <!-- Thêm [style.object-fit]="'cover'" để ảnh cover không bị méo -->
+            <img [src]="quiz.image" [alt]="quiz.title" style="object-fit: cover; width: 100%; height: 100%;">
+          </div>
+          <div class="card-details">
+            <h4 class="title-q">{{ quiz.title }}</h4>
+            <div class="user-row"><img src="User.png"><span>by {{ quiz.author }}</span></div>
+            <div class="stats-grid">
+              <div class="s-box"><span class="v">{{ quiz.items }}</span><span class="l">Items</span></div>
+              <div class="s-box"><span class="v">{{ quiz.plays }}</span><span class="l">Plays</span></div>
+              <div class="s-box"><span class="v">{{ quiz.level }}</span><span class="l">Level</span></div>
+            </div>
+            <button class="btn-play-gradient" [routerLink]="['/play/mode']" [queryParams]="{ id: quiz.id, title: quiz.title, desc: quiz.description, level: quiz.level, length: quiz.items }">Start Quiz <span class="material-icons">play_arrow</span></button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Logic Phân trang -->
+      <div class="pagination-container" *ngIf="totalPages > 1">
+        <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" [class.disabled-btn]="currentPage === 1">
+          <span class="material-icons">chevron_left</span>
+        </button>
         
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 1]">
-            <img src="World.png" alt="World">
-            <span class="badge-topic">HISTORY</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">World History Masters</h4>
-            <div class="user-row"><img src="User.png"><span>by Elena Vance</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">15</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">1.2k</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Mid</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
+        <button 
+          *ngFor="let page of getPagesArray()" 
+          class="page-btn" 
+          [class.active]="currentPage === page"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
 
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 2]">
-            <img src="Cyber.png" alt="Cyber">
-            <span class="badge-topic">TECH</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">Network Security</h4>
-            <div class="user-row"><img src="User.png"><span>by Alex Rivera</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">10</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">850</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Pro</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
-
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 3]">
-            <img src="Science.png" alt="Science">
-            <span class="badge-topic">SCIENCE</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">Quantum Physics</h4>
-            <div class="user-row"><img src="User.png"><span>by Dr. Smith</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">20</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">2k</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Pro</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
-
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 4]">
-            <img src="Music.png" alt="Music">
-            <span class="badge-topic">MUSIC</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">Pop Culture 2024</h4>
-            <div class="user-row"><img src="User.png"><span>by Sarah J.</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">25</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">5k</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Easy</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
-
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 5]">
-            <img src="Arts1.png" alt="Arts">
-            <span class="badge-topic">ARTS</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">Renaissance Art</h4>
-            <div class="user-row"><img src="User.png"><span>by Da Vinci</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">12</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">1.1k</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Mid</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
-
-        <div class="quiz-item-card">
-          <div class="thumb-wrap" [routerLink]="['/app/quiz-detail', 6]">
-            <img src="Tech.png" alt="Tech">
-            <span class="badge-topic">CODING</span>
-          </div>
-          <div class="card-details">
-            <h4 class="title-q">Angular Expert</h4>
-            <div class="user-row"><img src="User.png"><span>by Dev Team</span></div>
-            <div class="stats-grid">
-              <div class="s-box"><span class="v">30</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">8k</span><span class="l">Plays</span></div>
-              <div class="s-box"><span class="v">Pro</span><span class="l">Level</span></div>
-            </div>
-            <button class="btn-play-gradient" routerLink="/play/mode">Start Quiz <span class="material-icons">play_arrow</span></button>
-          </div>
-        </div>
-
+        <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" [class.disabled-btn]="currentPage === totalPages">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+      
+      <!-- Thông báo khi không có quiz -->
+      <div *ngIf="filteredQuizzes.length === 0" style="text-align: center; padding: 50px; color: #a097b1;">
+        <span class="material-icons" style="font-size: 40px; margin-bottom: 10px;">search_off</span>
+        <p>No quizzes found. Please try a different search or filter.</p>
       </div>
 
-      <div class="pagination-container">
-        <button class="page-btn"><span class="material-icons">chevron_left</span></button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">4</button>
-        <button class="page-btn">5</button>
-        <button class="page-btn"><span class="material-icons">chevron_right</span></button>
-      </div>
     </main>
   </div>
 </div>

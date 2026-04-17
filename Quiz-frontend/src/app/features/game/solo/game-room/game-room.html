@@ -2,61 +2,81 @@
   <div class="game-room-container">
     
     <div class="header-section">
-      <div class="left-head">
+      <div class="progress-info">
         <div class="badge">
-          <span class="material-icons badge-icon">security</span> SECURITY FUNDAMENTALS
+          <span class="badge-icon">🎯</span>
+          <span style="font-size: 1.1rem; font-weight: 900; letter-spacing: 0.5px;">QUESTION PROGRESS</span>
         </div>
-        <h1 class="question-count">Question {{ questionNumber }} of {{ totalQuestions }}</h1>
+        <h2 class="question-count">{{ (currentIndex + 1) | number:'2.0-0' }} <span style="color: #c7c7d4;">/ {{ (questions.length || 1) | number:'2.0-0' }}</span></h2>
       </div>
 
-      <div class="timer-card">
-        <div class="timer-circle">
-          <span class="timer-number">{{ timeLeft }}</span>
+      <div class="timer-card" *ngIf="enableTimer">
+        <div style="position: relative; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+          <svg style="position: absolute; top:0; left: 0; transform: rotate(-90deg);" width="60" height="60">
+            <circle cx="30" cy="30" r="26" stroke="#f0edf7" stroke-width="6" fill="none"></circle>
+            <circle cx="30" cy="30" r="26" [attr.stroke]="timeLeft <= 5 ? '#e91e63' : '#a42c67'" stroke-width="6" fill="none"
+                    stroke-dasharray="163.36" 
+                    [attr.stroke-dashoffset]="163.36 - ((timeLeft > 0 ? timeLeft : 0) / maxTime) * 163.36"
+                    style="transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round;"></circle>
+          </svg>
+          <span class="timer-number" style="position: relative; z-index: 2; margin: 0; font-size: 1.4rem;" [ngStyle]="{'color': timeLeft <= 5 ? '#e91e63' : '#a42c67'}">
+            {{ timeLeft > 0 ? timeLeft : 0 }}
+          </span>
         </div>
-        <span class="timer-label">SECONDS LEFT</span>
+        <div class="timer-label">SECONDS<br>REMAINING</div>
+      </div>
+    </div>
+    
+    <!-- Score Popup Display / Streak Info -->
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 20px; min-height: 48px;">
+      <h3 style="margin: 0; color: #2b2b42; font-weight: 800; font-size: 1.5rem">
+        Score: {{ score | number }} 
+        <span *ngIf="showScorePopup" style="color: #4caf50; font-size: 1.2rem; animation: fadeUp 1s ease-out; position: absolute; margin-left: 10px;">+{{ lastGainedScore | number }}</span>
+      </h3>
+      <div class="streak-badge" *ngIf="streak > 1" style="background: linear-gradient(135deg, #ff9800, #ff5722); padding: 8px 16px; border-radius: 20px; color: white; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3); animation: pulseScale 1s infinite alternate;">
+        🔥 {{ streak }} Streak!
       </div>
     </div>
 
-    <div class="question-card">
-      <h2 class="question-text">
-        Which of the following is the most common method of social engineering?
-      </h2>
+    <div class="question-card" *ngIf="currentQuestion">
+      <h3 class="question-text">
+        {{ currentQuestion.content }}
+      </h3>
+      <div style="font-size: 0.9rem; color: #6c2bd9; margin-top: 10px; font-weight: 700;" *ngIf="isMultipleChoice">
+        <i class="pi pi-check-square"></i> Select all correct answers
+      </div>
     </div>
 
-    <!-- Answers Grid -->
-    <div class="answers-grid">
-      <!-- Option A -->
-      <button class="answer-btn answer-a" (click)="selectAnswer('A')">
-        <span class="option-letter">A</span>
-        <span class="option-text">Phishing</span>
-        <div class="bg-icon">@</div>
-      </button>
+    <!-- Hiển thị Loading... nếu chưa load xong -->
+    <div class="question-card" *ngIf="!currentQuestion">
+      <h3 class="question-text">
+        Loading Question...
+      </h3>
+    </div>
 
-      <!-- Option B -->
-      <button class="answer-btn answer-b" (click)="selectAnswer('B')">
-        <span class="option-letter">B</span>
-        <span class="option-text">SQL Injection</span>
-        <div class="bg-icon"><span class="material-icons bg-material">storage</span></div>
-      </button>
-
-      <!-- Option C -->
-      <button class="answer-btn answer-c" (click)="selectAnswer('C')">
-        <span class="option-letter">C</span>
-        <span class="option-text">Brute Force</span>
-        <div class="bg-icon"><span class="material-icons bg-material">lock_open</span></div>
-      </button>
-
-      <!-- Option D -->
-      <button class="answer-btn answer-d" (click)="selectAnswer('D')">
-        <span class="option-letter">D</span>
-        <span class="option-text">Ransomware</span>
-        <div class="bg-icon"><span class="material-icons bg-material">security</span></div>
+    <div class="answers-grid" *ngIf="currentQuestion">
+      <button class="answer-btn" 
+              *ngFor="let opt of parsedOptions; let i = index"
+              [ngClass]="getOptionClass(i, opt)"
+              (click)="selectOption(opt)"
+              [disabled]="hasAnswered">
+        <div class="option-letter">{{ getLetter(i) }}</div>
+        <span class="option-text">{{ opt.text || opt.answer }}</span>
+        <span class="bg-icon">{{ getLetter(i) }}</span>
       </button>
     </div>
 
-    <div class="action-section">
-      <button class="next-btn" routerLink="/play/result">
-        NEXT QUESTION <span class="material-icons">double_arrow</span>
+    <div class="action-section" *ngIf="!hasAnswered && isMultipleChoice">
+      <button class="submit-ans-btn" (click)="submitMultipleChoice()" [disabled]="selectedOptionIds.size === 0">
+        Submit Check
+        <span class="material-icons">task_alt</span>
+      </button>
+    </div>
+
+    <div class="action-section" *ngIf="hasAnswered">
+      <button class="next-btn" (click)="goToNext()">
+        {{ practiceMode ? 'Next Question' : 'Auto Next in ' + nextCountDown + 's...' }}
+        <span class="material-icons">arrow_forward</span>
       </button>
     </div>
 

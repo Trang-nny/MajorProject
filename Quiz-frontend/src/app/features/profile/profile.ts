@@ -1,35 +1,66 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HttpClientModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
-export class Profile {
+export class Profile implements OnInit {
+  private http = inject(HttpClient);
+  private cd = inject(ChangeDetectorRef);
+
   user = {
-    name: 'Alex Rivera',
+    id: '',
+    name: 'Guest Player',
     title: 'Master of Logic & Digital Lore',
-    games: 142,
-    points: 42850,
-    rank: 12,
-    avgScore: 88
+    avatar: '/User.png',
+    games: 0,
+    points: 0,
+    rank: 0,
+    avgScore: 0
   };
 
+  historySessions: any[] = [];
 
-  historySessions = [
-    { name: 'Retro Sci-Fi Trivia', date: 'Oct 24, 2024', score: 950, rank: '1st', players: 248, icon: 'public', color: '#6c2bd9' },
-    { name: 'JS Mastery Challenge', date: 'Oct 22, 2024', score: 820, rank: '4th', players: 1024, icon: 'code', color: '#3d4aed' },
-    { name: 'Geography Sprint', date: 'Oct 20, 2024', score: 1100, rank: '2nd', players: 56, icon: 'terrain', color: '#d92b5a' }
-  ];
+  createdQuizzes: any[] = [];
 
-  createdQuizzes = [
-    { id: 1, title: 'Galactic Frontiers', image: '/Space-Quiz.png', plays: '1.2k plays', rating: 4.8, category: 'SCI-FI', color: '#6c2bd9' },
-    { id: 2, title: 'Exotic Ecosystems', image: '/Nature-Quiz.png', plays: '856 plays', rating: 4.5, category: 'NATURE', color: '#d92b5a' },
-    { id: 3, title: 'Python Logic Puzzles', image: '/Code-Quiz.png', plays: '3.4k plays', rating: 4.9, category: 'CODING', color: '#3d4aed' }
-  ];
+  ngOnInit() {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsed = JSON.parse(storedUser);
+        this.user.name = parsed.username || parsed.name || 'Alex Rivera';
+        this.user.title = parsed.bio || 'Master of Logic & Digital Lore';
+        this.user.avatar = parsed.avatar || '/User.png';
+        this.user.id = parsed.id || '';
+      } catch(e) {}
+    }
+
+    this.fetchMyQuizzes();
+  }
+
+  fetchMyQuizzes() {
+    this.http.get<any[]>('http://localhost:8080/api/quizzes').subscribe({
+      next: (allQuizzes) => {
+        // Nếu user.id rỗng (chưa đăng nhập chuẩn), hiện tất cả. Nếu có, hiện những cái khớp ID hoặc không có ID (quá khứ)
+        const myQuizzes = allQuizzes.filter(q => (this.user.id && q.created_by === this.user.id) || (q.creator && q.creator.id === this.user.id) || (!q.creator && q.created_by && q.created_by !== null)); this.createdQuizzes = myQuizzes.map(q => ({
+          id: q.id,
+          title: q.title,
+          image: q.cover_image || '/Space-Quiz.png',
+          plays: `${q.plays || 0} plays`,
+          rating: 5.0,
+          category: q.level ? q.level.toUpperCase() : 'GENERAL',
+          color: '#6c2bd9'
+        }));
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Failed to load quizzes', err)
+    });
+  }
 }

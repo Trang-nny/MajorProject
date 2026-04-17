@@ -1,17 +1,18 @@
 <div class="mode-selection-overlay">
   <div class="selection-card">
-    
+   
     <div class="card-header">
       <h2 class="main-title">Ready to Start?</h2>
-      <p class="sub-title">Choose how you want to experience <strong>Cybersecurity Fundamentals</strong></p>
-      <button class="btn-close-abs" routerLink="/app/quizzes">
+      <p class="sub-title">Choose how you want to experience <strong>{{ quizTitle }}</strong></p>
+      <button class="btn-close-abs" (click)="goBack()">
         <span class="material-icons">close</span>
       </button>
     </div>
 
+
     <div class="selection-body-grid">
-      
-      <div class="mode-option-card" [routerLink]="['/play/solo/setup']">
+     
+      <div class="mode-option-card" [routerLink]="['/play/solo/lobby']" queryParamsHandling="preserve">
         <div class="icon-circle solo-bg">
           <span class="material-icons">person</span>
         </div>
@@ -23,6 +24,7 @@
           <span class="material-icons">arrow_forward</span>
         </div>
       </div>
+
 
       <div class="mode-option-card" [routerLink]="['/play/lobby']">
         <div class="icon-circle multi-bg">
@@ -36,6 +38,7 @@
           <span class="material-icons">arrow_forward</span>
         </div>
       </div>
+
 
     </div>
   </div>

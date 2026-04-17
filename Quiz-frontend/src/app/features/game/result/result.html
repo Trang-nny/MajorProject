@@ -1,4 +1,4 @@
-<div class="result-container">
+﻿<div class="result-container">
   <main class="result-main">
    
     @if (isOwner) {
@@ -93,14 +93,14 @@
         <div class="summary-grid">
           <div class="performance-card">
             <div class="art-box">
-              <img [src]="quizResult.imageSummary" alt="Celebratory Art">
+              <img [src]="quizResult.imageSummary" alt="Celebratory Art" style="object-fit: cover;">
             </div>
             <div class="perf-info">
               <span class="label-tiny">FINAL PERFORMANCE</span>
               <h2 class="total-points">{{ quizResult.totalPoints | number }}</h2>
               <span class="pts-label">Total Points</span>
               <div class="mini-stats">
-                <span class="m-pill rank"><i class="pi pi-trophy"></i> #{{ quizResult.rank }} Rank</span>
+                <span class="m-pill rank" *ngIf="!isSolo"><i class="pi pi-trophy"></i> #{{ quizResult.rank }} Rank</span>
                 <span class="m-pill time"><i class="pi pi-clock"></i> {{ quizResult.avgTime }} Avg</span>
               </div>
             </div>
@@ -127,7 +127,7 @@
               </div>
               <div class="streak-info">
                 <span class="label-tiny">Best Streak</span>
-                <h3 class="streak-val">{{ quizResult.bestStreak }} Answers</h3>
+                <h3 class="streak-val">{{ quizResult.bestStreak }} Streaks</h3>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@
           <button class="btn-action-outline" routerLink="/app/dashboard">
             <i class="pi pi-th-large"></i> Return to Dashboard
           </button>
-          <button class="btn-action-primary">
+          <button class="btn-action-primary" [routerLink]="['/play/solo/lobby']" [queryParams]="{ id: quizId }">
              <i class="pi pi-refresh"></i> Play Again
           </button>
         </div>

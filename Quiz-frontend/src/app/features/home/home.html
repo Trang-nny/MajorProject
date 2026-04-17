@@ -5,32 +5,25 @@
     <p class="sub-text">Enter your PIN to dive into the world of <br> intelligent trivia.</p>
   </div>
 
-
-
-
   <div class="pin-box-wrapper">
     <div class="pin-card">
       <span class="pin-badge">ENTER PIN</span>
+      
       <div class="pin-input-group">
-  <input #pin1 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, pin2, null)">
- 
-  <input #pin2 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, pin3, pin1)">
- 
-  <input #pin3 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, pin4, pin2)">
-
-
-  <div class="pin-divider"></div> <input #pin4 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, pin5, pin3)">
- 
-  <input #pin5 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, pin6, pin4)">
- 
-  <input #pin6 type="text" maxlength="1" class="pin-field" placeholder="0"
-         (keyup)="moveFocus($event, null, pin5)">
-</div>
+        <input 
+          type="text" 
+          [(ngModel)]="joinPin" 
+          maxlength="6" 
+          class="hidden-pin-input" 
+          (input)="onPinInput($event)">
+        
+        @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+          <div class="pin-field" [class.placeholder]="!joinPin[i]">
+            {{ joinPin[i] || '0' }}
+          </div>
+        }
+      </div>
+      
       <button class="btn-join">
         JOIN GAME <i class="bolt-icon">⚡</i>
       </button>

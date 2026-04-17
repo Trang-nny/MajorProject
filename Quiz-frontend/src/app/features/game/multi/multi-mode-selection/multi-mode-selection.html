@@ -1,0 +1,85 @@
+<div class="multi-mode-wrapper">
+  <div class="selection-card">
+
+
+    <!-- Header -->
+    <div class="card-header">
+      <h2 class="main-title">Ready to Start your Multiplayer Quest?</h2>
+    </div>
+
+
+    <!-- Quiz Info Card -->
+    <div class="quiz-info-card">
+      <div class="badge-multiplayer">
+        <span class="material-icons badge-icon">groups</span>
+        <span class="badge-text">MULTIPLAYER MODE</span>
+      </div>
+      <h3 class="quiz-title">{{ quizTitle }}</h3>
+      <p class="quiz-desc">{{ quizDescription }}</p>
+
+
+      <div class="quiz-meta-row">
+        <div class="meta-box">
+          <span class="meta-label">LEVEL</span>
+          <div class="meta-value level-value">
+            <span class="level-text">{{ quizLevel }}</span>
+            <span class="level-dots">
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+            </span>
+          </div>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">LENGTH</span>
+          <div class="meta-value">{{ quizQuestions }} Questions</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Mode Selection -->
+    <h4 class="section-title">Choose Battle Mode</h4>
+
+
+    <div class="mode-grid">
+
+
+      <!-- Classic Mode -->
+      <div class="mode-card" [class.selected]="selectedMode === 'classic'" (click)="selectMode('classic')">
+        <div class="check-circle" [class.checked]="selectedMode === 'classic'">
+          <span class="material-icons check-icon" *ngIf="selectedMode === 'classic'">check</span>
+        </div>
+        <div class="mode-icon-wrap classic-bg">
+          <span class="material-icons">groups</span>
+        </div>
+        <h5 class="mode-name">Classic Mode</h5>
+        <p class="mode-desc">Standard point system based on speed and accuracy. Perfect for classroom challenges.</p>
+      </div>
+
+
+      <!-- Focus Mode -->
+      <div class="mode-card" [class.selected]="selectedMode === 'focus'" (click)="selectMode('focus')">
+        <div class="check-circle" [class.checked]="selectedMode === 'focus'">
+          <span class="material-icons check-icon" *ngIf="selectedMode === 'focus'">check</span>
+        </div>
+        <div class="mode-icon-wrap focus-bg">
+          <span class="material-icons">psychology</span>
+        </div>
+        <h5 class="mode-name">Focus Mode</h5>
+        <p class="mode-desc">High intensity, power-ups enabled. Streaks grant shield bonuses and multipliers.</p>
+      </div>
+
+
+    </div>
+
+
+    <!-- Host Game Button -->
+    <button class="btn-host-game" (click)="hostGame()">
+      HOST GAME
+      <span class="material-icons btn-icon">rocket_launch</span>
+    </button>
+
+
+  </div>
+</div>

@@ -1,26 +1,37 @@
-<div class="solo-lobby-wrapper">
+﻿<div class="solo-lobby-wrapper">
   <main class="solo-lobby-container">
     <h1 class="page-title">Ready to Start your Solo Quest?</h1>
 
     <div class="cards-container">
-      
+     
       <!-- Quiz Info Card -->
       <div class="card quiz-card">
         <div class="badge">
           <i class="icon-location"></i> ACTIVE QUIZ
         </div>
-        
-        <h2>Mastering Cyber Security 2024</h2>
-        <p class="desc">Test your defense mechanisms against modern threats.</p>
-        
+       
+        <h2>{{ quizTitle }}</h2>
+        <p class="desc">{{ quizDesc }}</p>
+       
         <div class="stats-row">
           <div class="stat-box">
             <span class="stat-label">LEVEL</span>
-            <span class="stat-val danger">Pro <span class="dots">●●●○</span></span>
+            <span class="stat-val" [ngClass]="{'danger': quizLevel === 'Pro', 'primary': quizLevel !== 'Pro'}">
+              {{ quizLevel }} 
+              <span class="dots">
+                @if (quizLevel === 'Easy') {
+                  ●○○
+                } @else if (quizLevel === 'Mid') {
+                  ●●○
+                } @else {
+                  ●●●
+                }
+              </span>
+            </span>
           </div>
           <div class="stat-box">
             <span class="stat-label">LENGTH</span>
-            <span class="stat-val primary">25 Questions</span>
+            <span class="stat-val primary">{{ quizLength }} Questions</span>
           </div>
         </div>
       </div>
@@ -28,14 +39,14 @@
       <!-- Settings Card -->
       <div class="card settings-card">
         <h3 class="settings-title"><i class="icon-settings"></i> Game Settings</h3>
-        
+       
         <div class="setting-row">
           <div class="setting-info">
             <h4>Practice Mode</h4>
             <p>Review answers after each question</p>
           </div>
           <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" [(ngModel)]="practiceMode">
             <span class="slider round"></span>
           </label>
         </div>
@@ -46,7 +57,7 @@
             <p>Set time pressure for every response</p>
           </div>
           <label class="switch">
-            <input type="checkbox" checked>
+            <input type="checkbox" [(ngModel)]="enableTimer">
             <span class="slider round"></span>
           </label>
         </div>
@@ -59,7 +70,7 @@
     </div>
 
     <!-- Nút Start bọc trong routerLink nếu cần chuyển trang -->
-    <button class="start-btn" routerLink="/play/solo/room">
+    <button class="start-btn" (click)="startGame()">
       START SOLO GAME <i class="icon-arrow-right">></i>
     </button>
   </main>

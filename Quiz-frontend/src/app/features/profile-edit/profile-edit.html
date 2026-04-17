@@ -1,21 +1,24 @@
 <div class="edit-profile-container">
   <div class="edit-profile-card">
     <div class="card-header-line"></div>
-    
+   
     <div class="card-content">
       <h1 class="title">Edit Profile</h1>
       <p class="subtitle">Update your personal information and presence on the atoll.</p>
+
 
       <!-- Avatar Section -->
       <div class="avatar-section">
         <div class="avatar-wrapper">
           <img [src]="user.avatar" alt="Avatar">
-          <button class="edit-avatar-btn">
-            <i class="pi pi-pencil"></i>
+          <button class="edit-avatar-btn" (click)="fileInput.click()">
+            <span class="material-icons" style="font-size: 16px;">edit</span>
           </button>
+          <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
         </div>
         <h2 class="display-name">{{ user.username }}</h2>
       </div>
+
 
       <!-- Form Section -->
       <form class="profile-form">
@@ -27,21 +30,27 @@
           <div class="form-group flex-1">
             <label>Account ID</label>
             <div class="readonly-input">
-              <i class="pi pi-lock"></i>
+              <span class="material-icons info-color">lock</span>
               <span>{{ user.accountId }}</span>
             </div>
           </div>
         </div>
 
+
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" [(ngModel)]="user.email" name="email" placeholder="Enter email">
+          <div class="readonly-input">
+            <span class="material-icons info-color">email</span>
+            <span>{{ user.email }}</span>
+          </div>
         </div>
+
 
         <div class="form-group">
           <label>Bio</label>
           <textarea [(ngModel)]="user.bio" name="bio" rows="4"></textarea>
         </div>
+
 
         <!-- Action Buttons -->
         <div class="form-actions">

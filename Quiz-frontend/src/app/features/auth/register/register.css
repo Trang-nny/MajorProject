@@ -1,22 +1,23 @@
 /* Căn giữa toàn bộ trang vào giữa màn hình */
 :host {
+  display: block;
+}
+
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 85vh;
+  min-height: calc(100vh - 80px); /* Tự động khớp với chiều cao màn hình trừ Navbar */
+  padding: 20px;
   background-color: #F9F5FF;
-}
-
-.auth-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  box-sizing: border-box;
 }
 
 .login-card {
   display: flex;
-  width: 1000px;
+  width: 100%;
+  max-width: 1000px; /* Khống chế chiều rộng tối đa của card */
   background: white;
   border-radius: 32px;
   overflow: hidden;
@@ -24,10 +25,10 @@
 }
 
 .login-left {
-  flex: 1.1;
+  flex: 1;
   background: #2D0B7A url('/Cube.png') no-repeat center;
   background-size: cover;
-  padding: 50px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -37,14 +38,30 @@
 .login-right {
   flex: 1;
   padding: 40px;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.form-container { width: 100%; max-width: 350px; margin: 0 auto; }
+.form-container { width: 100%; max-width: 360px; margin: 0 auto; }
+
+.form-container h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #101828;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #667085;
+  margin-bottom: 24px;
+}
 
 /* INPUT STYLES */
 .form-group { margin-bottom: 18px; }
 .form-group label { display: block; font-size: 11px; font-weight: 800; color: #344054; margin-bottom: 8px; }
+
 
 .input-wrapper { position: relative; display: flex; align-items: center; }
 .input-wrapper input {
@@ -52,8 +69,10 @@
   border: none; background: #F4EBFF; border-radius: 10px; outline: none;
 }
 
+
 .field-icon { position: absolute; left: 12px; color: #98A2B3; font-size: 20px; }
 .eye-icon { position: absolute; right: 12px; color: #98A2B3; font-size: 20px; cursor: pointer; }
+
 
 /* NÚT BẤM CÓ MÀU GRADIENT */
 .btn-primary-auth {
@@ -68,17 +87,21 @@
   margin-top: 10px;
 }
 
+
 .btn-register-gradient {
   background: linear-gradient(90deg, #6A1BFF 0%, #C00A82 100%);
   box-shadow: 0 8px 20px rgba(106, 27, 255, 0.2);
 }
 
+
 /* FOOTER & OTHERS */
 .footer-terms { margin-top: 25px; font-size: 11px; color: #98A2B3; text-align: center; }
 .footer-terms a { color: #667085; font-weight: 600; text-decoration: none; }
 
+
 .divider { text-align: center; margin: 20px 0; border-bottom: 1px solid #EAECF0; line-height: 0.1em; }
 .divider span { background: #fff; padding: 0 10px; color: #98A2B3; font-size: 10px; }
+
 
 .btn-google {
   width: 100%; padding: 10px; border: 1px solid #EAECF0; background: #F4EBFF;
