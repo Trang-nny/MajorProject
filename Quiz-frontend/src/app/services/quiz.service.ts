@@ -6,6 +6,7 @@ export interface CreateQuizPayload {
   title: string;
   description?: string;
   level?: string;
+  visibility?: string;
   cover_image?: string;
   user_id?: string;
   questions: {
@@ -33,5 +34,13 @@ export class QuizService {
 
   getQuizzes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/quizzes`);
+  }
+
+  getQuiz(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/quizzes/${id}`);
+  }
+
+  updateVisibility(id: string, visibility: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/quizzes/${id}/visibility`, { visibility });
   }
 }

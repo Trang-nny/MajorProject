@@ -31,7 +31,7 @@ export class Dashboard implements OnInit {
         this.quizzes = res.slice(0, 4).map(q => {
           const plays = q.plays || 0;
           return {
-            id: q.id,
+            id: q.id || q.ID,
             title: q.title,
             stats: `${plays} Plays - ` + (q.questions ? q.questions.length : 0) + ' Questions',
             img: q.cover_image || '/Cyber.png'
@@ -40,7 +40,7 @@ export class Dashboard implements OnInit {
         this.cd.detectChanges();
       }
     } catch (error) {
-      console.error('Lá»—i fetch', error);
+      console.error('Lỗi fetch', error);
     }
   }
 

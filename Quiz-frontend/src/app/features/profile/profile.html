@@ -19,6 +19,12 @@
           <p>{{ user.title }}</p>
         </div>
 
+        <!-- Mode Buttons (Solo/Multi) -->
+        <div class="mode-toggles">
+          <button class="mode-btn" [class.active]="currentMode === 'solo'" (click)="setMode('solo')">Solo</button>
+          <button class="mode-btn" [class.active]="currentMode === 'multi'" (click)="setMode('multi')">Multi</button>
+        </div>
+
         <div class="stats-row">
           <div class="stat-box">
             <div class="icon-box info-bg"><span class="material-icons info-color">sports_esports</span></div>
@@ -60,8 +66,13 @@
      
       <!-- Left: Game History -->
       <div class="history-column">
-        <div class="section-header">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
           <h2>Game History</h2>
+          <!-- Mode Buttons (Solo/Multi) for History -->
+          <div class="mode-toggles" style="margin-bottom: 0;">
+            <button class="mode-btn" [class.active]="historyMode === 'solo'" (click)="setHistoryMode('solo')">Solo</button>
+            <button class="mode-btn" [class.active]="historyMode === 'multi'" (click)="setHistoryMode('multi')">Multi</button>
+          </div>
         </div>
        
         <div class="history-stack">

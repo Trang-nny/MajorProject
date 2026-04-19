@@ -112,3 +112,33 @@
 .nav-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #f0eaff; color: #8e5dfa; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 
 .nav-btn:hover { background: #8e5dfa; color: white; }
+
+
+.mode-toggles {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mode-btn {
+  padding: 8px 24px;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  background: #F9FAFB;
+  color: #6C727F;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+  background: #6C2BD9;
+  color: white;
+  border-color: #6C2BD9;
+  box-shadow: 0 4px 6px rgba(108, 43, 217, 0.2);
+}
+
+.mode-btn:hover:not(.active) {
+  background: #F3F4F6;
+  color: #374151;
+}

@@ -189,6 +189,7 @@ export class CreateQuiz {
       title: this.quizTitle,
       description: this.quizDescription,
       level: this.quizLevel,
+      visibility: 'private', // Mặc định là private
       cover_image: this.quizCoverImage || undefined,
       user_id: userId,
       questions: this.questions.map(q => {
@@ -208,9 +209,10 @@ export class CreateQuiz {
     console.log("Saving quiz with payload:", payload);
     
     this.quizService.createQuiz(payload).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         alert('Tạo Quiz thành công!');
-        this.router.navigate(['/app/quizzes']);
+        // Thay vì chuyển đến quizzes, chuyển đến quiz detail
+        this.router.navigate(['/app/quiz-detail', res.quiz?.id || res.quiz?.ID || res.data?.id || res.id || res.ID]);
       },
       error: (err) => {
         console.error(err);

@@ -55,8 +55,10 @@ export class QuizList implements OnInit, OnDestroy {
     this.quizService.getQuizzes().subscribe({
       next: (res: any[]) => {
         // Map data từ Backend sang dạng hiển thị trên giao diện
-        const apiQuizzes = res.map(q => ({
-          id: q.id,
+
+        const publicQuizzes = res.filter(q => q.visibility === 'public');
+        const apiQuizzes = publicQuizzes.map(q => ({
+          id: q.id || q.ID,
           title: q.title,
           description: q.description || 'Test your knowledge on this topic.',
           author: q.creator ? q.creator.username : 'Unknown Author',

@@ -1,139 +1,196 @@
-<div class="quiz-detail-page">
-  <div class="container-grid">
-
-    <div>
-      <div class="hero-card" [ngClass]="isOwner ? 'hero-owner' : 'hero-guest'">
-        <div class="image-box">
-          <img [src]="isOwner ? quizData.imageUser : quizData.imageGuest" class="hero-img">
+﻿<div class="quiz-detail-container">
+  <div class="main-layout-grid">
+   
+    <!-- CỘT TRÁI -->
+    <div class="main-content">
+     
+      @if (isOwner) {
+        <!-- HERO AREA FOR OWNER -->
+        <div class="hero-card hero-owner" [style.backgroundImage]="'url(' + quizData.imageUser + ')'">
+          <div class="hero-info">
+            <h1 class="main-title">{{ quizData.title }}</h1>
+           
+            <div class="stats-bar">
+              <span class="stat-item"><i class="pi pi-play-circle"></i> {{ quizData.plays }} Plays</span>
+              <span class="stat-item"><i class="pi pi-list"></i> {{ quizData.questionsCount }} Questions</span>
+              <span class="stat-item"><i class="pi pi-clock"></i> {{ quizData.duration }} Avg.</span>
+              <span class="stat-item"><i class="pi pi-trophy"></i> {{ quizData.level }}</span>
+            </div>
+          </div>
         </div>
 
-        <span class="badge-expert">{{ quizData.level | uppercase }}</span>
+        <!-- MANAGE VISIBILITY (Chỉ hiện khi là Host) -->
+        <div class="visibility-section" style="text-align: center;">
+          <div class="section-header" style="justify-content: center; margin-bottom: 1.5rem;">
+            <i class="pi pi-eye"></i>
+            <h3>Manage Visibility</h3>
+          </div>
+          <div class="visibility-grid" style="display: flex; justify-content: center; gap: 1.5rem;">
+            <div class="v-card" [class.active]="selectedVisibility === 'public'" (click)="updateVisibility('public')" style="flex: 0 1 200px;">
+              <i class="pi pi-globe"></i>
+              <strong>Public</strong>
+              <span>Visible to everyone</span>
+            </div>
+            <div class="v-card" [class.active]="selectedVisibility === 'private'" (click)="updateVisibility('private')" style="flex: 0 1 200px;">
+              <i class="pi pi-link"></i>
+              <strong>Private</strong>
+              <span>Link access only</span>
+            </div>
+          </div>
+        </div>
 
-        <div class="hero-content">
-          <span class="text-featured">FEATURED QUIZ</span>
-          <h1 class="main-title">{{ quizData.title }}</h1>
-
-          <div class="stats-bar">
-            <div class="stat-item"><i class="pi pi-play-circle"></i> {{ quizData.plays }} Plays</div>
-            <div class="stat-item"><i class="pi pi-list"></i> {{ quizData.questionsCount }} Qs</div>
-            <div class="stat-item"><i class="pi pi-clock"></i> {{ quizData.duration }} avg</div>
+        <!-- PREVIEW QUESTIONS -->
+        <div class="preview-section">
+          
+          <!-- DESCRIPTION (In Preview Section) -->
+          <div style="margin-bottom: 2rem;">
+             <span class="side-label" style="display: block; margin-bottom: 0.75rem;">DESCRIPTION</span>
+             <p style="color: #475467; font-size: 1rem; line-height: 1.6; margin: 0;">{{ quizData.description || 'No description provided.' }}</p>
           </div>
 
-          @if (!isOwner) {
-            <div class="hero-actions">
-              <button type="button" class="btn-start-game" (click)="goToSelectMode()">
-                <i class="pi pi-play"></i> START GAME
-              </button>
+          <div class="preview-header">
+            <h2>Question Preview</h2>
+            <span class="total-count">{{ quizData.questionsCount }} total questions</span>
+          </div>
+
+          <div class="questions-list">
+            <div class="q-card" *ngFor="let q of questions">
+              <div class="q-index">{{ q.id }}</div>
+              <div class="q-content" style="width: 100%;">
+                <div class="q-meta">
+                  <span class="q-tag type-tag">{{ q.type }}</span>
+                  <span class="q-tag time-tag"><i class="pi pi-clock"></i> {{ q.time }}</span>
+                  <span class="q-tag points-tag">{{ q.points }} PTS</span>
+                </div>
+                <p class="q-text" style="font-weight: 600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 1rem;">{{ q.text }}</p>
+                <div class="q-options-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div *ngFor="let opt of q.options" 
+                       class="opt-card" 
+                       [ngStyle]="{'background-color': (isOwner && opt.is_correct) ? '#d1fae5' : '#f8fafc', 'border': (isOwner && opt.is_correct) ? '2px solid #10b981' : '1px solid #e2e8f0', 'padding': '1rem', 'border-radius': '12px', 'display': 'flex', 'align-items': 'center', 'gap': '0.75rem', 'font-weight': '500'}">
+                    <i class="pi" [ngClass]="(isOwner && opt.is_correct) ? 'pi-check-circle' : 'pi-circle'" [ngStyle]="{'color': (isOwner && opt.is_correct) ? '#10b981' : '#94a3b8', 'font-size': '1.2rem'}"></i>
+                    <span style="color: #334155;">{{ opt.text }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          }
+          </div>
         </div>
-      </div>
-
-      @if (isOwner) {
-        <div class="visibility-section">
-          <div class="section-title">👁 Manage Visibility</div>
-          <div class="visibility-grid">
-            <button type="button" class="v-card" [class.active]="quizData.visibility === 'public' || !quizData.visibility" (click)="setVisibility('public')">
-              <div class="v-icon"><i class="pi pi-globe"></i></div>
-              <strong>Public</strong>
-              <div>Visible to everyone</div>
-            </button>
-
-            <button type="button" class="v-card" [class.active]="quizData.visibility === 'private'" (click)="setVisibility('private')">
-              <div class="v-icon"><i class="pi pi-link"></i></div>
-              <strong>Private</strong>
-              <div>Link access</div>
-            </button>
-
-            <button type="button" class="v-card" [class.active]="quizData.visibility === 'only_me'" (click)="setVisibility('only_me')">
-              <div class="v-icon"><i class="pi pi-user"></i></div>
-              <strong>Only Me</strong>
-              <div>Draft mode</div>
-            </button>
+      } @else {
+        <!-- HERO AREA FOR GUEST -->
+        <div class="hero-card hero-guest-full">
+          <div class="guest-hero-layout">
+            <div class="guest-hero-img-box">
+              <img [src]="quizData.imageGuest" alt="Quiz Cover">
+            </div>
+            <div class="guest-hero-info">
+              <div class="guest-top-meta">
+                <span class="cat-tag">{{ quizData.category }}</span>
+              </div>
+              <h1 class="guest-main-title">{{ quizData.title }}</h1>
+              <div class="guest-stats-row">
+                <span class="g-stat"><i class="pi pi-play"></i> {{ quizData.plays }} Plays</span>
+                <span class="g-stat"><i class="pi pi-list"></i> {{ quizData.questionsCount }} Qs</span>
+                <span class="g-stat"><i class="pi pi-clock"></i> {{ quizData.duration }}</span>
+              </div>
+             
+              <div class="guest-cta-btns">
+                <button class="btn-play-now"><i class="pi pi-play"></i> START GAME</button>
+              </div>
+            </div>
           </div>
         </div>
       }
-
-      <div class="preview-header">
-        <h2>Question Preview</h2>
-        <span>{{ quizData.questionsCount }} total questions</span>
-      </div>
-
-      <div class="questions-list">
-        @for (q of questions; track q.id) {
-          <div class="q-wrapper">
-            <button type="button" class="q-row" (click)="q.expanded = !q.expanded">
-              <div class="q-idx">{{ q.id }}</div>
-              <div class="q-body">
-                <div class="q-tags">
-                  <span class="tag-purple">{{ q.type }}</span>
-                  <span class="tag-gray"><i class="pi pi-clock"></i> {{ q.time }}</span>
-                  <span class="tag-gray">{{ q.points }} pts</span>
-                </div>
-                <div class="q-text">{{ q.text }}</div>
-              </div>
-              <i class="pi" [ngClass]="q.expanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
-            </button>
-            <div class="q-answers" *ngIf="q.expanded">
-              <ul>
-                <li *ngFor="let a of q.answers" [class.correct]="a.is_correct">
-                  <i class="pi" [ngClass]="a.is_correct ? 'pi-check-circle' : 'pi-circle'"></i>
-                  <span>{{ a.text }}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        }
-      </div>
     </div>
 
-    <div class="sidebar">
+        <!-- CỘT PHẢI (SIDEBAR) -->
+    <aside class="sidebar">
       @if (isOwner) {
-          <button type="button" class="btn-host-gradient" (click)="goToSelectMode()">▶ START GAME</button>
-      }
-      <div class="side-card purple">
-        <div class="side-label">QUICK ACTIONS</div>
-
-        @if (isOwner) {
-          <button type="button" class="action-item">
-            <i class="pi pi-pencil"></i> Edit Quiz
-          </button>
-        }
-
-        <button type="button" class="action-item">
-          <i class="pi pi-share-alt"></i> Share Quiz
+        <!-- Start Game chính (Host) -->
+        <button class="btn-start-gradient">
+          <i class="pi pi-play"></i> START GAME
         </button>
 
-        @if (isOwner) {
-          <button type="button" class="action-item delete" (click)="deleteQuiz()">
-            <i class="pi pi-trash"></i> Delete Quiz
-          </button>
-        }
-      </div>
-
-      <div class="side-card white">
-        <h3>Quiz Details</h3>
-        <div class="detail-row">
-          <span class="label">Author</span>
-          <span class="value">{{ quizData.author }}</span>
-        </div>
-        <div class="detail-row">
-          <span class="label">Last Updated</span>
-          <span class="value">{{ quizData.lastUpdated }}</span>
-        </div>
-        <p class="desc-text">{{ quizData.description }}</p>
-      </div>
-
-      @if (quizData.visibility === 'private') {
-        <div class="side-card white" style="margin-top: 15px; word-break: break-all;">
-          <h3>Private Link</h3>
-          <p class="desc-text" style="margin-bottom: 10px;">Share this link to invite players:</p>
-          <div style="background: #f4f4f4; padding: 10px; border-radius: 8px; font-size: 0.85rem; color: #555; border: 1px solid #ddd; user-select: all;">
-            {{ getShareLink() }}
+        <!-- Quick Actions -->
+        <div class="side-card quick-actions-card">
+          <span class="side-label">QUICK ACTIONS</span>
+          <div class="action-list">
+            <button class="action-item">
+              <i class="pi pi-align-left" style="color: #64748b;"></i>
+              <span>Edit Quiz</span>
+            </button>
+            <button class="action-item" (click)="shareQuiz()">
+              <i class="pi pi-share-alt" style="color: #64748b;"></i>
+              <span>Share Quiz</span>
+            </button>
+            <button class="action-item delete">
+              <i class="pi pi-trash" style="color: #64748b;"></i>
+              <span>Delete Quiz</span>
+            </button>
           </div>
         </div>
+
+        <!-- Summary -->
+        <div class="side-card summary-card">
+          <span class="side-label">QUIZ SUMMARY</span>
+          <div class="summary-content" style="margin-top: 1rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <p class="summary-text" style="font-size: 0.85rem; color: #94a3b8; margin: 0; display: flex; align-items: center;">
+                <i class="pi pi-user" style="margin-right: 0.75rem; color: #7f56d9;"></i>
+                <span style="flex: 1;">Author:</span> 
+                <strong style="color: #1e293b;">{{ quizData.author }}</strong>
+              </p>
+              <p class="summary-text" style="font-size: 0.85rem; color: #94a3b8; margin: 0; display: flex; align-items: center;">
+                <i class="pi pi-calendar" style="margin-right: 0.75rem; color: #7f56d9;"></i>
+                <span style="flex: 1;">Last updated on:</span>
+                <strong style="color: #1e293b;">{{ quizData.lastUpdated }}</strong>
+              </p>
+              <p class="summary-text" style="font-size: 0.85rem; color: #94a3b8; margin: 0; display: flex; align-items: center;">
+                <i class="pi pi-chart-bar" style="margin-right: 0.75rem; color: #7f56d9;"></i>
+                <span style="flex: 1;">Difficulty Level:</span>
+                <span class="tag-purple" style="font-size: 0.75rem;">{{ quizData.level }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- GUEST SIDEBAR -->
+        <div class="side-card quick-actions-card">
+          <span class="side-label">QUICK ACTIONS</span>
+          <div class="action-list">
+            <button class="action-item" (click)="shareQuiz()">
+              <i class="pi pi-share-alt" style="color: #64748b;"></i>
+              <span>Share Quiz</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="side-card detail-card">
+          <span class="side-label-large">Quiz Details</span>
+          <div class="detail-list">
+            <div class="detail-item-guest">
+              <span class="detail-label">Author</span>
+              <div class="val-guest">
+                <span class="author-name">{{ quizData.author }}</span>
+                <i class="pi pi-verified-fill verified-icon"></i>
+              </div>
+            </div>
+            <div class="detail-item-guest">
+              <span class="detail-label">Last Updated</span>
+              <div class="val-guest">{{ quizData.lastUpdated }}</div>
+            </div>
+            <div class="detail-item-guest" style="margin-top: 1rem;">
+              <span class="detail-label">Difficulty</span>
+              <div class="val-guest">
+                <span class="tag-purple" style="font-size: 0.75rem;">{{ quizData.level }}</span>
+              </div>
+            </div>
+          </div>
+          <p class="summary-desc-guest">
+            {{ quizData.description }}
+          </p>
+        </div>
       }
-    </div>
+    </aside>
 
   </div>
 </div>

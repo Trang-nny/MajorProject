@@ -47,8 +47,8 @@
 
 
         <div class="form-group">
-          <label>Bio</label>
-          <textarea [(ngModel)]="user.bio" name="bio" rows="4"></textarea>
+          <label>Bio <span style="font-size: 12px; color: #8c9096; font-weight: normal;">(Max 250 characters)</span></label>
+          <textarea [(ngModel)]="user.bio" name="bio" rows="4" maxlength="250"></textarea>
         </div>
 
 
