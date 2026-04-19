@@ -1,26 +1,66 @@
 package main
 
 import (
+	"log"
 	"quiz-backend/config"
-	"quiz-backend/controllers" // Nhập thư mục controllers vào
+	"quiz-backend/controllers"
+	"quiz-backend/models"
+	"quiz-backend/sockets"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// 1. Khởi tạo server Gin
-	r := gin.Default()
 
-	// 2. Kết nối Database
-	config.ConnectDatabase()
-
-	// 3. Khai báo các API Routes
-	auth := r.Group("/auth")
-	{
-		auth.POST("/register", controllers.Register) // Đường dẫn: localhost:8080/auth/register
-		auth.POST("/login", controllers.Login)       // Đường dẫn: localhost:8080/auth/login
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
 	}
 
-	// 4. Chạy Server ở cổng 8080
+	// Khởi tạo WebSocket Hub
+	hub := sockets.NewHub()
+	go hub.Run()
+
+	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:   []string{"Content-Length"},
+		MaxAge:          12 * time.Hour,
+	}))
+
+	config.ConnectDatabase()
+	// Tu dong tao bang
+	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{})
+
+	auth := r.Group("/auth")
+	{
+		auth.POST("/register", controllers.Register)
+		auth.POST("/login", controllers.Login)
+		auth.POST("/google", controllers.GoogleLogin)
+		auth.PATCH("/profile", controllers.UpdateProfile)
+	}
+
+	api := r.Group("/api")
+	{
+		api.GET("/ws", func(c *gin.Context) {
+			sockets.ServeWs(hub, c)
+		})
+
+		api.POST("/quizzes", controllers.CreateQuiz)
+		api.GET("/quizzes", controllers.GetQuizzes)
+		api.GET("/quizzes/:id", controllers.GetQuiz)
+		api.DELETE("/quizzes/:id", controllers.DeleteQuiz)
+		api.PATCH("/quizzes/:id/visibility", controllers.UpdateQuizVisibility)
+		api.POST("/results", controllers.SubmitResult)
+		api.GET("/stats/:id", controllers.GetUserStats)
+		api.GET("/users/:id/history", controllers.GetUserHistory)
+	}
+
 	r.Run(":8080")
 }
