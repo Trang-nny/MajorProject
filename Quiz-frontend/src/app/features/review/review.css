@@ -1,0 +1,136 @@
+.review-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.main-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2.5rem;
+}
+
+/* HERO AREA */
+.hero-card {
+  background: #F4EBFF;
+  padding: 5rem 4rem;
+  border-radius: 35px;
+  margin-bottom: 3rem;
+  border: 1px solid #efeaff;
+}
+
+.main-title {
+  font-size: 4rem;
+  color: #2d2654;
+  font-weight: 850;
+  margin-bottom: 2rem;
+  letter-spacing: -1.5px;
+}
+
+.stars-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #ad2e69; /* Màu tím hồng đậm đúng hình */
+}
+
+.rating-val {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-left: 0.8rem;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* REVIEWS CORE */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-header h2 { font-size: 1.5rem; font-weight: 750; color: #1e1b4b; }
+.sort-select { color: #7c3aed; font-weight: 600; cursor: pointer; }
+
+.review-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 25px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f1efff;
+}
+
+.card-top { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+.user-block { display: flex; gap: 1.25rem; align-items: center; }
+.user-avatar { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; }
+.user-info h3 { font-size: 1.15rem; margin: 0; color: #1e293b; }
+.user-info p { font-size: 0.85rem; color: #94a3b8; margin: 0.2rem 0 0 0; }
+.stars-display { color: #ad2e69; font-size: 0.9rem; letter-spacing: 2px; }
+.comment-text { color: #475569; line-height: 1.7; font-size: 1rem; }
+
+/* SIDEBAR */
+.side-card { 
+  padding: 2rem; 
+  border-radius: 25px; 
+  margin-bottom: 1.5rem; 
+  box-sizing: border-box; 
+}
+
+.stats-card { background: #f1eeff; }
+.review-form-card { background: white; border: 1px solid #f1efff; }
+
+/* RATING OVERVIEW LIST - Fix dính nhau */
+.rating-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
+.rating-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; color: #5b538e; }
+.rating-row span:first-child { width: 55px; white-space: nowrap; }
+.rating-row span:last-child { width: 35px; text-align: right; }
+.bar-bg { flex: 1; height: 10px; background: #e9e6ff; border-radius: 10px; margin: 0 10px; }
+.bar-fill { height: 100%; background: #7c3aed; border-radius: 10px; }
+
+/* STAR PICKER */
+.star-picker { display: flex; justify-content: center; gap: 0.8rem; font-size: 2.2rem; color: #ad2e69; margin: 1.5rem 0; cursor: pointer; }
+
+/* INPUT GROUP - Fix tràn ô nhập liệu */
+.input-group { width: 100%; margin-top: 1.5rem; display: flex; flex-direction: column; }
+.input-label { font-size: 0.75rem; font-weight: 850; color: #94a3b8; margin-bottom: 0.8rem; letter-spacing: 0.05rem; }
+
+textarea {
+  width: 100%;
+  box-sizing: border-box; /* Quan trọng để không tràn */
+  height: 160px;
+  background: #f3e8ff; 
+  border: none;
+  border-radius: 15px;
+  padding: 1.5rem;
+  resize: none; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  color: #5b538e;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+/* BUTTONS */
+.form-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
+
+.btn-primary {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 50px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }

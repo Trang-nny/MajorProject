@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../../services/quiz.service';
 
 @Component({
   selector: 'app-quiz-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './quiz-detail.html',
   styleUrl: './quiz-detail.css'
 })
@@ -25,6 +25,9 @@ export class QuizDetail implements OnInit {
   quizData: any = {
     title: 'Loading...',
     plays: '0',
+    hosts: '0',
+    comments: '0',
+    rating: '0',
     questionsCount: 0,
     duration: '0 min Avg.',
     level: 'Loading...',
@@ -85,12 +88,13 @@ export class QuizDetail implements OnInit {
         }
         const totalMinutes = Math.ceil(totalSeconds / 60);
 
-        // Cập nhật thông tin hiện tại
+        // Cập nhật thông tin hiển thị
         this.quizData = {
           ...this.quizData,
           title: res.title || 'Untitled',
-          plays: res.plays || 0,
-          author: res.creator?.username || 'Unknown',
+          plays: res.plays || 0,          hosts: res.hosts || 0,
+          comments: res.comments || 0,
+          rating: res.rating || 0,          author: res.creator?.username || 'Unknown',
           description: res.description || '',
           level: res.level || 'Easy',
           category: 'General', 
@@ -123,13 +127,13 @@ export class QuizDetail implements OnInit {
             };
           });
         }
-
-        // Render lại component với các params Data và params Questions
+        
+        // Render lại component với cả params Data và params Questions
         this.cd.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching quiz detail', err);
-        // Ngừng nhảy trang, hiển thị thông báo lỗi
+        // Ngừng nhảy trang, hiển thị thông báo trên màn hình là lỗi
         this.quizData.title = 'Lỗi không tải được Quiz!';
         this.cd.detectChanges();
         alert('Could not load quiz details. ' + (err.error?.error || err.message));
@@ -147,13 +151,25 @@ export class QuizDetail implements OnInit {
       },
       error: (err) => {
         console.error('Failed to update visibility', err);
-        alert('Cập nhật trạng thái hiển thị thất bại');
+        alert('Could not update visibility');
       }
     });
   }
  
   cancel() {
     console.log('Action cancelled');
+  }
+
+  startGame() {
+    this.router.navigate(['/play/mode'], {
+      queryParams: {
+        id: this.quizId,
+        title: this.quizData.title,
+        desc: this.quizData.description,
+        level: this.quizData.level,
+        length: this.quizData.questionsCount
+      }
+    });
   }
 
   shareQuiz() {

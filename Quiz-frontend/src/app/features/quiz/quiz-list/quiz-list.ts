@@ -8,8 +8,14 @@ interface Quiz {
   id: any;
   title: string;
   author: string;
+  authorAvatar: string;
+  creatorId: string;
+  visibility: string;
   items: number;
   plays: string;
+  hosts: string;
+  comments: string;
+  rating: string;
   level: string;
   image: string;
   description: string;
@@ -24,6 +30,8 @@ interface Quiz {
 })
 export class QuizList implements OnInit, OnDestroy {
   searchTerm: string = '';
+  viewMode: 'all' | 'my' = 'all';
+  currentUserId: string = '';
   
   selectedLevels: { [key: string]: boolean } = {
     Easy: false,
@@ -42,11 +50,20 @@ export class QuizList implements OnInit, OnDestroy {
   private cd = inject(ChangeDetectorRef);
 
   ngOnInit() {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const parsed = JSON.parse(userStr);
+        this.currentUserId = parsed.id || parsed.ID || '';
+      } catch (e) {}
+    }
+
     const savedState = sessionStorage.getItem('quizFilterState');
     if (savedState) {
       const state = JSON.parse(savedState);
       this.searchTerm = state.searchTerm || '';
       this.selectedLevels = state.selectedLevels || { Easy: false, Mid: false, Pro: false };
+      this.viewMode = state.viewMode || 'all';
     }
     this.fetchQuizzes();
   }
@@ -55,15 +72,19 @@ export class QuizList implements OnInit, OnDestroy {
     this.quizService.getQuizzes().subscribe({
       next: (res: any[]) => {
         // Map data từ Backend sang dạng hiển thị trên giao diện
-
-        const publicQuizzes = res.filter(q => q.visibility === 'public');
-        const apiQuizzes = publicQuizzes.map(q => ({
+        const apiQuizzes = res.map(q => ({
           id: q.id || q.ID,
           title: q.title,
           description: q.description || 'Test your knowledge on this topic.',
           author: q.creator ? q.creator.username : 'Unknown Author',
+          authorAvatar: q.creator && q.creator.avatar ? q.creator.avatar : 'User.png',
+          creatorId: q.created_by || (q.creator ? (q.creator.id || q.creator.ID) : null),
+          visibility: q.visibility || 'public',
           items: q.questions ? q.questions.length : 0,
           plays: String(q.plays || 0),
+          hosts: String(q.hosts || 0),
+          comments: String(q.comments || 0),
+          rating: String(q.rating || 0),
           level: q.level || 'Mid',
           image: q.cover_image && q.cover_image.startsWith('data:image') ? q.cover_image : '/Tech.png' // Fallback nếu ko có
         }));
@@ -88,12 +109,31 @@ export class QuizList implements OnInit, OnDestroy {
   saveState() {
     sessionStorage.setItem('quizFilterState', JSON.stringify({
       searchTerm: this.searchTerm,
-      selectedLevels: this.selectedLevels
+      selectedLevels: this.selectedLevels,
+      viewMode: this.viewMode
     }));
+  }
+
+  setViewMode(mode: 'all' | 'my') {
+    if (!this.currentUserId && mode === 'my') {
+      alert('You need to log in to view your quizzes.');
+      return;
+    }
+    this.viewMode = mode;
+    this.saveState();
+    this.currentPage = 1;
   }
 
   get filteredQuizzes(): Quiz[] {
     return this.quizzes.filter(quiz => {
+      // Filter by View Mode
+      if (this.viewMode === 'my') {
+         if (quiz.creatorId !== this.currentUserId) return false;
+      } else {
+         if (quiz.visibility !== 'public') return false;
+         if (this.currentUserId && quiz.creatorId === this.currentUserId) return false;
+      }
+
       // Filter by Search Term
       const matchesSearch = quiz.title.toLowerCase().includes(this.searchTerm.toLowerCase());
       

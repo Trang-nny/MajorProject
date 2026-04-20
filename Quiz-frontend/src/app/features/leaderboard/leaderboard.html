@@ -1,7 +1,7 @@
 <div class="leaderboard-container">
   <header class="leaderboard-header">
     <h1>Global Champions</h1>
-    
+   
     <div class="header-controls">
       <div class="search-bar">
         <span class="material-icons">search</span>
@@ -17,7 +17,7 @@
 
   <div class="top-champions">
     <!-- Đảm bảo mảng topChampions trong TS có thứ tự: [Hạng 2, Hạng 1, Hạng 3] -->
-    <div *ngFor="let player of topChampions" 
+    <div *ngFor="let player of topChampions"
          [class]="'champion-card ' + (player.rank === 1 ? 'main' : (player.rank === 2 ? 'silver' : 'bronze'))">
       <div class="rank-badge">{{player.rank}}</div>
       <div class="avatar-container">
@@ -40,7 +40,7 @@
     </div>
 
     <div class="ranking-list">
-      <div *ngFor="let item of rankings" 
+      <div *ngFor="let item of rankings"
            [class]="'ranking-item' + (item.isUser ? ' current-user' : '')">
         <span class="rank-num">{{item.rank}}</span>
         <div class="player-info">
@@ -48,7 +48,7 @@
           <div class="details">
             <div class="name-badge">
               <span class="name">{{item.name}}</span>
-              <span class="badge" *ngIf="item.badge" 
+              <span class="badge" *ngIf="item.badge"
                     [style.background-color]="item.badge === 'TOP PERFORMER' ? '#E0EAFF' : (item.badge === 'CONSISTENT' ? '#FDF2FA' : '')"
                     [style.color]="item.badge === 'TOP PERFORMER' ? '#444CE7' : (item.badge === 'CONSISTENT' ? '#C11574' : '')">
                 {{item.badge}}

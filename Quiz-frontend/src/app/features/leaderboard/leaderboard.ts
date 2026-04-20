@@ -22,7 +22,7 @@ export class Leaderboard {
     { rank: '07', name: 'Alex Rivera (You)', subtitle: 'Current Rank', badge: 'RISING STAR', points: '8,440', trend: '+5 ranks', isUser: true, img: '/User.png' },
     { rank: '08', name: 'Leo Kim', subtitle: 'Science Expert', points: '7,100', trend: 'STABLE', img: '/User.png' },
     { rank: '09', name: 'Mia Tran', subtitle: 'Math Genius', points: '6,850', trend: 'UP', img: '/User.png' },
-{ rank: '10', name: 'David Nguyen', subtitle: 'History Buff', points: '6,500', trend: 'DOWN', img: '/User.png' },
-{ rank: '11', name: 'Anna Pham', subtitle: 'Tech Enthusiast', points: '6,200', trend: 'STABLE', img: '/User.png' }
+    { rank: '10', name: 'David Nguyen', subtitle: 'History Buff', points: '6,500', trend: 'DOWN', img: '/User.png' },
+    { rank: '11', name: 'Anna Pham', subtitle: 'Tech Enthusiast', points: '6,200', trend: 'STABLE', img: '/User.png' }
   ];
 }

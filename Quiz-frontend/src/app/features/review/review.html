@@ -1,1 +1,88 @@
-<p>review works!</p>
+<div class="review-container">
+  <div class="main-layout-grid">
+    
+    <!-- CỘT TRÁI: NỘI DUNG CHÍNH -->
+    <div class="main-content">
+      <!-- HERO AREA (Đúng màu gradient Hình 1) -->
+      <div class="hero-card">
+        <h1 class="main-title">Mastering Cyber Security 2024</h1>
+        <div class="hero-stats">
+          <div class="stars-group">
+            <i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i>
+            <span class="rating-val">4.8</span>
+          </div>
+          <span class="stat-item">1,248 Reviews</span>
+          <span class="stat-item">15k completions</span>
+        </div>
+      </div>
+
+      <!-- DANH SÁCH ĐÁNH GIÁ -->
+      <div class="reviews-section">
+        <div class="section-header">
+          <h2>Community Reviews</h2>
+          <div class="sort-select">Latest First <i class="pi pi-chevron-down"></i></div>
+        </div>
+
+        @for (rev of reviews; track rev.userName) {
+          <div class="review-card">
+            <div class="card-top">
+              <div class="user-block">
+                <img [src]="rev.avatar" class="user-avatar" alt="avatar">
+                <div class="user-info">
+                  <h3>{{ rev.userName }}</h3>
+                  <p>{{ rev.userMeta }}</p>
+                </div>
+              </div>
+              <div class="stars-display">
+                @for (s of getStars(rev.rating); track $index) { <i class="pi pi-star-fill"></i> }
+                @for (s of getEmptyStars(rev.rating); track $index) { <i class="pi pi-star"></i> }
+              </div>
+            </div>
+            <p class="comment-text">{{ rev.content }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- CỘT PHẢI: SIDEBAR -->
+    <aside class="sidebar">
+      <!-- BẢNG THỐNG KÊ (Rating Overview) -->
+      <div class="side-card stats-card">
+        <h3>Rating Overview</h3>
+        <div class="rating-list">
+          <div class="rating-row"><span>5 stars</span><div class="bar-bg"><div class="bar-fill" style="width: 82%"></div></div><span>82%</span></div>
+          <div class="rating-row"><span>4 stars</span><div class="bar-bg"><div class="bar-fill" style="width: 12%"></div></div><span>12%</span></div>
+          <div class="rating-row"><span>3 stars</span><div class="bar-bg"><div class="bar-fill" style="width: 4%"></div></div><span>4%</span></div>
+          <div class="rating-row"><span>2 stars</span><div class="bar-bg"><div class="bar-fill" style="width: 1%"></div></div><span>1%</span></div>
+          <div class="rating-row"><span>1 star</span><div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div><span>0%</span></div>
+        </div>
+      </div>
+
+      <!-- BẢNG ĐÁNH GIÁ (Rate this Quiz) -->
+      <div class="side-card review-form-card">
+        <h3>Rate this Quiz</h3>
+        <p class="sub-text">Your feedback helps the community find the best content.</p>
+        
+        <div class="star-picker">
+          @for (i of [1,2,3,4,5]; track i) {
+            <i class="pi" 
+               [class.pi-star-fill]="i <= selectedRating" 
+               [class.pi-star]="i > selectedRating"
+               (click)="setRating(i)"></i>
+          }
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">REVIEW COMMENTS</label>
+          <textarea placeholder="What did you think of the difficulty and quality?"></textarea>
+        </div>
+        
+        <div class="form-btns">
+          <button class="btn-primary">Cancel</button>
+          <button class="btn-primary">Submit Review</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>

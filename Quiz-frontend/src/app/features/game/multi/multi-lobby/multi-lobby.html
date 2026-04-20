@@ -1,1 +1,166 @@
-<p>multi-lobby works!</p>
+<div class="lobby-root">
+
+
+  <!-- ================================================
+       HOST VIEW
+       [class.focus-bg] → đổi gradient blob hồng đậm hơn
+       ================================================ -->
+  <div class="host-view"
+       *ngIf="isHost"
+       [class.focus-bg]="gameMode === 'focus'">
+
+
+    <h1 class="host-title">Waiting for players<span class="dot-anim">...</span></h1>
+    <p class="host-subtitle">Join at <span class="join-link">just4quiz.game</span></p>
+
+
+    <!-- PIN Card -->
+    <div class="pin-card">
+      <span class="pin-card-label">GAME PIN</span>
+      <div class="pin-card-number">{{ gamePin }}</div>
+    </div>
+
+
+    <!-- Game Mode -->
+    <p class="select-mode-label">SELECT GAME MODE</p>
+    <div class="host-mode-pill"
+         [class.classic-pill]="gameMode === 'classic'"
+         [class.focus-pill]="gameMode === 'focus'">
+      <span class="material-icons host-mode-icon">{{ modeInfo.icon }}</span>
+      <div class="host-mode-text">
+        <span class="host-mode-name">{{ modeInfo.name }}</span>
+        <span class="host-mode-desc">{{ modeInfo.desc }}</span>
+      </div>
+    </div>
+
+
+    <!-- Players Bar -->
+    <div class="host-players-bar">
+      <div class="count-badge">
+        <span class="material-icons count-icon">group</span>
+        <strong>{{ players.length }}</strong>&nbsp;Players Joined
+      </div>
+      <div class="host-bar-actions">
+        <button class="btn-lock-game">
+          <span class="material-icons">lock</span>
+          Lock Game
+        </button>
+        <button class="btn-sound-icon">
+          <span class="material-icons">volume_up</span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Players Grid -->
+    <div class="host-players-grid">
+      <div *ngFor="let p of players"
+           class="host-player-tile"
+           [class.host-waiting-tile]="p.waiting">
+        <div class="host-waiting-icon-wrap" *ngIf="p.waiting">
+          <span class="material-icons">hourglass_top</span>
+        </div>
+        <img *ngIf="!p.waiting"
+             [src]="p.avatar"
+             [alt]="p.name"
+             class="host-tile-avatar" />
+        <span class="host-tile-name">{{ p.waiting ? 'Waiting...' : p.name }}</span>
+      </div>
+    </div>
+
+
+    <!-- START GAME — màu đồng bộ mode pill -->
+    <button class="btn-start-game"
+            [class.btn-start-classic]="gameMode === 'classic'"
+            [class.btn-start-focus]="gameMode === 'focus'"
+            (click)="startGame()">
+      START GAME
+      <span class="material-icons">play_circle</span>
+    </button>
+
+
+  </div>
+
+
+  <!-- ================================================
+       PLAYER VIEW
+       ================================================ -->
+  <div class="player-view" *ngIf="!isHost">
+
+
+    <!-- WAITING ROOM Badge -->
+    <div class="wr-badge">
+      <span class="pulse-dot"></span>
+      WAITING ROOM
+    </div>
+
+
+    <!-- Hero Row: title trái + 2 info card phải -->
+    <div class="player-hero-row">
+      <div class="player-hero-left">
+        <h1 class="player-title">
+          You're in!&nbsp;<span class="player-title-purple">Waiting for<br>host</span> to start<span class="dot-anim">...</span>
+        </h1>
+      </div>
+      <div class="player-hero-right">
+        <div class="info-box">
+          <span class="info-box-label">GAME MODE</span>
+          <div class="info-mode-pill"
+               [class.info-mode-classic]="gameMode === 'classic'"
+               [class.info-mode-focus]="gameMode === 'focus'">
+            {{ modeInfo.name }}
+          </div>
+        </div>
+        <div class="info-box">
+          <span class="info-box-label">GAME PIN</span>
+          <div class="info-pin">{{ gamePin }}</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Players Section Header -->
+    <div class="player-section-bar">
+      <h3 class="joined-label">Joined Players</h3>
+      <div class="joined-count-pill"
+           [class.joined-count-classic]="gameMode === 'classic'"
+           [class.joined-count-focus]="gameMode === 'focus'">
+        {{ players.length }} Players Joined
+      </div>
+      <button class="btn-leave-room" (click)="leaveRoom()">
+        <span class="material-icons">logout</span>
+        Leave Room
+      </button>
+    </div>
+
+
+    <!-- Players Grid -->
+    <div class="player-players-grid">
+      <div *ngFor="let p of players"
+           class="player-tile"
+           [class.you-tile]="p.isCurrentUser">
+        <div class="player-tile-avatar-wrap">
+          <img [src]="p.avatar" [alt]="p.name" class="player-tile-avatar" />
+          <span class="you-chip" *ngIf="p.isCurrentUser">YOU</span>
+        </div>
+        <span class="player-tile-name">{{ p.name }}</span>
+      </div>
+    </div>
+
+
+    <!-- Pro Tip -->
+    <div class="pro-tip-box">
+      <div class="pro-tip-icon-wrap">
+        <span class="material-icons">lightbulb</span>
+      </div>
+      <div>
+        <p class="pro-tip-heading">Pro Tip</p>
+        <p class="pro-tip-body">The faster you answer, the more points you get! Keep your eyes on the screen when the host starts the countdown. Good luck, {{ currentUserName }}!</p>
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>

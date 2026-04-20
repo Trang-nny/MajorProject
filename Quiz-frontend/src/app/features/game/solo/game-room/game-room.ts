@@ -11,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './game-room.html',
   styleUrls: ['./game-room.css']
 })
-export class GameRoomComponent implements OnInit, OnDestroy {
+export class GameRoom implements OnInit, OnDestroy {
   quizId: string | null = null;
   questions: any[] = [];
   currentIndex: number = 0;

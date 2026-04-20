@@ -59,6 +59,12 @@
 
 
     <main class="quiz-content-area">
+      <!-- Mode Toggle Buttons -->
+      <div class="view-toggles" style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <button class="toggle-btn" [class.active]="viewMode === 'all'" (click)="setViewMode('all')">Quizzes</button>
+        <button class="toggle-btn" [class.active]="viewMode === 'my'" (click)="setViewMode('my')">My Quizzes</button>
+      </div>
+
       <div class="quiz-grid-6-cards">
        
         <!-- Hiển thị danh sách quiz đã được phân trang -->
@@ -68,12 +74,18 @@
             <img [src]="quiz.image" [alt]="quiz.title" style="object-fit: cover; width: 100%; height: 100%;">
           </div>
           <div class="card-details">
-            <h4 class="title-q">{{ quiz.title }}</h4>
-            <div class="user-row"><img src="User.png"><span>by {{ quiz.author }}</span></div>
+            <div class="title-container">
+              <h4 class="title-q">{{ quiz.title }}</h4>
+            </div>
+            <div class="user-row"><img [src]="quiz.authorAvatar" alt="Avatar" style="object-fit: cover;"><span>by {{ quiz.author }}</span></div>
             <div class="stats-grid">
               <div class="s-box"><span class="v">{{ quiz.items }}</span><span class="l">Items</span></div>
-              <div class="s-box"><span class="v">{{ quiz.plays }}</span><span class="l">Plays</span></div>
               <div class="s-box"><span class="v">{{ quiz.level }}</span><span class="l">Level</span></div>
+            </div>
+            <div class="list-meta-row" style="display: flex; gap: 12px; align-items: center; font-size: 0.85rem; color: #7b7b8f; font-weight: 600; margin-bottom: 20px; justify-content: center;">
+              <span title="Plays" style="display: flex; align-items: center; gap: 2px;"><span class="material-icons sm" style="font-size: 16px;">play_arrow</span> {{ quiz.plays }}</span>
+              <span title="Comments" style="display: flex; align-items: center; gap: 2px;"><span class="material-icons sm" style="font-size: 16px;">chat_bubble_outline</span> {{ quiz.comments }}</span>
+              <span title="Rating" style="display: flex; align-items: center; gap: 2px;"><span class="material-icons sm gold" style="font-size: 16px; color: #f1ad1d;">star</span> {{ quiz.rating }}</span>
             </div>
             <button class="btn-play-gradient" [routerLink]="['/play/mode']" [queryParams]="{ id: quiz.id, title: quiz.title, desc: quiz.description, level: quiz.level, length: quiz.items }">Start Quiz <span class="material-icons">play_arrow</span></button>
           </div>
