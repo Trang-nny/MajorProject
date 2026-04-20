@@ -15,11 +15,13 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { Leaderboard } from './features/leaderboard/leaderboard';
 import { Profile } from './features/profile/profile';
 import { ProfileEdit } from './features/profile-edit/profile-edit';
+import { Review } from './features/review/review';
 
 // Features - Quiz
 import { QuizList } from './features/quiz/quiz-list/quiz-list';
 import { CreateQuiz } from './features/quiz/create-quiz/create-quiz';
 import { QuizDetail } from './features/quiz/quiz-detail/quiz-detail';
+import { QuizEdit } from './features/quiz/quiz-edit/quiz-edit';
 
 // Features - Game Play
 import { GameRoom } from './features/game/multi/game-room/game-room';
@@ -55,6 +57,8 @@ export const routes: Routes = [
       { path: 'leaderboard', component: Leaderboard },
       { path: 'profile', component: Profile },
       { path: 'profile/edit', component: ProfileEdit },
+      { path: 'quiz/edit/:id', component: QuizEdit },
+      { path: 'review/:id', component: Review }
     ]
   },
 

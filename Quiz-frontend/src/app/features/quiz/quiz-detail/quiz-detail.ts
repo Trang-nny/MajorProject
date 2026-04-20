@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { QuizService } from '../../../services/quiz.service';
 
 @Component({
   selector: 'app-quiz-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './quiz-detail.html',
   styleUrl: './quiz-detail.css'
 })
@@ -69,7 +69,7 @@ export class QuizDetail implements OnInit {
            return;
         }
 
-        // Ki?m tra xem user hi?n t?i c� ph?i l� ngu?i t?o kh�ng
+        // Kiểm tra xem user hiện tại có phải là người tạo không
         if (this.currentUser && res.created_by === this.currentUser.id) {
           this.isOwner = true;
         } else {
@@ -85,7 +85,7 @@ export class QuizDetail implements OnInit {
         }
         const totalMinutes = Math.ceil(totalSeconds / 60);
 
-        // C?p nh?t th�ng tin hi?n th?
+        // Cập nhật thông tin hiện tại
         this.quizData = {
           ...this.quizData,
           title: res.title || 'Untitled',
@@ -123,14 +123,14 @@ export class QuizDetail implements OnInit {
             };
           });
         }
-        
-        // Render l?i component v?i c? params Data v� params Questions
+
+        // Render lại component với các params Data và params Questions
         this.cd.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching quiz detail', err);
-        // Ng?ng nh?y trang, hi?n th? th?ng tr�n m�n h�nh l� l?i
-        this.quizData.title = 'L?i kh�ng t?i du?c Quiz!';
+        // Ngừng nhảy trang, hiển thị thông báo lỗi
+        this.quizData.title = 'Lỗi không tải được Quiz!';
         this.cd.detectChanges();
         alert('Could not load quiz details. ' + (err.error?.error || err.message));
       }
@@ -147,7 +147,7 @@ export class QuizDetail implements OnInit {
       },
       error: (err) => {
         console.error('Failed to update visibility', err);
-        alert('C?p nh?t tr?ng th�i hi?n th? th?t b?i');
+        alert('Cập nhật trạng thái hiển thị thất bại');
       }
     });
   }
