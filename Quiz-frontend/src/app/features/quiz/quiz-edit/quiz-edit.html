@@ -1,1 +1,153 @@
-<p>quiz-edit works!</p>
+<div class="create-quiz-wrapper">
+  <div class="create-quiz-container-edit" style="width: 100%; max-width: 1000px; margin: 0 auto;">
+    <h1 class="sidebar-title" style="font-size: 32px; margin-bottom: 30px;">Edit Quiz</h1>
+
+    <main class="quiz-editor-main">
+      <!-- 1. QUIZ INFORMATION SECTION -->
+      <section class="quiz-info-section">
+        <div class="info-header-row">
+           <span class="material-icons">info</span>
+           <h2 class="form-section-title">Quiz Information</h2>
+        </div>
+
+        <div class="info-layout-flex">
+          <!-- Phía trái: Title, Level, Description -->
+          <div class="info-left-content" style="flex: 1;">
+            <div class="info-grid-top">
+              <div class="form-group-custom title-group">
+                <label class="label-bold">Quiz Title</label>
+                <input type="text" [(ngModel)]="quizData.title" placeholder="e.g. World History Masters" class="input-styled" maxlength="100">
+              </div>
+              <div class="form-group-custom level-group">
+                <label class="label-bold">Level</label>
+                <div class="level-pills-row">
+                  <button class="pill-btn" [class.active]="quizData.level === 'Easy'" (click)="selectLevel('Easy')">Easy</button>
+                  <button class="pill-btn" [class.active]="quizData.level === 'Mid'" (click)="selectLevel('Mid')">Mid</button>
+                  <button class="pill-btn" [class.active]="quizData.level === 'Pro'" (click)="selectLevel('Pro')">Pro</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group-custom">
+              <label class="label-bold">Cover Image</label>
+              <div class="cover-image-upload" style="display: flex; align-items: center; gap: 1.5rem; margin-top: 5px;">
+                <div class="upload-actions">
+                  <label class="choose-img-label">
+                    <div class="img-icon-box">
+                      <span class="material-icons">image</span>
+                    </div>
+                    <span>Change Image</span>
+                    <input type="file" (change)="onCoverImageSelected($event)" accept="image/*" style="display: none;">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group-custom" style="margin-top: 20px;">
+              <label class="label-bold">Description</label>
+              <textarea [(ngModel)]="quizData.description" placeholder="Describe your quiz..." class="textarea-styled" maxlength="500"></textarea>
+            </div>
+          </div>
+
+          <!-- Phía phải: Cover Preview nằm ngoài cùng -->
+          <div class="info-right-preview">
+            <div class="cover-preview-box-large">
+              <img [src]="quizData.image" alt="Cover Preview">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. NAVIGATION ROW -->
+      <div class="nav-questions-header-row">
+        <h2 class="form-section-title" style="font-size: 20px;">Total Questions ({{questions.length}})</h2>
+        <div class="nav-btn-group">
+          <button class="icon-button-action" (click)="prevQuestion()"><span class="material-icons">chevron_left</span></button>
+          <div class="q-number-box">
+            <b>{{currentQuestionIndex + 1}}</b> / {{questions.length}}
+          </div>
+          <button class="icon-button-action" (click)="nextQuestion()"><span class="material-icons">chevron_right</span></button>
+        </div>
+      </div>
+
+      <!-- 3. QUESTION EDITOR SECTION -->
+      <section class="question-editor-card" *ngIf="questions[currentQuestionIndex]">
+        <div class="card-header-flex">
+          <div class="info-header-row" style="margin-bottom: 0;">
+            <span class="material-icons">description</span>
+            <h2 class="form-section-title">Question {{ currentQuestionIndex + 1 }}</h2>
+          </div>
+
+          <div class="header-actions">
+            <button class="icon-button-action" title="Duplicate Question">
+              <span class="material-icons">content_copy</span>
+            </button>
+            <button class="icon-button-action delete" title="Delete Question" (click)="removeQuestion(currentQuestionIndex)">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="main-q-input">
+          <textarea [(ngModel)]="questions[currentQuestionIndex].questionText" placeholder="Type your question here..." maxlength="250"></textarea>        
+          <span class="char-limit">{{ questions[currentQuestionIndex].questionText.length }}/250</span>
+        </div>
+
+        <div class="toggle-option-row">
+          <span>Allow multiple correct answers</span>
+          <label class="switch-ui">
+            <input type="checkbox" [(ngModel)]="questions[currentQuestionIndex].allowMultiple">
+            <span class="slider-ui"></span>
+          </label>
+        </div>
+
+        <div class="answers-2-col">
+          <div class="ans-box" *ngFor="let opt of questions[currentQuestionIndex].options; let optIndex = index"
+               [class.selected]="opt.isCorrect">
+            <button class="radio-check-btn" [class.active]="opt.isCorrect" (click)="opt.isCorrect = !opt.isCorrect">
+              <span class="material-icons" *ngIf="opt.isCorrect">done</span>
+            </button>
+            <input type="text" [(ngModel)]="opt.text" placeholder="Add answer {{ optIndex + 1 }}" maxlength="100">
+            <button class="icon-button-action delete" style="margin-left: auto;">
+              <span class="material-icons" style="font-size: 18px;">close</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Nút Add Answer đã được loại bỏ theo yêu cầu -->
+
+        <div class="settings-bottom">
+          <div class="custom-select-ui">
+            <span class="material-icons">timer</span>
+            <select [(ngModel)]="questions[currentQuestionIndex].timeLimit">
+              <option [ngValue]="10">10 seconds</option>
+              <option [ngValue]="20">20 seconds</option>
+              <option [ngValue]="30">30 seconds</option>
+              <option [ngValue]="60">60 seconds</option>
+            </select>
+            <span class="material-icons">expand_more</span>
+          </div>
+          <div class="custom-select-ui">
+            <span class="material-icons">stars</span>
+            <select [(ngModel)]="questions[currentQuestionIndex].points">
+              <option [ngValue]="100">100 points</option>
+              <option [ngValue]="200">200 points</option>
+              <option [ngValue]="500">500 points</option>
+              <option [ngValue]="1000">1000 points</option>
+            </select>
+            <span class="material-icons">expand_more</span>
+          </div>
+        </div>
+      </section>
+
+      <button class="btn-add-q-dash" (click)="addQuestion()">
+        <span class="material-icons">add</span> Add Question
+      </button>
+
+      <div class="form-btns">
+        <button class="btn-primary">Discard Changes</button>
+        <button class="btn-primary">Save Progress</button>
+      </div>
+    </main>
+  </div>
+</div>
