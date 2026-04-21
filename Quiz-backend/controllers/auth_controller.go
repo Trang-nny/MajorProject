@@ -158,9 +158,10 @@ func GoogleLogin(c *gin.Context) {
 }
 
 type UpdateProfileInput struct {
-	UserID string `json:"user_id"`
-	Avatar string `json:"avatar"`
-	Bio    string `json:"bio"`
+	UserID   string `json:"user_id"`
+	Avatar   string `json:"avatar"`
+	Bio      string `json:"bio"`
+	Username string `json:"username"`
 }
 
 func UpdateProfile(c *gin.Context) {
@@ -182,7 +183,9 @@ func UpdateProfile(c *gin.Context) {
 	if input.Bio != "" {
 		user.Bio = &input.Bio
 	}
-
+	if input.Username != "" {
+		user.Username = input.Username
+	}
 	if err := config.DB.Save(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not update profile"})
 		return

@@ -31,9 +31,6 @@ func SubmitResult(c *gin.Context) {
 		// Check if a solo result already exists for this user and quiz
 		err := config.DB.Where("user_id = ? AND quiz_id = ? AND room_id IS NULL", req.UserID, req.QuizID).First(&existingResult).Error
 
-		// Tăng số lượt chơi của Quiz lên 1
-		config.DB.Model(&models.Quiz{}).Where("id = ?", req.QuizID).UpdateColumn("plays", gorm.Expr("plays + ?", 1))
-
 		if err == nil {
 			// Found existing record. Increment play count.
 			existingResult.PlayCount += 1
@@ -66,8 +63,9 @@ func SubmitResult(c *gin.Context) {
 		return
 	}
 
-	// Tăng số lượt chơi của Quiz lên 1 cho lượt chơi hoàn toàn mới
-	config.DB.Model(&models.Quiz{}).Where("id = ?", req.QuizID).UpdateColumn("plays", gorm.Expr("plays + ?", 1))
+        // Tăng số lượt chơi của Quiz lên 1 cho lượt chơi mới
+        config.DB.Model(&models.Quiz{}).Where("id = ?", req.QuizID).UpdateColumn("plays", gorm.Expr("plays + ?", 1))
 
-	c.JSON(http.StatusOK, result)
+
+        c.JSON(http.StatusOK, result)
 }
