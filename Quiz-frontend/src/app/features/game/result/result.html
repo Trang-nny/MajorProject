@@ -135,24 +135,17 @@
 
 
         <div class="cta-row-center">
-          <button class="btn-action-outline" routerLink="/app/dashboard">
+          <button class="btn-action-primary" routerLink="/app/dashboard">
             <i class="pi pi-th-large"></i> Return to Dashboard
           </button>
           <button class="btn-action-primary" [routerLink]="['/play/solo/lobby']" [queryParams]="{ id: quizId }">
              <i class="pi pi-refresh"></i> Play Again
           </button>
-        </div>
-
-
-        <div class="mastery-box">
-          <span class="label-tiny centered">MASTERY INSIGHT</span>
-          <p class="mastery-text">"{{ quizResult.masteryInsight }}"</p>
-          <div class="mastery-footer">
-            <button class="circle-btn"><i class="pi pi-share-alt"></i></button>
-            <button class="circle-btn"><i class="pi pi-download"></i></button>
-          </div>
+          <button class="btn-action-primary" *ngIf="quizId" [routerLink]="['/app/review', quizId]">
+             <i class="pi pi-star"></i> Rate Quiz
+          </button>
         </div>
       </div>
     }
   </main>
-</div>
+</div>s
