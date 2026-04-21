@@ -120,17 +120,26 @@ textarea {
 }
 
 /* BUTTONS */
-.form-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
-
-.btn-primary {
-  background: #7c3aed;
-  color: white;
-  border: none;
-  padding: 1.2rem;
-  border-radius: 50px;
-  font-weight: 750;
-  cursor: pointer;
-  transition: 0.2s;
+.form-btns {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  width: 100%;
 }
 
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary {
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
+  background: #7c3aed;
+  color: white;
+  font-weight: 750;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover { 
+  opacity: 0.9; 
+  transform: translateY(-1px); 
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
