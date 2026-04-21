@@ -111,11 +111,14 @@ export class Profile implements OnInit {
     this.http.get<any[]>('http://localhost:8080/api/quizzes').subscribe({
       next: (allQuizzes) => {
         // Nếu user.id rỗng (chưa đăng nhập chuẩn), hiện tất cả. Nếu có, hiện những cái khớp ID hoặc không có ID (quá khứ)
-        const myQuizzes = allQuizzes.filter(q => (this.user.id && q.created_by === this.user.id) || (q.creator && q.creator.id === this.user.id) || (!q.creator && q.created_by && q.created_by !== null)); this.createdQuizzes = myQuizzes.map(q => ({
+        const myQuizzes = allQuizzes.filter(q => (this.user.id && q.created_by === this.user.id) || (q.creator && q.creator.id === this.user.id) || (!q.creator && q.created_by && q.created_by !== null)); 
+        this.createdQuizzes = myQuizzes.map(q => ({
           id: q.id || q.ID,
           title: q.title,
           image: q.cover_image || '/Space-Quiz.png',
-          plays: `${q.plays || 0} plays`,
+          plays: q.plays || 0,
+          hosts: q.hosts || 0,
+          comments: q.comments || 0,
           rating: 5.0,
           category: q.level ? q.level.toUpperCase() : 'GENERAL',
           color: '#6c2bd9'

@@ -62,7 +62,7 @@ export const routes: Routes = [
       { path: 'quiz-edit/:id', component: QuizEdit },
       { path: 'leaderboard', component: Leaderboard },
       { path: 'profile', component: Profile },
-      { path: 'profile-edit', component: ProfileEdit },
+      { path: 'profile/edit', component: ProfileEdit },
       { path: 'review/:id', component: Review },
     ]
   },
