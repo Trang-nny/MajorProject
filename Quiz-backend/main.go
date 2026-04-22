@@ -36,7 +36,7 @@ func main() {
 
 	config.ConnectDatabase()
 	// Tu dong tao bang
-	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{})
+	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{}, &models.Review{})
 
 	auth := r.Group("/auth")
 	{
@@ -60,6 +60,8 @@ func main() {
 		api.POST("/results", controllers.SubmitResult)
 		api.GET("/stats/:id", controllers.GetUserStats)
 		api.GET("/users/:id/history", controllers.GetUserHistory)
+		api.POST("/quizzes/reviews", controllers.CreateReview)
+		api.GET("/quizzes/:id/reviews", controllers.GetQuizReviews)
 	}
 
 	r.Run(":8080")
