@@ -377,7 +377,7 @@
 
 /* SIDEBAR & VISIBILITY STYLING */
 .side-card, .visibility-section {
-  background: #f9f5ff !important;
+  background: #f1eeff !important;
   border: 1px solid rgba(127, 86, 217, 0.1);
   padding: 24px;
   border-radius: 24px;
@@ -554,3 +554,51 @@
 .last-summary {
   margin-bottom: 25px !important;
 }
+
+
+.reviews-section-guest {
+  background: white;
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  border: 1px solid #f1f1f1;
+}
+
+.section-header-review {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 15px;
+}
+
+.section-header-review h2 { font-size: 24px; font-weight: 850; color: #1a1a2e; margin: 0; }
+
+
+.sort-wrapper { display: flex; align-items: center; gap: 12px; }
+.sort-label { font-size: 0.95rem; font-weight: 900; color: #000000; }
+.sort-select { 
+  padding: 10px 16px; border-radius: 12px; border: 2px solid #f1efff; 
+  background-color: white; color: #4b3f8a; font-weight: 700; font-size: 0.9rem;
+  cursor: pointer; outline: none; transition: all 0.2s ease;
+}
+.sort-select:hover { border-color: #7c3aed; background-color: #f9f7ff; }
+.sort-select:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); }
+
+
+.review-card-item { padding: 20px 0; border-bottom: 1.5px solid #f2f4f7; }
+.review-card-item:last-child { border-bottom: none; }
+
+.card-top-review { display: flex; justify-content: space-between; align-items: flex-start; }
+.user-block-review { display: flex; gap: 12px; align-items: center; }
+.user-avatar-review { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
+.user-info-review h3 { font-size: 16px; color: #1d2939; margin: 0; font-weight: 800; }
+.user-info-review p { font-size: 13px; color: #94a3b8; margin: 2px 0 0 0; }
+.stars-display-review { color: #ad2e69; font-size: 14px; }
+.comment-text-review { margin-top: 15px; color: #475467; font-size: 15px; line-height: 1.6; }
+
+.summary-text-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #667085; }
+.summary-text-item i { color: #7f56d9; }
+.desc-text-side { font-size: 14px; color: #475467; line-height: 1.6; }
+.empty-state { text-align: center; padding: 40px; color: #94a3b8; font-weight: 600; }

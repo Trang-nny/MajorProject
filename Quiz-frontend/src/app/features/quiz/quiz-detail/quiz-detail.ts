@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizService } from '../../../services/quiz.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-quiz-detail',
@@ -16,16 +17,21 @@ export class QuizDetail implements OnInit {
   private quizService = inject(QuizService);
   private router = inject(Router);
   private cd = inject(ChangeDetectorRef);
+  private http = inject(HttpClient);
 
   isOwner: boolean = false;
   selectedVisibility: string = 'private';
   quizId: string = '';
   currentUser: any = null;
+  apiUrl = 'http://' + window.location.hostname + ':8080/api';
+
+  // Dữ liệu cho danh sách Review (Dành cho Guest)
+  reviews: any[] = [];
+  sortBy = 'latest';
 
   quizData: any = {
     title: 'Loading...',
     plays: '0',
-    hosts: '0',
     comments: '0',
     rating: '0',
     questionsCount: 0,
@@ -52,49 +58,38 @@ export class QuizDetail implements OnInit {
 
     this.route.paramMap.subscribe(params => {
       this.quizId = params.get('id') || '';
-      console.log('QuizDetail Init with ID:', this.quizId);
       if (this.quizId) {
         this.fetchQuizDetail();
-      } else {
-        console.error('QuizDetail was loaded without an ID parameters!');
       }
     });
   }
  
   fetchQuizDetail() {
-    console.log('Fetching quiz data for ID:', this.quizId);
     this.quizService.getQuiz(this.quizId).subscribe({
       next: (res) => {
-        console.log('Got quiz from BE:', res);
-        if (!res) {
-           this.quizData.title = 'ERROR: Empty response';
-           this.cd.detectChanges();
-           return;
-        }
+        if (!res) return;
 
-        // Kiểm tra xem user hiện tại có phải là người tạo không
+        // Code gốc: Kiểm tra quyền chủ sở hữu
         if (this.currentUser && res.created_by === this.currentUser.id) {
           this.isOwner = true;
         } else {
           this.isOwner = false;
+          this.loadReviews(); // Guest mới tải reviews
         }
 
         this.selectedVisibility = res.visibility || 'private';
 
-        // Calculate total time
-        let totalSeconds = 0;
-        if (res.questions) {
-          totalSeconds = res.questions.reduce((acc: number, q: any) => acc + (q.time_limit || 20), 0);
-        }
+        let totalSeconds = res.questions ? res.questions.reduce((acc: number, q: any) => acc + (q.time_limit || 20), 0) : 0;
         const totalMinutes = Math.ceil(totalSeconds / 60);
 
-        // Cập nhật thông tin hiển thị
         this.quizData = {
           ...this.quizData,
+          id: res.id,
           title: res.title || 'Untitled',
-          plays: res.plays || 0,          hosts: res.hosts || 0,
+          plays: res.plays || 0,
           comments: res.comments || 0,
-          rating: res.rating || 0,          author: res.creator?.username || 'Unknown',
+          rating: res.rating || 0,
+          author: res.creator?.username || 'Unknown',
           description: res.description || '',
           level: res.level || 'Easy',
           category: 'General', 
@@ -105,14 +100,11 @@ export class QuizDetail implements OnInit {
           lastUpdated: new Date(res.updated_at || res.created_at).toLocaleDateString()
         };
 
-        // Format questions
         if (res.questions) {
           this.questions = res.questions.map((q: any, i: number) => {
             let options = [];
             if (typeof q.options === 'string') {
-              try {
-                options = JSON.parse(q.options);
-              } catch (e) {}
+              try { options = JSON.parse(q.options); } catch (e) {}
             } else if (Array.isArray(q.options)) {
               options = q.options;
             }
@@ -127,58 +119,58 @@ export class QuizDetail implements OnInit {
             };
           });
         }
-        
-        // Render lại component với cả params Data và params Questions
         this.cd.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching quiz detail', err);
-        // Ngừng nhảy trang, hiển thị thông báo trên màn hình là lỗi
-        this.quizData.title = 'Lỗi không tải được Quiz!';
         this.cd.detectChanges();
-        alert('Could not load quiz details. ' + (err.error?.error || err.message));
       }
     });
   }
 
-  updateVisibility(visibility: string) {
-    if (!this.isOwner) return;
-    
-    this.quizService.updateVisibility(this.quizId, visibility).subscribe({
-      next: (res) => {
-        this.selectedVisibility = visibility;
-        console.log('Visibility updated:', visibility);
+  // Chức năng Review hỗ trợ phần Guest
+  loadReviews() {
+    this.http.get(`${this.apiUrl}/quizzes/${this.quizId}/reviews`).subscribe({
+      next: (res: any) => {
+        this.reviews = res || [];
+        this.sortReviews();
+        this.cd.detectChanges();
       },
-      error: (err) => {
-        console.error('Failed to update visibility', err);
-        alert('Could not update visibility');
-      }
+      error: (err) => console.error('Reviews API error:', err)
     });
   }
- 
-  cancel() {
-    console.log('Action cancelled');
+
+  sortReviews() {
+    if (!this.reviews.length) return;
+    switch (this.sortBy) {
+      case 'latest': this.reviews.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()); break;
+      case 'oldest': this.reviews.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()); break;
+      case 'highest': this.reviews.sort((a, b) => b.rating - a.rating); break;
+      case 'lowest': this.reviews.sort((a, b) => a.rating - b.rating); break;
+    }
+    this.cd.detectChanges();
+  }
+
+  getStars(rating: any): number[] { return Array(Math.max(0, Math.floor(Number(rating) || 0))).fill(0); }
+  getEmptyStars(rating: any): number[] { return Array(Math.max(0, 5 - Math.floor(Number(rating) || 0))).fill(0); }
+
+  // Chức năng gốc
+  updateVisibility(visibility: string) {
+    if (!this.isOwner) return;
+    this.quizService.updateVisibility(this.quizId, visibility).subscribe({
+      next: () => { this.selectedVisibility = visibility; this.cd.detectChanges(); },
+      error: (err) => console.error('Visibility update error', err)
+    });
   }
 
   startGame() {
-    this.router.navigate(['/play/mode'], {
-      queryParams: {
-        id: this.quizId,
-        title: this.quizData.title,
-        desc: this.quizData.description,
-        level: this.quizData.level,
-        length: this.quizData.questionsCount
-      }
+    this.router.navigate(['/play/mode'], { 
+      queryParams: { id: this.quizId, title: this.quizData.title, desc: this.quizData.description, level: this.quizData.level, length: this.quizData.questionsCount } 
     });
   }
 
   shareQuiz() {
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      alert('Đã copy đường dẫn: ' + url);
-    }).catch(err => {
-      console.error('Không thể copy link', err);
-      alert('Lỗi copy link: ' + url);
-    });
+    navigator.clipboard.writeText(url).then(() => alert('Link copied: ' + url));
   }
 }

@@ -8,7 +8,7 @@
 }
 .main-title { font-size: 3.5rem; color: #2d2654; font-weight: 850; margin-bottom: 1.5rem; }
 .hero-stats { display: flex; gap: 2rem; align-items: center; color: #64748b; font-weight: 600; }
-.stars-group { display: flex; align-items: center; color: #ad2e69; gap: 5px; }
+.stars-group { display: flex; align-items: center; color: #7c3aed; gap: 5px; }
 
 /* Review List Header & Sort */
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
@@ -31,7 +31,7 @@
 .user-avatar { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
 .user-info h3 { font-size: 1.1rem; color: #2d2654; margin: 0; font-weight: 750; }
 .user-info p { font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0; }
-.stars-display { color: #ad2e69; font-size: 0.9rem; }
+.stars-display { color: #7c3aed; font-size: 0.9rem; }
 .comment-text { color: #475569; line-height: 1.7; font-size: 1.05rem; }
 
 .empty-state { padding: 4rem 2rem; color: #94a3b8; text-align: center; font-weight: 600; }
@@ -47,7 +47,7 @@
 
 /* Review Form */
 .review-form-card { background: white; border: 1px solid #f1efff; }
-.star-picker { display: flex; justify-content: center; gap: 0.8rem; font-size: 2.5rem; color: #ad2e69; margin: 1.5rem 0; cursor: pointer; }
+.star-picker { display: flex; justify-content: center; gap: 0.8rem; font-size: 2.5rem; color: #7c3aed; margin: 1.5rem 0; cursor: pointer; }
 .input-group { margin-top: 1.5rem; display: flex; flex-direction: column; }
 .input-label { font-size: 0.75rem; font-weight: 850; color: #94a3b8; margin-bottom: 0.8rem; letter-spacing: 0.05em; }
 textarea { 
