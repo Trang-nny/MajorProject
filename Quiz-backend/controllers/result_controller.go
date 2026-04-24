@@ -63,9 +63,8 @@ func SubmitResult(c *gin.Context) {
 		return
 	}
 
-        // Tăng số lượt chơi của Quiz lên 1 cho lượt chơi mới
-        config.DB.Model(&models.Quiz{}).Where("id = ?", req.QuizID).UpdateColumn("plays", gorm.Expr("plays + ?", 1))
+	// Tăng số lượt chơi của Quiz lên 1 cho lượt chơi mới
+	config.DB.Model(&models.Quiz{}).Where("id = ?", req.QuizID).UpdateColumn("plays", gorm.Expr("plays + ?", 1))
 
-
-        c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, result)
 }

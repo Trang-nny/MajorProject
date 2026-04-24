@@ -20,4 +20,5 @@ type Quiz struct {
 
 	Creator   *User      `json:"creator" gorm:"foreignKey:CreatedBy;references:ID"`
 	Questions []Question `json:"questions" gorm:"foreignKey:QuizID;references:ID"`
+	Reviews   []Review   `json:"reviews" gorm:"foreignKey:QuizID;references:ID"`
 }

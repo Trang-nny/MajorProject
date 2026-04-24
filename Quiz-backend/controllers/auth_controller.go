@@ -136,18 +136,18 @@ func GoogleLogin(c *gin.Context) {
 	var user models.User
 	// Tìm user bằng email hoặc táo mới. Password ở đây mình có thể hash tạm hoặc là b� qua, default google là google auth
 	if err := config.DB.Where("email = ?", email).First(&user).Error; err != nil {
-		// Tạo ngư�i dùng mơ�i nê�u không tìm thâ�y
+		// Tạo người dùng mới nếu không tìm thấy
 		user = models.User{
 			Username: name, // Bản chất tên đầy đủ Google
 			Email:    email,
-			Password: "GOOGLE_OAUTH_LOGIN", // Mnột chuỗi mã random mà bình thư�ng ai gõ pass cũng ko match dc m�t khẩu Hash // Th�t ra mình auto login mà ^^
+			Password: "GOOGLE_OAUTH_LOGIN", // Mnột chuỗi mã random mà bình thường ai gõ pass cũng ko match dc mật khẩu Hash // Thật ra mình auto login mà ^^
 		}
 		config.DB.Create(&user)
 	}
 
-	// Trả v� user (KHÔNG trả password)
+	// Trả về user (KHÔNG trả password)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "ăng nh�p Google thành công!",
+		"message": "Đăng nhập Google thành công!",
 		"token":   "fake_jwt_token_for_" + user.Username, // Replace với true JWT token trên file Auth hệ thống
 		"user": gin.H{
 			"id":       user.ID,

@@ -149,17 +149,25 @@ export class Profile implements OnInit {
     this.http.get<any[]>('http://localhost:8080/api/quizzes').subscribe({
       next: (allQuizzes) => {
         const myQuizzes = allQuizzes.filter(q => (this.user.id && q.created_by === this.user.id) || (q.creator && q.creator.id === this.user.id) || (!q.creator && q.created_by && q.created_by !== null)); 
-        this.createdQuizzes = myQuizzes.map(q => ({
-          id: q.id || q.ID,
-          title: q.title,
-          image: q.cover_image || '/Space-Quiz.png',
-          plays: q.plays || 0,
-          hosts: q.hosts || 0,
-          comments: q.comments || 0,
-          rating: 5.0,
-          category: q.level ? q.level.toUpperCase() : 'GENERAL',
-          color: '#6c2bd9'
-        }));
+        this.createdQuizzes = myQuizzes.map(q => {
+          let comments = 0;
+          let rating = 0;
+          if (q.reviews && q.reviews.length > 0) {
+             comments = q.reviews.length;
+             const sum = q.reviews.reduce((a: number, b: any) => a + b.rating, 0);
+             rating = Math.round((sum / comments) * 10) / 10;
+          }
+          return {
+            id: q.id || q.ID,
+            title: q.title,
+            image: q.cover_image || '/Space-Quiz.png',
+            plays: q.plays || 0,
+            comments: comments,
+            rating: rating || 0,
+            category: q.level ? q.level.toUpperCase() : 'GENERAL',
+            color: '#6c2bd9'
+          };
+        });
         this.cd.detectChanges();
       },
       error: (err) => console.error('Failed to load quizzes', err)

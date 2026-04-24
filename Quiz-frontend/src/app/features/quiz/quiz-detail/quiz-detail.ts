@@ -71,8 +71,7 @@ export class QuizDetail implements OnInit {
 
         // Code gốc: Kiểm tra quyền chủ sở hữu
         if (this.currentUser && res.created_by === this.currentUser.id) {
-          this.isOwner = true;
-        } else {
+          this.isOwner = true;          this.loadReviews();        } else {
           this.isOwner = false;
           this.loadReviews(); // Guest mới tải reviews
         }
@@ -82,13 +81,21 @@ export class QuizDetail implements OnInit {
         let totalSeconds = res.questions ? res.questions.reduce((acc: number, q: any) => acc + (q.time_limit || 20), 0) : 0;
         const totalMinutes = Math.ceil(totalSeconds / 60);
 
+        let calculatedComments = res.comments || 0;
+        let calculatedRating: number | string = res.rating || 0;
+        if (res.reviews && res.reviews.length > 0) {
+            calculatedComments = res.reviews.length;
+            const sum = res.reviews.reduce((a: number, b: any) => a + b.rating, 0);
+            calculatedRating = (sum / calculatedComments).toFixed(1);
+        }
+
         this.quizData = {
           ...this.quizData,
           id: res.id,
           title: res.title || 'Untitled',
           plays: res.plays || 0,
-          comments: res.comments || 0,
-          rating: res.rating || 0,
+          comments: calculatedComments,
+          rating: calculatedRating,
           author: res.creator?.username || 'Unknown',
           description: res.description || '',
           level: res.level || 'Easy',
@@ -132,8 +139,9 @@ export class QuizDetail implements OnInit {
   loadReviews() {
     this.http.get(`${this.apiUrl}/quizzes/${this.quizId}/reviews`).subscribe({
       next: (res: any) => {
-        this.reviews = res || [];
-        this.sortReviews();
+        this.reviews = res || [];        this.quizData.comments = this.reviews.length;
+        const totalRating = this.reviews.reduce((sum: number, r: any) => sum + r.rating, 0);
+        this.quizData.rating = this.reviews.length ? (totalRating / this.reviews.length).toFixed(1) : 0;        this.sortReviews();
         this.cd.detectChanges();
       },
       error: (err) => console.error('Reviews API error:', err)
@@ -173,8 +181,7 @@ export class QuizDetail implements OnInit {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => alert('Link copied: ' + url));
   }
-
-  // Bổ sung chức năng Delete
+    // Bổ sung chức năng Delete
   deleteQuiz() {
     if (!this.isOwner) return;
     const confirmDelete = confirm('Are you sure you want to delete this quiz? This action cannot be undone.');

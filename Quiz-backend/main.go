@@ -20,7 +20,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Kh?i t?o WebSocket Hub
+	// Khởi tạo WebSocket Hub
 	hub := sockets.NewHub()
 	go hub.Run()
 

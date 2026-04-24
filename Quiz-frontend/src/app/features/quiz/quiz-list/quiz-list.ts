@@ -13,7 +13,6 @@ interface Quiz {
   visibility: string;
   items: number;
   plays: string;
-  hosts: string;
   comments: string;
   rating: string;
   level: string;
@@ -72,22 +71,30 @@ export class QuizList implements OnInit, OnDestroy {
     this.quizService.getQuizzes().subscribe({
       next: (res: any[]) => {
         // Map data từ Backend sang dạng hiển thị trên giao diện
-        const apiQuizzes = res.map(q => ({
-          id: q.id || q.ID,
-          title: q.title,
-          description: q.description || 'Test your knowledge on this topic.',
-          author: q.creator ? q.creator.username : 'Unknown Author',
-          authorAvatar: q.creator && q.creator.avatar ? q.creator.avatar : 'User.png',
-          creatorId: q.created_by || (q.creator ? (q.creator.id || q.creator.ID) : null),
-          visibility: q.visibility || 'public',
-          items: q.questions ? q.questions.length : 0,
-          plays: String(q.plays || 0),
-          hosts: String(q.hosts || 0),
-          comments: String(q.comments || 0),
-          rating: String(q.rating || 0),
-          level: q.level || 'Mid',
-          image: q.cover_image && q.cover_image.startsWith('data:image') ? q.cover_image : '/Tech.png' // Fallback nếu ko có
-        }));
+        const apiQuizzes = res.map(q => {
+          let comments = 0;
+          let rating = 0;
+          if (q.reviews && q.reviews.length > 0) {
+             comments = q.reviews.length;
+             const sum = q.reviews.reduce((a: number, b: any) => a + b.rating, 0);
+             rating = Math.round((sum / comments) * 10) / 10;
+          }
+          return {
+            id: q.id || q.ID,
+            title: q.title,
+            description: q.description || 'Test your knowledge on this topic.',
+            author: q.creator ? q.creator.username : 'Unknown Author',
+            authorAvatar: q.creator && q.creator.avatar ? q.creator.avatar : 'User.png',
+            creatorId: q.created_by || (q.creator ? (q.creator.id || q.creator.ID) : null),
+            visibility: q.visibility || 'public',
+            items: q.questions ? q.questions.length : 0,
+            plays: String(q.plays || 0),
+            comments: String(comments),
+            rating: String(rating),
+            level: q.level || 'Mid',
+            image: q.cover_image && q.cover_image.startsWith('data:image') ? q.cover_image : '/Tech.png' // Fallback náº¿u ko cÃ³
+          };
+        });
 
         this.quizzes = apiQuizzes;
         this.cd.detectChanges();

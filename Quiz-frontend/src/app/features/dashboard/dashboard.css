@@ -288,3 +288,8 @@
 .pin-field.placeholder {
   color: #D0D5DD;
 }
+
+.dash-meta-row { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; color: #7b7b8f; font-weight: 600; margin-top: 5px; }
+.dash-meta-row span { display: flex; align-items: center; gap: 2px; }
+.gold { color: #f1ad1d; }
+.sm { font-size: 16px; margin-right: 2px; }
