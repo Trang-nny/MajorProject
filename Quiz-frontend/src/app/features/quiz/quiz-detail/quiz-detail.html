@@ -142,7 +142,7 @@
             <button class="action-item" [routerLink]="['/app/review', quizId]">
               <i class="pi pi-star"></i><span>Review</span>
             </button>
-            <button class="action-item delete">
+            <button class="action-item delete" (click)="deleteQuiz()">
               <i class="pi pi-trash"></i><span>Delete Quiz</span>
             </button>
           </div>

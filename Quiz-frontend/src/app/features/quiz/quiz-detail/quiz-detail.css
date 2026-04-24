@@ -595,7 +595,7 @@
 .user-avatar-review { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
 .user-info-review h3 { font-size: 16px; color: #1d2939; margin: 0; font-weight: 800; }
 .user-info-review p { font-size: 13px; color: #94a3b8; margin: 2px 0 0 0; }
-.stars-display-review { color: #ad2e69; font-size: 14px; }
+.stars-display-review { color: #7f56d9; font-size: 14px; }
 .comment-text-review { margin-top: 15px; color: #475467; font-size: 15px; line-height: 1.6; }
 
 .summary-text-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #667085; }

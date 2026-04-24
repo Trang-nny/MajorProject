@@ -173,4 +173,22 @@ export class QuizDetail implements OnInit {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => alert('Link copied: ' + url));
   }
+
+  // Bổ sung chức năng Delete
+  deleteQuiz() {
+    if (!this.isOwner) return;
+    const confirmDelete = confirm('Are you sure you want to delete this quiz? This action cannot be undone.');
+    if (confirmDelete) {
+      this.http.delete(`${this.apiUrl}/quizzes/${this.quizId}`).subscribe({
+        next: () => {
+          alert('Quiz deleted successfully!');
+          this.router.navigate(['/app/dashboard']);
+        },
+        error: (err) => {
+          console.error('Error deleting quiz:', err);
+          alert('Failed to delete quiz.');
+        }
+      });
+    }
+  }
 }
