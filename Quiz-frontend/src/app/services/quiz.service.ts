@@ -40,6 +40,10 @@ export class QuizService {
     return this.http.get<any>(`${this.apiUrl}/quizzes/${id}`);
   }
 
+  updateQuiz(id: string, quizData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/quizzes/${id}`, quizData);
+  }
+
   updateVisibility(id: string, visibility: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/quizzes/${id}/visibility`, { visibility });
   }

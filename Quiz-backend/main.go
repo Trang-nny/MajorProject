@@ -20,7 +20,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Khởi tạo WebSocket Hub
+	// Kh?i t?o WebSocket Hub
 	hub := sockets.NewHub()
 	go hub.Run()
 
@@ -55,6 +55,7 @@ func main() {
 		api.POST("/quizzes", controllers.CreateQuiz)
 		api.GET("/quizzes", controllers.GetQuizzes)
 		api.GET("/quizzes/:id", controllers.GetQuiz)
+		api.PUT("/quizzes/:id", controllers.UpdateQuiz)
 		api.DELETE("/quizzes/:id", controllers.DeleteQuiz)
 		api.PATCH("/quizzes/:id/visibility", controllers.UpdateQuizVisibility)
 		api.POST("/results", controllers.SubmitResult)
