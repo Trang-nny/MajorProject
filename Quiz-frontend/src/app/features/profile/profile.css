@@ -99,6 +99,23 @@
   .card-body { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
   .card-body .card-title-fixed { font-size: 1.2rem; margin: 0 0 15px 0; font-weight: 700; color: #1a1a2e; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 2.8rem; line-height: 1.4; }
   .card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #7b7b8f; font-weight: 600; margin-top: auto; }
+
+/* Logout Button Theme */
+.logout-btn-theme {
+  background: #d92b5a  !important;
+  color: #ffffff !important;
+  border: 1px solid #d92b5a  !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important;
+}
+
+.logout-btn-theme:hover {
+  background: #d92b5a  !important;
+  border-color: #ffffff !important;
+}
+
+.logout-btn-theme .material-icons {
+  color: #ffffff !important;
+}
   .card-meta span { display: flex; align-items: center; gap: 4px; }
 .gold { color: #f1ad1d; }
 .sm { font-size: 18px; margin-right: 4px; }
