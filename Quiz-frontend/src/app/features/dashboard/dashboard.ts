@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -17,7 +17,7 @@ export class Dashboard implements OnInit {
   joinPin: string = '';
   quizzes: any[] = [];
 
-  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef, private router: Router) {}
 
   async ngOnInit() {
     try {
@@ -27,10 +27,10 @@ export class Dashboard implements OnInit {
       );
       
       if (res && Array.isArray(res)) {
-        // Chỉ hiển thị các quiz của Admin dựa vào email (ổn định hơn username vì username có thể thay đổi)
+        // Ch? hi?n th? các quiz c?a Admin d?a vào email (?n d?nh hon username vì username có th? thay d?i)
         const adminQuizzes = res.filter(q => q.creator && q.creator.email === 'just4quiz@gmail.com');
 
-        // Lấy tối đa 4 quiz
+        // L?y t?i da 4 quiz
         this.quizzes = adminQuizzes.slice(0, 4).map(q => {
           const plays = q.plays || 0;
           let comments = 0;
@@ -53,7 +53,15 @@ export class Dashboard implements OnInit {
         this.cd.detectChanges();
       }
     } catch (error) {
-      console.error('Lỗi khi tải dữ liệu', error);
+      console.error('L?i khi t?i d? li?u', error);
+    }
+  }
+
+  joinGame() {
+    if (this.joinPin && this.joinPin.length === 6) {
+      this.router.navigate(['/play/multi/lobby'], {
+        queryParams: { role: 'player', pin: this.joinPin }
+      });
     }
   }
 

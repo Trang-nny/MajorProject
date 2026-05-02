@@ -35,7 +35,7 @@ func main() {
 	}))
 
 	config.ConnectDatabase()
-	// Tu dong tao bang
+	// Tự động tạo bảng nếu chưa tồn tại
 	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{}, &models.Review{})
 
 	auth := r.Group("/auth")

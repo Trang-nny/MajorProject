@@ -133,8 +133,19 @@ func (h *Hub) handleJoinRoom(client *Client, data map[string]interface{}) {
 	gamePin, _ := data["gamePin"].(string)
 	quizID, _ := data["quizId"].(string)
 
-	// Tạo RoomState nếu chưa có (Host tạo phòng đầu tiên)
+	// Kiểm tra xem phòng có tồn tại không
 	if h.RoomStates[roomID] == nil {
+		if !isHost {
+			// Player đang cố nhập mã không tồn tại -> Báo lỗi
+			h.sendToClient(roomID, userID, Message{
+				Action: "error",
+				RoomID: roomID,
+				UserID: "SYSTEM",
+				Data:   "Phòng chơi không tồn tại. Vui lòng kiểm tra lại mã PIN.",
+			})
+			return
+		}
+		// Tạo RoomState nếu chưa có (Host tạo phòng đầu tiên)
 		h.RoomStates[roomID] = &RoomState{
 			HostID:   userID,
 			GameMode: gameMode,
@@ -142,6 +153,18 @@ func (h *Hub) handleJoinRoom(client *Client, data map[string]interface{}) {
 			QuizID:   quizID,
 			Status:   "waiting",
 			Players:  make(map[string]PlayerInfo),
+		}
+	} else {
+		// Phòng đã tồn tại
+		if isHost && h.RoomStates[roomID].HostID != userID {
+			// Host tạo phòng nhưng mã PIN đã tồn tại -> Báo lỗi trùng mã
+			h.sendToClient(roomID, userID, Message{
+				Action: "error",
+				RoomID: roomID,
+				UserID: "SYSTEM",
+				Data:   "Mã PIN này hiện đang được sử dụng. Vui lòng quay lại và thử tạo lại.",
+			})
+			return
 		}
 	}
 

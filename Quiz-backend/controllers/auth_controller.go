@@ -140,7 +140,7 @@ func GoogleLogin(c *gin.Context) {
 		user = models.User{
 			Username: name, // Bản chất tên đầy đủ Google
 			Email:    email,
-			Password: "GOOGLE_OAUTH_LOGIN", // Mnột chuỗi mã random mà bình thường ai gõ pass cũng ko match dc mật khẩu Hash // Thật ra mình auto login mà ^^
+			Password: "GOOGLE_OAUTH_LOGIN", // Một chuỗi mã random mà bình thường ai gõ pass cũng ko match dc mật khẩu Hash
 		}
 		config.DB.Create(&user)
 	}

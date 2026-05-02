@@ -13,7 +13,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class Profile implements OnInit {
   private http = inject(HttpClient);
   private cd = inject(ChangeDetectorRef);
-  private router = inject(Router); // Thêm inject Router
+  private router = inject(Router);
 
   user = {
     id: '',
@@ -103,7 +103,7 @@ export class Profile implements OnInit {
 
   setHistoryMode(mode: 'solo' | 'multi') {
     this.historyMode = mode;
-    this.currentPage = 1; // Reset về trang 1
+    this.currentPage = 1;
     this.updateDisplayedHistory();
   }
 
@@ -136,6 +136,28 @@ export class Profile implements OnInit {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
+  // BỔ SUNG PHÂN TRANG CHO MY CREATED QUIZZES
+  quizCurrentPage: number = 1;
+  quizzesPerPage: number = 3;
+
+  get displayedQuizzes() {
+    const startIndex = (this.quizCurrentPage - 1) * this.quizzesPerPage;
+    return this.createdQuizzes.slice(startIndex, startIndex + this.quizzesPerPage);
+  }
+
+  prevQuizPage() {
+    if (this.quizCurrentPage > 1) {
+      this.quizCurrentPage--;
+    }
+  }
+
+  nextQuizPage() {
+    const maxPage = Math.ceil(this.createdQuizzes.length / this.quizzesPerPage) || 1;
+    if (this.quizCurrentPage < maxPage) {
+      this.quizCurrentPage++;
+    }
+  }
+
   updateDisplayedStats() {
     const currentStats = this.stats[this.currentMode];
     this.user.games = currentStats.games || 0;
@@ -148,6 +170,7 @@ export class Profile implements OnInit {
   fetchMyQuizzes() {
     this.http.get<any[]>('http://localhost:8080/api/quizzes').subscribe({
       next: (allQuizzes) => {
+        // Nếu user.id rỗng (chưa đăng nhập chuẩn), hiện tất cả. Nếu có, hiện những cái khớp ID hoặc không có ID (quá khứ)
         const myQuizzes = allQuizzes.filter(q => (this.user.id && q.created_by === this.user.id) || (q.creator && q.creator.id === this.user.id) || (!q.creator && q.created_by && q.created_by !== null)); 
         this.createdQuizzes = myQuizzes.map(q => {
           let comments = 0;

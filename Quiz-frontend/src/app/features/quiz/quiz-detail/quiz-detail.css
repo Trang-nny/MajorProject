@@ -474,7 +474,7 @@
   flex: 1;
 }
 
-/* Fix dính chữ và phông chữ cho Meta */
+/* Fix dính ch? và phông ch? cho Meta */
 .q-meta {
   display: flex;
   align-items: center;
@@ -510,7 +510,7 @@
 }
 
 .points-tag {
-  background: #fef3f2; /* Màu đỏ nhạt pastel cho Points */
+  background: #fef3f2; /* Màu d? nh?t pastel cho Points */
   color: #b42318;
 }
 
@@ -545,10 +545,10 @@
   box-shadow: 0 4px 12px rgba(112, 41, 255, 0.1);
 }
 
-/* Fix QUIZ SUMMARY bị dính câu */
+/* Fix QUIZ SUMMARY b? dính câu */
 .summary-text {
   display: block;
-  margin-bottom: 16px !important; /* Tạo khoảng cách giữa 2 câu */
+  margin-bottom: 16px !important; /* T?o kho?ng cách gi?a 2 câu */
 }
 
 .last-summary {

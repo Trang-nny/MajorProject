@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type CreateQuizInput struct {
@@ -72,7 +73,7 @@ func CreateQuiz(c *gin.Context) {
 	}
 
 	var questions []models.Question
-	for _, qData := range input.Questions {
+	for i, qData := range input.Questions {
 		optionsJSON, err := json.Marshal(qData.Answers)
 		if err != nil {
 			tx.Rollback()
@@ -87,6 +88,7 @@ func CreateQuiz(c *gin.Context) {
 			Points:          qData.Points,
 			MultipleCorrect: qData.MultipleCorrect,
 			Options:         string(optionsJSON),
+			OrderIndex:      i,
 		}
 		questions = append(questions, q)
 	}
@@ -109,7 +111,7 @@ func CreateQuiz(c *gin.Context) {
 
 func GetQuizzes(c *gin.Context) {
 	var quizzes []models.Quiz
-	if err := config.DB.Preload("Creator").Preload("Questions").Preload("Reviews").Order("created_at desc").Find(&quizzes).Error; err != nil {
+	if err := config.DB.Preload("Creator").Preload("Questions", func(db *gorm.DB) *gorm.DB { return db.Order("order_index asc") }).Preload("Reviews").Order("created_at desc").Find(&quizzes).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch quizzes"})
 		return
 	}
@@ -125,7 +127,7 @@ func GetQuiz(c *gin.Context) {
 
 	var quiz models.Quiz
 
-	if err := config.DB.Preload("Creator").Preload("Questions").Preload("Reviews").First(&quiz, "id = ?", id).Error; err != nil {
+	if err := config.DB.Preload("Creator").Preload("Questions", func(db *gorm.DB) *gorm.DB { return db.Order("order_index asc") }).Preload("Reviews").First(&quiz, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Quiz not found"})
 		return
 	}
@@ -220,7 +222,7 @@ func UpdateQuiz(c *gin.Context) {
 	}
 
 	// Add new questions
-	for _, qInput := range input.Questions {
+	for i, qInput := range input.Questions {
 		ansBytes, _ := json.Marshal(qInput.Answers)
 
 		question := models.Question{
@@ -230,6 +232,7 @@ func UpdateQuiz(c *gin.Context) {
 			TimeLimit:       qInput.TimeLimit,
 			Points:          qInput.Points,
 			MultipleCorrect: qInput.MultipleCorrect,
+			OrderIndex:      i,
 		}
 
 		if err := tx.Create(&question).Error; err != nil {

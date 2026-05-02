@@ -25,7 +25,7 @@ export class QuizDetail implements OnInit {
   currentUser: any = null;
   apiUrl = 'http://' + window.location.hostname + ':8080/api';
 
-  // Dữ liệu cho danh sách Review (Dành cho Guest)
+  // D? li?u cho danh sách Review (Dành cho Guest)
   reviews: any[] = [];
   sortBy = 'latest';
 
@@ -38,6 +38,7 @@ export class QuizDetail implements OnInit {
     duration: '0 min Avg.',
     level: 'Loading...',
     engagementRate: 0,
+    createdAt: '',
     lastUpdated: '',
     category: 'Loading...',
     author: 'Loading...',
@@ -69,11 +70,11 @@ export class QuizDetail implements OnInit {
       next: (res) => {
         if (!res) return;
 
-        // Code gốc: Kiểm tra quyền chủ sở hữu
+        // Code g?c: Ki?m tra quy?n ch? s? h?u
         if (this.currentUser && res.created_by === this.currentUser.id) {
           this.isOwner = true;          this.loadReviews();        } else {
           this.isOwner = false;
-          this.loadReviews(); // Guest mới tải reviews
+          this.loadReviews(); // Guest m?i t?i reviews
         }
 
         this.selectedVisibility = res.visibility || 'private';
@@ -104,6 +105,7 @@ export class QuizDetail implements OnInit {
           duration: totalMinutes + ' min',
           imageUser: res.cover_image || '/Cyber Security Theme.png',
           imageGuest: res.cover_image || '/Cyber security concept.png',
+          createdAt: new Date(res.created_at).toLocaleDateString(),
           lastUpdated: new Date(res.updated_at || res.created_at).toLocaleDateString()
         };
 
@@ -135,7 +137,7 @@ export class QuizDetail implements OnInit {
     });
   }
 
-  // Chức năng Review hỗ trợ phần Guest
+  // Ch?c nang Review h? tr? ph?n Guest
   loadReviews() {
     this.http.get(`${this.apiUrl}/quizzes/${this.quizId}/reviews`).subscribe({
       next: (res: any) => {
@@ -162,7 +164,7 @@ export class QuizDetail implements OnInit {
   getStars(rating: any): number[] { return Array(Math.max(0, Math.floor(Number(rating) || 0))).fill(0); }
   getEmptyStars(rating: any): number[] { return Array(Math.max(0, 5 - Math.floor(Number(rating) || 0))).fill(0); }
 
-  // Chức năng gốc
+  // Ch?c nang g?c
   updateVisibility(visibility: string) {
     if (!this.isOwner) return;
     this.quizService.updateVisibility(this.quizId, visibility).subscribe({
@@ -181,7 +183,7 @@ export class QuizDetail implements OnInit {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => alert('Link copied: ' + url));
   }
-    // Bổ sung chức năng Delete
+    // B? sung ch?c nang Delete
   deleteQuiz() {
     if (!this.isOwner) return;
     const confirmDelete = confirm('Are you sure you want to delete this quiz? This action cannot be undone.');

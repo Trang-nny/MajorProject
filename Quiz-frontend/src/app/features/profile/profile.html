@@ -1,7 +1,8 @@
+
 <div class="profile-page">
   <div class="profile-container">
 
-    <!-- 1. Header & Banner User Info-->
+    <!-- 1. Header & Banner User Info -->
     <div class="profile-header-card">
       <div class="avatar-column">
         <div class="avatar-wrap">
@@ -26,14 +27,17 @@
             <div class="icon-box info-bg"><span class="material-icons info-color">sports_esports</span></div>
             <div class="stat-info"><span class="label">GAMES</span><span class="value">{{ user.games }}</span></div>
           </div>
+
           <div class="stat-box">
             <div class="icon-box danger-bg"><span class="material-icons danger-color">diamond</span></div>
             <div class="stat-info"><span class="label">POINTS</span><span class="value">{{ user.points | number }}</span></div>
           </div>
+
           <div class="stat-box">
             <div class="icon-box primary-bg"><span class="material-icons primary-color">workspace_premium</span></div>
             <div class="stat-info"><span class="label">RANK</span><span class="value">#{{ user.rank }}</span></div>
           </div>
+
           <div class="stat-box">
             <div class="icon-box success-bg"><span class="material-icons success-color">assessment</span></div>
             <div class="stat-info"><span class="label">AVG SCORE</span><span class="value">{{ user.avgScore }}%</span></div>
@@ -63,11 +67,13 @@
             <span class="col-players">PLAYERS</span>
           </div>
 
+          <!-- Trạng thái trống (Empty State) -->
           <div class="empty-state" *ngIf="historySessions.length === 0" style="padding: 30px; text-align: center; color: #667085; font-size: 14px;">
             <span class="material-icons" style="font-size: 40px; color: #D0D5DD; margin-bottom: 10px;">videogame_asset_off</span>
             <p>You haven't played any games yet.</p>
           </div>
 
+          <!-- Các hàng dữ liệu rời nhau -->
           <div class="history-item-row" *ngFor="let item of historySessions">
             <div class="col-name cell-flex">
               <div class="quiz-mini-icon" [style.color]="item.color" [style.background]="item.color + '15'">
@@ -87,7 +93,7 @@
           </div>
         </div>
         
-        <!-- NÚT PHÂN TRANG: Cập nhật điều kiện hiển thị bằng biến totalPages -->
+         <!-- NÚT PHÂN TRANG: Cập nhật điều kiện hiển thị bằng biến totalPages -->
         <div class="pagination-container" *ngIf="totalPages > 1">
           <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
             <span class="material-icons">chevron_left</span>
@@ -109,19 +115,23 @@
       <!-- Right: Quick Actions -->
       <div class="actions-column">
         <h2 class="sub-section-title">Quick Actions</h2>
+       
         <div class="actions-vertical-stack">
           <button class="action-btn-primary" routerLink="/app/profile/edit">
             <span class="material-icons">edit_square</span> Edit Profile
             <span class="material-icons chevron">chevron_right</span>
           </button>
+         
           <button class="action-btn-primary" routerLink="/app/create-quiz">
             <span class="material-icons">add_circle_outline</span> Create Quiz
             <span class="material-icons chevron">chevron_right</span>
           </button>
+
           <button class="action-btn-primary" routerLink="/app/leaderboard">
             <span class="material-icons">bar_chart</span> Global Leaderboard
             <span class="material-icons chevron">chevron_right</span>
           </button>
+
           <button class="action-btn-primary logout-btn-theme" (click)="logout()">
             <span class="material-icons">logout</span> Logout
             <span class="material-icons chevron">chevron_right</span>
@@ -130,18 +140,19 @@
       </div>
     </div>
 
-    <!-- 3. Bottom Section: My Created Quizzes-->
+    <!-- 3. Bottom Section: My Created Quizzes -->
     <div class="created-quizzes-section">
       <div class="section-header">
         <h2>My Created Quizzes</h2>
         <div class="nav-arrows-box">
-          <button class="nav-btn"><span class="material-icons">arrow_back</span></button>
-          <button class="nav-btn"><span class="material-icons">arrow_forward</span></button>
+          <button class="nav-btn" (click)="prevQuizPage()" [disabled]="quizCurrentPage === 1" [style.opacity]="quizCurrentPage === 1 ? '0.5' : '1'"><span class="material-icons">arrow_back</span></button>
+          <button class="nav-btn" (click)="nextQuizPage()" [disabled]="quizCurrentPage * quizzesPerPage >= createdQuizzes.length" [style.opacity]="quizCurrentPage * quizzesPerPage >= createdQuizzes.length ? '0.5' : '1'"><span class="material-icons">arrow_forward</span></button>
         </div>
       </div>
 
       <div class="quizzes-responsive-grid">
-        <div class="pro-quiz-card" *ngFor="let quiz of createdQuizzes" [routerLink]="['/app/quiz-detail', quiz.id]">
+        <!-- Quiz Cards - Added routerLink to quiz details -->
+        <div class="pro-quiz-card" *ngFor="let quiz of displayedQuizzes" [routerLink]="['/app/quiz-detail', quiz.id]">
           <div class="card-img-box">
             <div class="category-pill" [style.background]="quiz.color">{{ quiz.category }}</div>
             <img [src]="quiz.image" alt="Quiz">
@@ -156,6 +167,7 @@
           </div>
         </div>
 
+        <!-- Create New Card (Chuẩn tỉ lệ 16:9 giống các card khác) -->
         <div class="create-placeholder-card" routerLink="/app/create-quiz">
           <div class="plus-circle-icon"><span class="material-icons">add</span></div>
           <span class="label-text">Create New Quiz</span>
