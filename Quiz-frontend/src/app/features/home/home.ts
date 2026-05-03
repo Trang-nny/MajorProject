@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,11 +11,22 @@ import { FormsModule } from '@angular/forms';
 })
 export class Home {
   joinPin: string = '';
+  private router = inject(Router);
 
   onPinInput(event: Event) {
     // Chỉ cho phép nhập số
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
     this.joinPin = input.value;
+  }
+
+  joinGame() {
+    if (this.joinPin && this.joinPin.length === 6) {
+      this.router.navigate(['/play/multi/lobby'], {
+        queryParams: { role: 'player', pin: this.joinPin }
+      });
+    } else {
+      alert('Vui lòng nhập mã PIN hợp lệ gồm 6 chữ số!');
+    }
   }
 }

@@ -6,8 +6,8 @@
   <!-- ========================================================================= -->
   <ng-container *ngIf="isHost">
 
-    <!-- HOST ONLY: Hiện thị ngay cả khi Player chưa vào câu hỏi,
-         nhưng với logic, host show question cho mọi form -->
+    <!-- HOST ONLY: Hi?n th? ngay c? khi Player chua v�o c�u h?i,
+         nhu?ng v?i logic, host show question cho m?i form -->
 
     <div class="host-layout" *ngIf="(gamePhase === 'question' || gamePhase === 'answer_reveal') && currentQuestion">
 
@@ -24,7 +24,7 @@
           <h3 class="question-text">{{ currentQuestion.content }}</h3>
         </div>
 
-        <!-- GRID 4 PHÂN TRẢ LỜI -->
+        <!-- GRID 4 PHÂN -->
         <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'">
           <!-- Vòng lặp ra 4 tùy chọn -->
           <div *ngFor="let opt of currentQuestion.options; let i = index"
@@ -39,7 +39,7 @@
 
         <!-- BOTTOM BUTTONS: Show Answer & Next Question -->
         <div class="host-bottom-btns">
-            <!-- CHỨC NĂNG HIỂN THỊ GIẢI ĐÁP ANSWER REVEAL TRÁNH VIỆC CLICK MULTIPLE TIMES HOẶC HOST SHOW SAI -->
+            <!-- CHỈ HIỂN THỊ TÙY CHỌN ANSWER REVEAL TRƯỚC ĐỂ PREVENT CLICK MULTIPLE TIMES HOẶC HOST SHOW SAI -->
           <!-- Nút SHOW ANSWER -->
           <button class="btn-show-answer"
                   *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'"
@@ -89,7 +89,7 @@
           <!-- Progress bar -->
           <div class="sub-row">
             <div class="sub-bar">
-              <!-- Width = % sự nguội dần -->
+              <!-- Width = % số người đã nộp -->
               <div class="sub-bar-fill"
                    [style.width.%]="nonHostPlayersCount ? (submissionsCount / nonHostPlayersCount) * 100 : 0"></div>
             </div>
@@ -130,7 +130,7 @@
   </ng-container>
 
   <!-- ========================================================================= -->
-  <!-- PLAYER VIEW (SẮP XẾP CHIỀU DỌC THEO THIẾT KẾ Mobile/Web)                  -->
+  <!-- PLAYER VIEW (Sắp xếp chiều dọc theo thiết kế Mobile/Web)                  -->
   <!-- ========================================================================= -->
   <ng-container *ngIf="!isHost">
 
@@ -144,7 +144,7 @@
             <h2 class="player-question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }}</h2>
           </div>
 
-          <!-- Timer pill nằm góc phải (Chỉ hiện lúc đang trả lời, không hiện lúc countdown) -->
+          <!-- Timer pill nh? g�c ph?i (Ch? hi?n l�c dang tr? l?i, kh�ng hi?n l�c countdown) -->
           <div class="player-timer-pill" *ngIf="gamePhase === 'question'">
             <div class="player-timer-wrap sm">
               <svg class="timer-svg sm" viewBox="0 0 100 100">
@@ -185,7 +185,7 @@
         </div>
 
         <!-- ===== GRID 4 NÚT TRẢ LỜI ===== -->
-        <!-- Focus mode grid b?, Classic grid bình thường -->
+        <!-- Focus mode grid b?, Classic grid b?nh thu?ng -->
         <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'" *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'">
           <div *ngFor="let opt of currentQuestion.options; let i = index"
                class="ans-card ans-{{ i }}"
@@ -199,7 +199,7 @@
               <span class="ans-icon">{{ getLetter(i) }}</span>
             </ng-container>
 
-            <!-- Layout FOCUS (Chỉ vuông to, chỉ cắt giữa) -->
+            <!-- Layout FOCUS (Chỉ vuông to, chỉ cói giữa) -->
             <ng-container *ngIf="gameMode === 'focus'">
               <!-- Lúc CHƯA TRẢ LỜI hoặc lúc XEM KQ NHƯNG KHÔNG CHỌN NÚT NÀY -->
               <ng-container *ngIf="!hasAnswered || selectedAnswers[0] !== i">
@@ -297,14 +297,3 @@
   </div>
 
 </div>
-
-  <!-- Màn hình chờ nếu phase load -->
-  <div style="text-align:center; padding-top: 100px" *ngIf="gamePhase === 'loading' || gamePhase === 'countdown'">
-      <div *ngIf="gamePhase === 'countdown'">
-          <h1 style="font-size: 100px; color:#7C3AED">{{ countdown }}</h1>
-          <p>Get ready!</p>
-      </div>
-      <div *ngIf="gamePhase === 'loading'">
-          <h2>Waiting for host to start...</h2>
-      </div>
-  </div>

@@ -79,7 +79,7 @@ export class MultiLobby implements OnInit, OnDestroy {
         this.gameMode = params['mode'] || 'classic';
         this.isHost   = params['role'] !== 'player';
         this.gamePin  = params['pin']  || this.generatePin();
-        this.quizId   = params['quizId'] || '';
+        this.quizId   = params['quizId'] || params['id'] || '';
 
         this.connectAndJoin();
       })
@@ -193,6 +193,9 @@ export class MultiLobby implements OnInit, OnDestroy {
     this.subs.add(
       this.ws.on('game_started').subscribe((msg: any) => {
         console.log('🎮 Game started! Navigating to game room...');
+        
+        sessionStorage.setItem('roomPlayers', JSON.stringify(this.players));
+
         this.router.navigate(['/play/multi/room'], {
           queryParams: {
             mode:    this.gameMode,
