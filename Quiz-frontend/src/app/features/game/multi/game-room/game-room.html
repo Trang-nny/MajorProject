@@ -1,1 +1,310 @@
-<p>game-room works!</p>
+<!-- ROOT CONTAINER -->
+<div class="gr-root" [class.focus-bg]="gameMode === 'focus'">
+
+  <!-- ========================================================================= -->
+  <!-- HOST VIEW                                                                 -->
+  <!-- ========================================================================= -->
+  <ng-container *ngIf="isHost">
+
+    <!-- HOST ONLY: Hiện thị ngay cả khi Player chưa vào câu hỏi,
+         nhưng với logic, host show question cho mọi form -->
+
+    <div class="host-layout" *ngIf="(gamePhase === 'question' || gamePhase === 'answer_reveal') && currentQuestion">
+
+      <!-- ==================== LEFT COLUMN (Main game area) ==================== -->
+      <div class="host-left">
+        <!-- Badge The loai (removed) -->
+
+
+        <!-- Question Counter -->
+        <h2 class="question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }} of {{ questions.length | number:'2.0' }}</h2>
+
+        <!-- Question Text Card -->
+        <div class="question-card">
+          <h3 class="question-text">{{ currentQuestion.content }}</h3>
+        </div>
+
+        <!-- GRID 4 PHÂN TRẢ LỜI -->
+        <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'">
+          <!-- Vòng lặp ra 4 tùy chọn -->
+          <div *ngFor="let opt of currentQuestion.options; let i = index"
+               class="ans-card ans-{{ i }}"
+               [ngClass]="hostCardClass(i)">
+
+            <div class="ans-letter-box">{{ getLetter(i) }}</div>
+            <div class="ans-text">{{ opt.text }}</div>
+            <span class="ans-icon">{{ getLetter(i) }}</span>
+          </div>
+        </div>
+
+        <!-- BOTTOM BUTTONS: Show Answer & Next Question -->
+        <div class="host-bottom-btns">
+            <!-- CHỨC NĂNG HIỂN THỊ GIẢI ĐÁP ANSWER REVEAL TRÁNH VIỆC CLICK MULTIPLE TIMES HOẶC HOST SHOW SAI -->
+          <!-- Nút SHOW ANSWER -->
+          <button class="btn-show-answer"
+                  *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'"
+                  [disabled]="gamePhase !== 'question' && gameMode === 'classic'"
+                  (click)="hostRevealAnswer()">
+            <span class="material-icons">visibility</span>
+            <span>SHOW ANSWER</span>
+          </button>
+
+          <!-- Nút NEXT QUESTION -->
+          <button class="btn-next-question"
+                  *ngIf="gamePhase === 'answer_reveal'"
+                  (click)="nextQuestionOrEnd()">
+            <span>NEXT QUESTION</span>
+            <span class="material-icons">arrow_forward</span>
+          </button>
+        </div>
+
+      </div> <!-- End host-left -->
+
+      <!-- ==================== RIGHT COLUMN (Timer & Stats) ==================== -->
+      <div class="host-right">
+
+        <!-- TIMER CARD -->
+        <div class="timer-card">
+          <div class="timer-wrap">
+            <svg class="timer-svg" viewBox="0 0 100 100">
+              <circle class="timer-track" cx="50" cy="50" r="45"></circle>
+              <!-- Dasharray 283 = chu vi (2 * PI * 45) -->
+              <circle class="timer-progress" cx="50" cy="50" r="45"
+                      stroke-dasharray="283"
+                      [style.stroke-dashoffset]="timerOffset">
+              </circle>
+            </svg>
+            <div class="timer-number">{{ timeLeft }}</div>
+          </div>
+          <div class="timer-label">SECONDS LEFT</div>
+        </div>
+
+        <!-- SUBMISSIONS CARD -->
+        <div class="sidebar-card">
+          <div class="sub-header">
+            <span class="sub-title">Submissions</span>
+            <span class="material-icons sub-icon">group_add</span>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="sub-row">
+            <div class="sub-bar">
+              <!-- Width = % sự nguội dần -->
+              <div class="sub-bar-fill"
+                   [style.width.%]="nonHostPlayersCount ? (submissionsCount / nonHostPlayersCount) * 100 : 0"></div>
+            </div>
+            <div class="sub-count">
+              <strong>{{ submissionsCount }}</strong> / {{ nonHostPlayersCount }}
+            </div>
+          </div>
+
+          <!-- Text 'Players are thinking...' -->
+          <div class="thinking-row">
+            <div class="thinking-dot"></div>
+            <span>Players are thinking...</span>
+          </div>
+        </div>
+
+        <!-- HOST CONTROLS CARD -->
+        <div class="sidebar-card">
+          <span class="controls-label">CONTROLS</span>
+          <div class="controls-row">
+            <div class="ctrl-btn">
+              <span class="material-icons">volume_up</span>
+              <span class="ctrl-text">MUSIC</span>
+            </div>
+            <div class="ctrl-btn">
+              <span class="material-icons">fullscreen</span>
+              <span class="ctrl-text">FULL</span>
+            </div>
+            <div class="ctrl-btn" style="color:#DC2626" (click)="endGameNow()">
+              <span class="material-icons">power_settings_new</span>
+              <span class="ctrl-text">END</span>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- End host-right -->
+
+    </div>
+  </ng-container>
+
+  <!-- ========================================================================= -->
+  <!-- PLAYER VIEW (SẮP XẾP CHIỀU DỌC THEO THIẾT KẾ Mobile/Web)                  -->
+  <!-- ========================================================================= -->
+  <ng-container *ngIf="!isHost">
+
+    <div class="player-root" *ngIf="gamePhase !== 'loading' && currentQuestion">
+      <div class="player-layout">
+
+        <!-- ===== DÒNG TRÊN CÙNG: Title + Question Counter + Timer ===== -->
+        <div class="player-top-row" *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'">
+          <div class="player-meta">
+            
+            <h2 class="player-question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }}</h2>
+          </div>
+
+          <!-- Timer pill nằm góc phải (Chỉ hiện lúc đang trả lời, không hiện lúc countdown) -->
+          <div class="player-timer-pill" *ngIf="gamePhase === 'question'">
+            <div class="player-timer-wrap sm">
+              <svg class="timer-svg sm" viewBox="0 0 100 100">
+                <circle class="timer-track" cx="50" cy="50" r="45"></circle>
+                <circle class="timer-progress" cx="50" cy="50" r="45"
+                        stroke-dasharray="283"
+                        [style.stroke-dashoffset]="timerOffset">
+                </circle>
+              </svg>
+              <div class="timer-number sm">{{ timeLeft }}</div>
+            </div>
+            <div class="timer-label sm">SECONDS<br>LEFT</div>
+          </div>
+        </div>
+
+        <!-- THÔNG BÁO KQ (Dành cho FOCUS MODE)
+             Nằm ngay trên các nút -->
+        <div *ngIf="gameMode === 'focus' && hasAnswered && !!lastAnswerResult"
+             class="focus-feedback-banner"
+             [ngClass]="lastAnswerResult.isCorrect ? 'banner-correct' : 'banner-wrong'">
+
+          <span class="material-icons feedback-icon">
+            {{ lastAnswerResult.isCorrect ? 'check_circle' : 'cancel' }}
+          </span>
+          <div class="feedback-text">
+            <div class="feedback-title">
+              {{ lastAnswerResult.isCorrect ? 'Correct!' : 'Incorrect' }}
+            </div>
+            <div class="feedback-pts">
+              {{ lastAnswerResult.isCorrect ? '+' + lastAnswerResult.points + ' PTS' : '0 PTS' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Text (Dành cho Classic Mode) -->
+        <div class="question-card player-question-card" *ngIf="gameMode === 'classic' && (gamePhase === 'question' || gamePhase === 'answer_reveal')">
+          <h3 class="question-text">{{ currentQuestion.content }}</h3>
+        </div>
+
+        <!-- ===== GRID 4 NÚT TRẢ LỜI ===== -->
+        <!-- Focus mode grid b?, Classic grid bình thường -->
+        <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'" *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'">
+          <div *ngFor="let opt of currentQuestion.options; let i = index"
+               class="ans-card ans-{{ i }}"
+               [ngClass]="playerCardClass(i)"
+               (click)="selectAnswer(i)">
+
+            <!-- Layout CLASSIC -->
+            <ng-container *ngIf="gameMode === 'classic'">
+              <div class="ans-letter-box">{{ getLetter(i) }}</div>
+              <div class="ans-text">{{ opt.text }}</div>
+              <span class="ans-icon">{{ getLetter(i) }}</span>
+            </ng-container>
+
+            <!-- Layout FOCUS (Chỉ vuông to, chỉ cắt giữa) -->
+            <ng-container *ngIf="gameMode === 'focus'">
+              <!-- Lúc CHƯA TRẢ LỜI hoặc lúc XEM KQ NHƯNG KHÔNG CHỌN NÚT NÀY -->
+              <ng-container *ngIf="!hasAnswered || selectedAnswers[0] !== i">
+                <div class="focus-letter-box">{{ getLetter(i) }}</div>
+                <span class="focus-bg-icon">{{ getLetter(i) }}</span>
+              </ng-container>
+
+              <!-- Lúc ĐÃ TRẢ LỜI VÀ NÚT NÀY ĐƯỢC CHỌN -->
+              <ng-container *ngIf="hasAnswered && selectedAnswers[0] === i">
+                <div class="focus-result-icon">
+                  <span class="material-icons focus-result-mat">
+                    {{ lastAnswerResult?.isCorrect ? 'check' : 'close' }}
+                  </span>
+                </div>
+                <div class="focus-letter-box focus-letter-small">{{ getLetter(i) }}</div>
+              </ng-container>
+            </ng-container>
+
+          </div>
+        </div>
+
+        <!-- ===== KẾT QUẢ CUỐI (CLASSIC MODE) =====
+             Thanh ngang báo động sai hiện lên sau khi nộp (Chỉ Classic Mode) -->
+        <div *ngIf="gameMode === 'classic' && hasAnswered && !!lastAnswerResult"
+             class="classic-result-bar"
+             [ngClass]="lastAnswerResult.isCorrect ? 'result-bar-correct' : 'result-bar-wrong'">
+          <div class="result-bar-left">
+            <div class="result-bar-icon-wrap">
+              <span class="material-icons result-bar-icon">
+                {{ lastAnswerResult.isCorrect ? 'check' : 'close' }}
+              </span>
+            </div>
+            <div class="result-bar-text">
+              <div class="result-bar-title">
+                 {{ lastAnswerResult.isCorrect ? 'Awesome job!' : 'Oops, wrong answer' }}
+              </div>
+              <div class="result-bar-sub">
+                 {{ lastAnswerResult.isCorrect ? 'You nailed it. Get ready for the next one.' : 'Better luck on the next question.' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== THANH STATS PLAYER DƯỚI CÙNG ===== -->
+        <div class="player-stats-bar">
+          <div class="stat-block">
+            <span class="stat-label">PIN</span>
+            <div class="stat-value">{{ gamePin }}</div>
+          </div>
+
+          <div class="stat-divider"></div>
+
+          <div class="stat-block">
+            <span class="stat-label">SCORE</span>
+            <div class="stat-value">
+              <span>{{ playerScore }}</span>
+              <span class="material-icons stat-ico">stars</span>
+            </div>
+          </div>
+
+          <div class="stat-divider"></div>
+
+          <!-- Mode Pill -->
+          <div class="mode-pill" [class.mode-pill-focus]="gameMode === 'focus'">
+            <span class="material-icons mode-ico">
+              {{ gameMode === 'focus' ? 'center_focus_strong' : 'auto_awesome_mosaic' }}
+            </span>
+            <div class="mode-pill-text">
+              <span class="mode-sub">MODE</span>
+              <span class="mode-name" [class.focus-name]="gameMode === 'focus'">
+                {{ gameMode | uppercase }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Avatar btn dummy -->
+          <button class="avatar-btn" title="Profile profile">
+            <span class="material-icons">person</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Màn hình chờ nếu phase load -->
+  <div style="text-align:center; padding-top: 100px" *ngIf="gamePhase === 'loading' || gamePhase === 'countdown'">
+      <div *ngIf="gamePhase === 'countdown'">
+          <h1 style="font-size: 100px; color:#7C3AED">{{ countdown }}</h1>
+          <p style="font-size: 24px; color: #1A1033; font-weight: bold;">Get ready!</p>
+      </div>
+      <div *ngIf="gamePhase === 'loading'">
+          <h2 style="color: #6D28D9;">Waiting for host to start...</h2>
+      </div>
+  </div>
+
+</div>
+
+  <!-- Màn hình chờ nếu phase load -->
+  <div style="text-align:center; padding-top: 100px" *ngIf="gamePhase === 'loading' || gamePhase === 'countdown'">
+      <div *ngIf="gamePhase === 'countdown'">
+          <h1 style="font-size: 100px; color:#7C3AED">{{ countdown }}</h1>
+          <p>Get ready!</p>
+      </div>
+      <div *ngIf="gamePhase === 'loading'">
+          <h2>Waiting for host to start...</h2>
+      </div>
+  </div>
