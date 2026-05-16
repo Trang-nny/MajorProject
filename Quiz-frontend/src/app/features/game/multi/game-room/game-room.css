@@ -112,10 +112,10 @@
 }
 
 /* Gradients A / B / C / D */
-.ans-0 { background: linear-gradient(135deg, #7C3AED 0%, #9F5CF7 100%); }
-.ans-1 { background: linear-gradient(135deg, #BE185D 0%, #EC4899 100%); }
-.ans-2 { background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); }
-.ans-3 { background: linear-gradient(135deg, #7E22CE 0%, #A855F7 100%); }
+.ans-0 { background: linear-gradient(135deg, #7135ee, #9c33b7); }
+.ans-1 { background: linear-gradient(135deg, #bd3a62, #98328c); }
+.ans-2 { background: linear-gradient(135deg, #4e43e0, #2b44ec); }
+.ans-3 { background: linear-gradient(135deg, #d99132, #b57018); }
 
 /* Letter box */
 .ans-letter-box {

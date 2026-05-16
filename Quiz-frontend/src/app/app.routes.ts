@@ -33,13 +33,14 @@ import { Review } from './features/review/review';
 
 // Features - Solo Play
 import { SoloLobby } from './features/game/solo/solo-lobby/solo-lobby';
-import { GameRoom as SoloGameRoom } from './features/game/solo/game-room/game-room';
+import { GameRoomComponent as SoloGameRoom } from './features/game/solo/game-room/game-room';
 
 // Features - Multi Play
 import { MultiModeSelection } from './features/game/multi/multi-mode-selection/multi-mode-selection';
 import { GameRoom as MultiGameRoom } from './features/game/multi/game-room/game-room';
 export const routes: Routes = [
-  // Nhóm 1: Các trang không có Header phức tạp (Sử dụng AuthLayout)
+
+  // Nhóm 1: Các trang không có Header phụ trợ (Sử dụng AuthLayout)
   {
     path: '',
     component: AuthLayout,

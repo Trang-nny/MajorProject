@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-
+import { API_CONFIG } from '../../config/api.config';
 
 @Component({
   selector: 'app-profile-edit',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './profile-edit.html',
-  styleUrl: './profile-edit.css',
+  styleUrls: ['./profile-edit.css'],
 })
 export class ProfileEdit implements OnInit {
   private router = inject(Router);
@@ -36,8 +36,8 @@ export class ProfileEdit implements OnInit {
         this.user.email = parsed.email || 'No email provided';
         this.user.bio = parsed.bio || 'Master of Logic & Digital Lore';
         this.user.avatar = parsed.avatar || '/User.png';
-
-        // Tao Account ID bang 5 ky tu dau cua ID, viet hoa
+        
+        // Tạo Account ID báº±ng 5 kÃ½ tá»± Ä‘áº§u cá»§a ID, viáº¿t hoa
         if (parsed.id) {
           this.user.accountId = 'ID_' + parsed.id.substring(0, 5).toUpperCase();
         }
@@ -72,8 +72,9 @@ export class ProfileEdit implements OnInit {
 
         if (this.user.id) {
           await firstValueFrom(
-            this.http.patch('http://localhost:8080/auth/profile', {
+            this.http.patch(API_CONFIG.ENDPOINTS.PROFILE_UPDATE, {
               user_id: this.user.id,
+              username: this.user.username,
               avatar: this.user.avatar,
               bio: this.user.bio
             })

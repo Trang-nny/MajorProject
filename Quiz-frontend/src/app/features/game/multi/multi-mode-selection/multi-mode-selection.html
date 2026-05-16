@@ -22,11 +22,21 @@
         <div class="meta-box">
           <span class="meta-label">LEVEL</span>
           <div class="meta-value level-value">
-            <span class="level-text">{{ quizLevel }}</span>
+            <span class="level-text" [style.color]="quizLevel === 'Pro' ? '#d92b5a' : '#7029FF'">{{ quizLevel }}</span>
             <span class="level-dots">
-              <span class="dot active"></span>
-              <span class="dot active"></span>
-              <span class="dot active"></span>
+              @if (quizLevel === 'Easy') {
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              } @else if (quizLevel === 'Mid') {
+                <span class="dot active"></span>
+                <span class="dot active"></span>
+                <span class="dot"></span>
+              } @else {
+                <span class="dot active"></span>
+                <span class="dot active"></span>
+                <span class="dot active"></span>
+              }
             </span>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { API_CONFIG } from '../../../../config/api.config';
 
 @Component({
   selector: 'app-game-room',
@@ -11,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './game-room.html',
   styleUrls: ['./game-room.css']
 })
-export class GameRoom implements OnInit, OnDestroy {
+export class GameRoomComponent implements OnInit, OnDestroy {
   quizId: string | null = null;
   questions: any[] = [];
   currentIndex: number = 0;
@@ -59,7 +60,7 @@ export class GameRoom implements OnInit, OnDestroy {
   }
 
   loadQuizFromAPI() {
-    this.http.get('http://localhost:8080/api/quizzes/' + this.quizId).subscribe({
+    this.http.get(`${API_CONFIG.API_BASE}/quizzes/${this.quizId}`).subscribe({
       next: (res: any) => {
         console.log('Quiz Data Loaded from API:', res);
         if (res && res.questions && res.questions.length > 0) {
