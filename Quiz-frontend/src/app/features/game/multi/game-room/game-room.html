@@ -5,91 +5,38 @@
   <!-- HOST VIEW                                                                 -->
   <!-- ========================================================================= -->
   <ng-container *ngIf="isHost">
+    <!-- CLASSIC HOST VIEW: leaderboard instead of question grid -->
+    <div class="host-classic-layout" *ngIf="gameMode === 'classic'; else focusHostView">
+      <div class="host-left classic-left">
+        <h2 class="question-counter">Live Leaderboard</h2>
 
-    <!-- HOST ONLY: Hi?n th? ngay c? khi Player chua v�o c�u h?i,
-         nhu?ng v?i logic, host show question cho m?i form -->
+        <div class="classic-leaderboard-panel">
+          <div class="classic-leaderboard-empty" *ngIf="hostLeaderboardPlayers.length === 0">
+            Waiting for players to join...
+          </div>
 
-    <div class="host-layout" *ngIf="(gamePhase === 'question' || gamePhase === 'answer_reveal') && currentQuestion">
-
-      <!-- ==================== LEFT COLUMN (Main game area) ==================== -->
-      <div class="host-left">
-        <!-- Badge The loai (removed) -->
-
-
-        <!-- Question Counter -->
-        <h2 class="question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }} of {{ questions.length | number:'2.0' }}</h2>
-
-        <!-- Question Text Card -->
-        <div class="question-card">
-          <h3 class="question-text">{{ currentQuestion.content }}</h3>
-        </div>
-
-        <!-- GRID 4 PHÂN -->
-        <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'">
-          <!-- Vòng lặp ra 4 tùy chọn -->
-          <div *ngFor="let opt of currentQuestion.options; let i = index"
-               class="ans-card ans-{{ i }}"
-               [ngClass]="hostCardClass(i)">
-
-            <div class="ans-letter-box">{{ getLetter(i) }}</div>
-            <div class="ans-text">{{ opt.text }}</div>
-            <span class="ans-icon">{{ getLetter(i) }}</span>
+          <div class="classic-leaderboard-row" *ngFor="let p of hostLeaderboardPlayers; let i = index; trackBy: trackByUserId">
+            <div class="classic-rank">{{ i + 1 }}</div>
+            <img [src]="p.avatar" class="classic-avatar" [alt]="p.name">
+            <div class="classic-player-meta">
+              <div class="classic-player-name">{{ p.name }}</div>
+              <div class="classic-player-role">{{ p.isHost ? 'Host' : 'Player' }}</div>
+            </div>
+            <div class="classic-score">{{ p.score | number }}</div>
           </div>
         </div>
 
-        <!-- BOTTOM BUTTONS: Show Answer & Next Question -->
-        <div class="host-bottom-btns">
-            <!-- CHỈ HIỂN THỊ TÙY CHỌN ANSWER REVEAL TRƯỚC ĐỂ PREVENT CLICK MULTIPLE TIMES HOẶC HOST SHOW SAI -->
-          <!-- Nút SHOW ANSWER -->
-          <button class="btn-show-answer"
-                  *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'"
-                  [disabled]="gamePhase !== 'question' && gameMode === 'classic'"
-                  (click)="hostRevealAnswer()">
-            <span class="material-icons">visibility</span>
-            <span>SHOW ANSWER</span>
-          </button>
+      </div>
 
-          <!-- Nút NEXT QUESTION -->
-          <button class="btn-next-question"
-                  *ngIf="gamePhase === 'answer_reveal'"
-                  (click)="nextQuestionOrEnd()">
-            <span>NEXT QUESTION</span>
-            <span class="material-icons">arrow_forward</span>
-          </button>
-        </div>
-
-      </div> <!-- End host-left -->
-
-      <!-- ==================== RIGHT COLUMN (Timer & Stats) ==================== -->
       <div class="host-right">
-
-        <!-- TIMER CARD -->
-        <div class="timer-card">
-          <div class="timer-wrap">
-            <svg class="timer-svg" viewBox="0 0 100 100">
-              <circle class="timer-track" cx="50" cy="50" r="45"></circle>
-              <!-- Dasharray 283 = chu vi (2 * PI * 45) -->
-              <circle class="timer-progress" cx="50" cy="50" r="45"
-                      stroke-dasharray="283"
-                      [style.stroke-dashoffset]="timerOffset">
-              </circle>
-            </svg>
-            <div class="timer-number">{{ timeLeft }}</div>
-          </div>
-          <div class="timer-label">SECONDS LEFT</div>
-        </div>
-
-        <!-- SUBMISSIONS CARD -->
+        <!-- Classic host: DO NOT show timer (players-only). Keep submissions + controls. -->
         <div class="sidebar-card">
           <div class="sub-header">
             <span class="sub-title">Submissions</span>
             <span class="material-icons sub-icon">group_add</span>
           </div>
-
-          <!-- Progress bar -->
           <div class="sub-row">
             <div class="sub-bar">
-              <!-- Width = % số người đã nộp -->
               <div class="sub-bar-fill"
                    [style.width.%]="nonHostPlayersCount ? (submissionsCount / nonHostPlayersCount) * 100 : 0"></div>
             </div>
@@ -97,15 +44,12 @@
               <strong>{{ submissionsCount }}</strong> / {{ nonHostPlayersCount }}
             </div>
           </div>
-
-          <!-- Text 'Players are thinking...' -->
-          <div class="thinking-row">
+          <div class="thinking-row" [class.thinking-complete]="allPlayersAnswered">
             <div class="thinking-dot"></div>
-            <span>Players are thinking...</span>
+            <span>{{ submissionStatusText }}</span>
           </div>
         </div>
 
-        <!-- HOST CONTROLS CARD -->
         <div class="sidebar-card">
           <span class="controls-label">CONTROLS</span>
           <div class="controls-row">
@@ -123,28 +67,110 @@
             </div>
           </div>
         </div>
-
-      </div> <!-- End host-right -->
+      </div>
 
     </div>
+
+    <ng-template #focusHostView>
+      <div class="host-layout" *ngIf="(gamePhase === 'question' || gamePhase === 'answer_reveal') && currentQuestion">
+        <div class="host-left">
+          <h2 class="question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }} of {{ questions.length | number:'2.0' }}</h2>
+
+          <div class="question-card">
+            <h3 class="question-text">{{ currentQuestion.content }}</h3>
+          </div>
+
+          <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'">
+            <div *ngFor="let opt of currentQuestion.options; let i = index"
+                 class="ans-card ans-{{ i }}"
+                 [ngClass]="hostCardClass(i)">
+              <div class="ans-letter-box">{{ getLetter(i) }}</div>
+              <div class="ans-text">{{ opt.text }}</div>
+              <span class="ans-icon">{{ getLetter(i) }}</span>
+            </div>
+          </div>
+
+          <div class="host-bottom-btns" *ngIf="gameMode === 'focus'">
+            <button class="btn-show-answer"
+                    *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'"
+                    (click)="hostRevealAnswer()">
+              <span class="material-icons">visibility</span>
+              <span>SHOW ANSWER</span>
+            </button>
+
+            <button class="btn-next-question"
+                    *ngIf="gamePhase === 'answer_reveal'"
+                    (click)="nextQuestionOrEnd()">
+              <span>NEXT QUESTION</span>
+              <span class="material-icons">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="host-right">
+          <div class="timer-card">
+            <div class="timer-wrap">
+              <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-track" cx="50" cy="50" r="45"></circle>
+                <circle class="timer-progress" cx="50" cy="50" r="45"
+                        stroke-dasharray="283"
+                        [style.stroke-dashoffset]="timerOffset">
+                </circle>
+              </svg>
+              <div class="timer-number">{{ timeLeft }}</div>
+            </div>
+            <div class="timer-label">SECONDS LEFT</div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sub-header">
+              <span class="sub-title">Submissions</span>
+              <span class="material-icons sub-icon">group_add</span>
+            </div>
+            <div class="sub-row">
+              <div class="sub-bar">
+                <div class="sub-bar-fill"
+                     [style.width.%]="nonHostPlayersCount ? (submissionsCount / nonHostPlayersCount) * 100 : 0"></div>
+              </div>
+              <div class="sub-count">
+                <strong>{{ submissionsCount }}</strong> / {{ nonHostPlayersCount }}
+              </div>
+            </div>
+            <div class="thinking-row" [class.thinking-complete]="allPlayersAnswered">
+              <div class="thinking-dot"></div>
+              <span>{{ submissionStatusText }}</span>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <span class="controls-label">CONTROLS</span>
+            <div class="controls-row">
+              <div class="ctrl-btn"><span class="material-icons">volume_up</span><span class="ctrl-text">MUSIC</span></div>
+              <div class="ctrl-btn"><span class="material-icons">fullscreen</span><span class="ctrl-text">FULL</span></div>
+              <div class="ctrl-btn" style="color:#DC2626" (click)="endGameNow()"><span class="material-icons">power_settings_new</span><span class="ctrl-text">END</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </ng-container>
 
   <!-- ========================================================================= -->
-  <!-- PLAYER VIEW (Sắp xếp chiều dọc theo thiết kế Mobile/Web)                  -->
+  <!-- PLAYER VIEW (S?p x?p chi?u d?c theo thi?t k? Mobile/Web)                  -->
   <!-- ========================================================================= -->
   <ng-container *ngIf="!isHost">
 
-    <div class="player-root" *ngIf="gamePhase !== 'loading' && currentQuestion">
+    <div class="player-root" *ngIf="gamePhase !== 'loading' && currentQuestion && !playerWaiting">
       <div class="player-layout">
 
-        <!-- ===== DÒNG TRÊN CÙNG: Title + Question Counter + Timer ===== -->
+        <!-- ===== Dï¿½NG TRï¿½N Cï¿½NG: Title + Question Counter + Timer ===== -->
         <div class="player-top-row" *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'">
           <div class="player-meta">
             
             <h2 class="player-question-counter">Question {{ currentQuestionIdx + 1 | number:'2.0' }}</h2>
           </div>
 
-          <!-- Timer pill nh? g�c ph?i (Ch? hi?n l�c dang tr? l?i, kh�ng hi?n l�c countdown) -->
+          <!-- Timer pill nh? gï¿½c ph?i (Ch? hi?n lï¿½c dang tr? l?i, khï¿½ng hi?n lï¿½c countdown) -->
           <div class="player-timer-pill" *ngIf="gamePhase === 'question'">
             <div class="player-timer-wrap sm">
               <svg class="timer-svg sm" viewBox="0 0 100 100">
@@ -160,8 +186,8 @@
           </div>
         </div>
 
-        <!-- THÔNG BÁO KQ (Dành cho FOCUS MODE)
-             Nằm ngay trên các nút -->
+        <!-- THï¿½NG Bï¿½O KQ (Dï¿½nh cho FOCUS MODE)
+             N?m ngay trï¿½n cï¿½c nï¿½t -->
         <div *ngIf="gameMode === 'focus' && hasAnswered && !!lastAnswerResult"
              class="focus-feedback-banner"
              [ngClass]="lastAnswerResult.isCorrect ? 'banner-correct' : 'banner-wrong'">
@@ -179,13 +205,13 @@
           </div>
         </div>
 
-        <!-- Question Text (Dành cho Classic Mode) -->
+        <!-- Question Text (Dï¿½nh cho Classic Mode) -->
         <div class="question-card player-question-card" *ngIf="gameMode === 'classic' && (gamePhase === 'question' || gamePhase === 'answer_reveal')">
           <h3 class="question-text">{{ currentQuestion.content }}</h3>
         </div>
 
-        <!-- ===== GRID 4 NÚT TRẢ LỜI ===== -->
-        <!-- Focus mode grid b?, Classic grid b?nh thu?ng -->
+        <!-- ===== GRID 4 Nï¿½T TR? L?I ===== -->
+        <!-- Focus mode grid b?, Classic grid bï¿½nh thu?ng -->
         <div class="answers-grid" [class.focus-grid]="gameMode === 'focus'" *ngIf="gamePhase === 'question' || gamePhase === 'answer_reveal'">
           <div *ngFor="let opt of currentQuestion.options; let i = index"
                class="ans-card ans-{{ i }}"
@@ -199,15 +225,15 @@
               <span class="ans-icon">{{ getLetter(i) }}</span>
             </ng-container>
 
-            <!-- Layout FOCUS (Chỉ vuông to, chỉ cói giữa) -->
+            <!-- Layout FOCUS (Ch? vuï¿½ng to, ch? cï¿½i gi?a) -->
             <ng-container *ngIf="gameMode === 'focus'">
-              <!-- Lúc CHƯA TRẢ LỜI hoặc lúc XEM KQ NHƯNG KHÔNG CHỌN NÚT NÀY -->
+              <!-- Lï¿½c CHUA TR? L?I ho?c lï¿½c XEM KQ NHUNG KHï¿½NG CH?N Nï¿½T Nï¿½Y -->
               <ng-container *ngIf="!hasAnswered || selectedAnswers[0] !== i">
                 <div class="focus-letter-box">{{ getLetter(i) }}</div>
                 <span class="focus-bg-icon">{{ getLetter(i) }}</span>
               </ng-container>
 
-              <!-- Lúc ĐÃ TRẢ LỜI VÀ NÚT NÀY ĐƯỢC CHỌN -->
+              <!-- Lï¿½c ï¿½ï¿½ TR? L?I Vï¿½ Nï¿½T Nï¿½Y ï¿½U?C CH?N -->
               <ng-container *ngIf="hasAnswered && selectedAnswers[0] === i">
                 <div class="focus-result-icon">
                   <span class="material-icons focus-result-mat">
@@ -222,7 +248,7 @@
         </div>
 
         <!-- ===== KẾT QUẢ CUỐI (CLASSIC MODE) =====
-             Thanh ngang báo động sai hiện lên sau khi nộp (Chỉ Classic Mode) -->
+             Thanh ngang bï¿½o dï¿½ng sai hi?n lï¿½n sau khi n?p (Ch? Classic Mode) -->
         <div *ngIf="gameMode === 'classic' && hasAnswered && !!lastAnswerResult"
              class="classic-result-bar"
              [ngClass]="lastAnswerResult.isCorrect ? 'result-bar-correct' : 'result-bar-wrong'">
@@ -240,10 +266,16 @@
                  {{ lastAnswerResult.isCorrect ? 'You nailed it. Get ready for the next one.' : 'Better luck on the next question.' }}
               </div>
             </div>
+            <div class="result-bar-right">
+              <button class="btn-next-question" (click)="playerWaitNext()" style="margin-left:20px; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; background: rgba(0,0,0,0.1); color: inherit;">
+                <span>NEXT QUESTION</span>
+                <span class="material-icons" style="vertical-align: middle; margin-left: 5px;">arrow_forward</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- ===== THANH STATS PLAYER DƯỚI CÙNG ===== -->
+        <!-- ===== THANH STATS PLAYER DU?I Cï¿½NG ===== -->
         <div class="player-stats-bar">
           <div class="stat-block">
             <span class="stat-label">PIN</span>
@@ -275,25 +307,19 @@
             </div>
           </div>
 
-          <!-- Avatar btn dummy -->
+          <!-- Current user avatar -->
           <button class="avatar-btn" title="Profile profile">
-            <span class="material-icons">person</span>
+            <img [src]="currentUserAvatar" alt="Avatar" class="avatar-img" onerror="this.src='/User.png'">
           </button>
         </div>
 
       </div>
     </div>
+
+    <!-- PLAYER WAITING SCREEN (Classic or Focus mode) -->
+    <div class="player-waiting" *ngIf="gamePhase !== 'loading' && playerWaiting" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white;">
+      <span class="material-icons" style="font-size: 80px; margin-bottom: 20px;">hourglass_empty</span>
+      <h2>Waiting for host to proceed...</h2>
+    </div>
+
   </ng-container>
-
-  <!-- Màn hình chờ nếu phase load -->
-  <div style="text-align:center; padding-top: 100px" *ngIf="gamePhase === 'loading' || gamePhase === 'countdown'">
-      <div *ngIf="gamePhase === 'countdown'">
-          <h1 style="font-size: 100px; color:#7C3AED">{{ countdown }}</h1>
-          <p style="font-size: 24px; color: #1A1033; font-weight: bold;">Get ready!</p>
-      </div>
-      <div *ngIf="gamePhase === 'loading'">
-          <h2 style="color: #6D28D9;">Waiting for host to start...</h2>
-      </div>
-  </div>
-
-</div>

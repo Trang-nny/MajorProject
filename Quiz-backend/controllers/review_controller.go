@@ -57,6 +57,7 @@ func CreateReview(c *gin.Context) {
 }
 
 func GetQuizReviews(c *gin.Context) {
+	noStore(c)
 	quizID := c.Param("id")
 
 	if _, err := uuid.Parse(quizID); err != nil {

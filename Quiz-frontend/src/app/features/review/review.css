@@ -1,7 +1,3 @@
-/* ============================================================
-   REVIEW PAGE — Responsive Mobile
-   Giữ nguyên toàn bộ class names, chỉ thêm responsive
-   ============================================================ */
 
 .review-container {
   max-width: 1400px;
@@ -48,7 +44,6 @@
 .stat-item { white-space: nowrap; }
 
 /* ===== REVIEWS LIST ===== */
-.reviews-section { }
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -113,8 +108,6 @@
 }
 
 /* ===== SIDEBAR ===== */
-.sidebar { }
-
 .side-card {
   padding: 2rem;
   border-radius: 25px;
