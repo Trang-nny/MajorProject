@@ -25,9 +25,6 @@ func main() {
 	go hub.Run()
 
 	r := gin.Default()
-
-	r.GET("/api/leaderboard", controllers.GetLeaderboard)
-
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -36,9 +33,11 @@ func main() {
 		MaxAge:          12 * time.Hour,
 	}))
 
+	r.GET("/api/leaderboard", controllers.GetLeaderboard)
+
 	config.ConnectDatabase()
 	// Tự động tạo bảng nếu chưa tồn tại
-	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{}, &models.Review{})
+	config.DB.AutoMigrate(&models.User{}, &models.Quiz{}, &models.Question{}, &models.Result{}, &models.Review{}, &models.Room{}, &models.Player{})
 
 	auth := r.Group("/auth")
 	{

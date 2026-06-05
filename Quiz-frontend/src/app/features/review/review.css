@@ -1,3 +1,7 @@
+/* ============================================================
+   REVIEW PAGE — Responsive Mobile
+   Giữ nguyên toàn bộ class names, chỉ thêm responsive
+   ============================================================ */
 
 .review-container {
   max-width: 1400px;
@@ -44,6 +48,7 @@
 .stat-item { white-space: nowrap; }
 
 /* ===== REVIEWS LIST ===== */
+.reviews-section { }
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -108,6 +113,8 @@
 }
 
 /* ===== SIDEBAR ===== */
+.sidebar { }
+
 .side-card {
   padding: 2rem;
   border-radius: 25px;
@@ -116,7 +123,18 @@
 .side-card h3 { font-size: 1.3rem; color: #2d2654; font-weight: 800; margin-bottom: 1.5rem; }
 
 /* Rating Overview */
-.stats-card { background: #f1eeff; }
+.stats-card {
+  background: #f1eeff;
+  position: relative;
+}
+.stats-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+.stats-card-header h3 { margin-bottom: 0; }
 .rating-list { display: flex; flex-direction: column; gap: 1.25rem; }
 .rating-row {
   display: flex;
@@ -124,6 +142,20 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: #5b538e;
+}
+.review-count-badge {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.22);
 }
 .rating-row span:first-child { white-space: nowrap; }
 .bar-bg {
