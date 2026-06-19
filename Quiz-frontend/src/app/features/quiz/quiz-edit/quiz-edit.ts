@@ -236,3 +236,4 @@ export class QuizEdit implements OnInit {
     });
   }
 }
+

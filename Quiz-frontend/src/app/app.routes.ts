@@ -1,4 +1,4 @@
-﻿import { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 // Layouts
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
@@ -22,36 +22,48 @@ import { CreateQuiz } from './features/quiz/create-quiz/create-quiz';
 import { QuizDetail } from './features/quiz/quiz-detail/quiz-detail';
 import { QuizEdit } from './features/quiz/quiz-edit/quiz-edit';
 
-// Features - Game Play
-import { GameRoom } from './features/game/multi/game-room/game-room';
-import { MultiLobby } from './features/game/multi/multi-lobby/multi-lobby';
-import { ModeSelection } from './features/game/mode-selection/mode-selection';
-import { Result } from './features/game/result/result';
-
 // Features - Review
 import { Review } from './features/review/review';
 
-// Features - Solo Play
+// Features - Game Play
+import { ModeSelection } from './features/game/mode-selection/mode-selection';
+import { Result } from './features/game/result/result';
+
+// Solo
 import { SoloLobby } from './features/game/solo/solo-lobby/solo-lobby';
 import { GameRoomComponent as SoloGameRoom } from './features/game/solo/game-room/game-room';
 
-// Features - Multi Play
+// Multi
 import { MultiModeSelection } from './features/game/multi/multi-mode-selection/multi-mode-selection';
+import { MultiLobby } from './features/game/multi/multi-lobby/multi-lobby';
 import { GameRoom as MultiGameRoom } from './features/game/multi/game-room/game-room';
+
+// Admin
+import { AdminLayout } from './features/admin/admin-layout/admin-layout';
+import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
+import { AdminUsers } from './features/admin/admin-users/admin-users';
+import { AdminQuizBank } from './features/admin/admin-quiz-bank/admin-quiz-bank';
+import { AdminReviews } from './features/admin/admin-reviews/admin-reviews';
+import { AdminAnalytics } from './features/admin/admin-analytics/admin-analytics';
+import { AdminLeaderboard } from './features/admin/admin-leaderboard/admin-leaderboard';
+import { AdminReports } from './features/admin/admin-reports/admin-reports';
+import { AdminAchievements } from './features/admin/admin-achievements/admin-achievements';
+import { AdminSettings } from './features/admin/admin-settings/admin-settings';
+
 export const routes: Routes = [
 
-  // Nhóm 1: Các trang không có Header phụ trợ (Sử dụng AuthLayout)
+  // AUTH LAYOUT
   {
     path: '',
     component: AuthLayout,
     children: [
       { path: '', component: Home },
       { path: 'login', component: Login },
-      { path: 'register', component: Register },
+      { path: 'register', component: Register }
     ]
   },
 
-  // Nhóm 2: Các trang chính của ứng dụng (Sử dụng MainLayout - Có Header/Footer)
+  // MAIN APPLICATION
   {
     path: 'app',
     component: MainLayout,
@@ -60,30 +72,47 @@ export const routes: Routes = [
       { path: 'quizzes', component: QuizList },
       { path: 'create-quiz', component: CreateQuiz },
       { path: 'quiz-detail/:id', component: QuizDetail },
+      { path: 'quiz/edit/:id', component: QuizEdit },
       { path: 'leaderboard', component: Leaderboard },
       { path: 'profile', component: Profile },
       { path: 'profile/edit', component: ProfileEdit },
-      { path: 'quiz/edit/:id', component: QuizEdit },
       { path: 'review/:id', component: Review }
     ]
   },
 
-  // Nhóm 3: Các trang khi đang tham gia trò chơi (Sử dụng GameLayout)
+  // GAME LAYOUT
   {
     path: 'play',
     component: GameLayout,
     children: [
       { path: 'mode', component: ModeSelection },
       { path: 'result', component: Result },
-      
-      // Khai báo route cho Solo Mode
+
+      // SOLO MODE
       { path: 'solo/lobby', component: SoloLobby },
       { path: 'solo/room', component: SoloGameRoom },
 
-      // Khai báo route cho Multi Mode
+      // MULTI MODE
       { path: 'multi/mode', component: MultiModeSelection },
       { path: 'multi/lobby', component: MultiLobby },
-      { path: 'multi/room', component: MultiGameRoom },
+      { path: 'multi/room', component: MultiGameRoom }
+    ]
+  },
+
+  {
+    path: 'admin',
+    component: AdminLayout,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboard },
+      { path: 'users', component: AdminUsers },
+      { path: 'analytics', component: AdminAnalytics },
+      { path: 'quiz-bank', component: AdminQuizBank },
+      { path: 'reviews', component: AdminReviews },
+      { path: 'leaderboard', component: AdminLeaderboard },
+      { path: 'reports', component: AdminReports },
+      { path: 'achievements', component: AdminAchievements },
+      { path: 'settings', component: AdminSettings }
     ]
   },
 

@@ -14,7 +14,7 @@ export class Home {
   private router = inject(Router);
 
   onPinInput(event: Event) {
-    // Chỉ cho phép nhập số
+    // Chá»‰ cho phÃ©p nháºp sá»‘
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
     this.joinPin = input.value;

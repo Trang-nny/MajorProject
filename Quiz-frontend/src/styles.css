@@ -1,8 +1,8 @@
 @import "primeicons/primeicons.css";
+@import './assets/admin/admin.css';
 
 body {
   margin: 0;
   background-color: #F9F5FF !important;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
-

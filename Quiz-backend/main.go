@@ -34,6 +34,7 @@ func main() {
 	}))
 
 	r.GET("/api/leaderboard", controllers.GetLeaderboard)
+	r.GET("/api/network-info", controllers.GetNetworkInfo)
 
 	config.ConnectDatabase()
 	// Tự động tạo bảng nếu chưa tồn tại
@@ -53,17 +54,26 @@ func main() {
 			sockets.ServeWs(hub, c)
 		})
 
+		api.POST("/rooms", controllers.CreateRoom)
+		api.POST("/rooms/join", controllers.JoinRoom)
+
 		api.POST("/quizzes", controllers.CreateQuiz)
 		api.GET("/quizzes", controllers.GetQuizzes)
 		api.GET("/quizzes/:id", controllers.GetQuiz)
 		api.PUT("/quizzes/:id", controllers.UpdateQuiz)
 		api.DELETE("/quizzes/:id", controllers.DeleteQuiz)
-		api.PATCH("/quizzes/:id/visibility", controllers.UpdateQuizVisibility)
+
 		api.POST("/results", controllers.SubmitResult)
 		api.GET("/stats/:id", controllers.GetUserStats)
 		api.GET("/users/:id/history", controllers.GetUserHistory)
-		api.POST("/quizzes/reviews", controllers.CreateReview)
-		api.GET("/quizzes/:id/reviews", controllers.GetQuizReviews)
+
+		// Admin routes
+		api.GET("/admin/users", controllers.GetAdminUsers)
+		api.GET("/admin/users/stats", controllers.GetAdminUserStats)
+		api.PATCH("/admin/users/:id/status", controllers.ToggleUserStatus)
+
+		api.GET("/admin/reviews", controllers.GetAdminReviews)
+		api.DELETE("/admin/reviews/:id", controllers.DeleteAdminReview)
 	}
 
 	r.Run(":8080")

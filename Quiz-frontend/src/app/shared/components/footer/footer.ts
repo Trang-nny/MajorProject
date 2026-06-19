@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'app-shared-footer', // Đảm bảo selector này khớp với <app-shared-footer>
   standalone: true,

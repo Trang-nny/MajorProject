@@ -95,3 +95,4 @@ export class ProfileEdit implements OnInit {
     this.router.navigate(['/app/profile']);
   }
 }
+

@@ -216,7 +216,7 @@ export class QuizDetail implements OnInit {
   shareQuiz() {
     alert('Tính năng này hiện tại chưa được phát triển. Vui lòng chờ cập nhật trong tương lai!');
   }
-  // Bổ sung chức năng Delete
+    // B? sung ch?c nang Delete
   deleteQuiz() {
     if (!this.isOwner) return;
     const confirmDelete = confirm('Are you sure you want to delete this quiz? This action cannot be undone.');
@@ -234,3 +234,4 @@ export class QuizDetail implements OnInit {
     }
   }
 }
+

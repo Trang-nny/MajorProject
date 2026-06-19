@@ -96,3 +96,4 @@ func ServeWs(hub *Hub, c *gin.Context) {
 	}
 	hub.Broadcast <- welcomeMsg
 }
+

@@ -100,3 +100,4 @@ export class Register implements OnInit {
     alert('Tính năng này hiện tại chưa được cập nhật!');
   }
 }
+

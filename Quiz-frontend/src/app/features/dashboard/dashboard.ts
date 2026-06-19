@@ -1,6 +1,7 @@
-﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { AuthPromptService } from '../../core/services/auth-prompt.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -18,7 +19,7 @@ export class Dashboard implements OnInit {
   joinPin: string = '';
   quizzes: any[] = [];
 
-  constructor(private http: HttpClient, private cd: ChangeDetectorRef, private router: Router) {}
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef, private router: Router, private authPrompt: AuthPromptService) {}
 
   async ngOnInit() {
     try {
@@ -91,6 +92,23 @@ export class Dashboard implements OnInit {
     }
   }
 
+  guardedNavigate(path: string) {
+    if (this.authPrompt.requireLogin(path)) {
+      this.router.navigateByUrl(path);
+    }
+  }
+
+  guardedAction(cb: () => void) {
+    if (this.authPrompt.requireLogin()) {
+      cb();
+    }
+  }
+
+  openQuizDetail(id: any) {
+    // Quiz detail is public; allow navigation without auth
+    this.router.navigate(['/app/quiz-detail', id || 1]);
+  }
+
   onPinInput(event: Event) {
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
@@ -105,3 +123,4 @@ export class Dashboard implements OnInit {
     alert('Tính năng này hiện tại chưa được phát triển. Vui lòng chờ cập nhật trong tương lai!');
   }
 }
+
